@@ -1,6 +1,8 @@
 package net.vercte.satchels.satchel;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
@@ -17,6 +19,30 @@ public class SatchelInventory implements Container {
 
     public boolean isAccessible() {
         return this.satchelData.canAccessSatchelInventory();
+    }
+
+    public ListTag save(ListTag tag) {
+        for(int i = 0; i < this.items.size(); i++) {
+            if(this.items.get(i).isEmpty()) continue;
+
+            CompoundTag compoundTag = new CompoundTag();
+            compoundTag.putByte("Slot", (byte)i);
+            tag.add(this.items.get(i).save(this.satchelData.getPlayer().registryAccess(), compoundTag));
+        }
+
+        return tag;
+    }
+
+    public void load(ListTag tag) {
+        this.items.clear();
+
+        for (int i = 0; i < tag.size(); i++) {
+            CompoundTag compoundTag = tag.getCompound(i);
+
+            int slot = compoundTag.getByte("Slot");
+            ItemStack stack = ItemStack.parse(this.satchelData.getPlayer().registryAccess(), compoundTag).orElse(ItemStack.EMPTY);
+            this.items.set(slot, stack);
+        }
     }
 
     @Override

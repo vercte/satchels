@@ -1,5 +1,7 @@
 package net.vercte.satchels.satchel;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.player.Player;
 import net.vercte.satchels.ModItems;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +19,25 @@ public class SatchelData {
 
         this.satchelInventory = new SatchelInventory(this);
         this.satchelSlotInventory = new SatchelSlotInventory(this);
+    }
+
+    public void save(CompoundTag tag) {
+        CompoundTag satchelDataTag = new CompoundTag();
+
+        satchelDataTag.put("satchelInventory", this.satchelInventory.save(new ListTag()));
+        satchelDataTag.put("satchelSlot", this.satchelSlotInventory.save(new CompoundTag()));
+
+        tag.put("satchels$satchelData", satchelDataTag);
+    }
+
+    public void load(CompoundTag tag) {
+        CompoundTag satchelDataTag = tag.getCompound("satchels$satchelData");
+
+        ListTag inventoryTag = satchelDataTag.getList("satchelInventory", ListTag.TAG_COMPOUND);
+        this.satchelInventory.load(inventoryTag);
+
+        CompoundTag satchelSlotTag = satchelDataTag.getCompound("satchelSlot");
+        this.satchelSlotInventory.load(satchelSlotTag);
     }
 
     @NotNull

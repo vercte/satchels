@@ -1,7 +1,6 @@
 package net.vercte.satchels;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.vercte.satchels.platform.Services;
 

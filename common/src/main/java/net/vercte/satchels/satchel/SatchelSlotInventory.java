@@ -1,5 +1,8 @@
 package net.vercte.satchels.satchel;
 
+import com.mojang.logging.LogUtils;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +18,15 @@ public class SatchelSlotInventory implements Container {
     public SatchelSlotInventory(SatchelData parent) {
         this.stack = ItemStack.EMPTY;
         this.satchelData = parent;
+    }
+
+    public Tag save(CompoundTag tag) {
+        if(this.stack.isEmpty()) return tag;
+        return this.stack.save(this.satchelData.getPlayer().registryAccess(), tag);
+    }
+
+    public void load(CompoundTag tag) {
+        this.stack = ItemStack.parse(this.satchelData.getPlayer().registryAccess(), tag).orElse(ItemStack.EMPTY);
     }
 
     @Override
