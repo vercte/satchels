@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.vercte.satchels.platform.Services;
 
+// TODO: Datagen
 public final class Satchels {
     public static final String ID = "satchels";
 
