@@ -1,11 +1,10 @@
 package net.vercte.satchels.network;
 
-import com.mojang.logging.LogUtils;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.vercte.satchels.Satchels;
 import net.vercte.satchels.platform.Services;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +21,7 @@ public enum ToggleSatchelPacket implements CustomPacketPayload {
     }
 
     public static void handle(ServerPlayer player) {
-        LogUtils.getLogger().info("You're toggling! {}", player);
+        player.level().explode(null, player.getX(), player.getY(), player.getZ(), 2, Level.ExplosionInteraction.MOB);
     }
 
     @Override
