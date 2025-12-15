@@ -9,6 +9,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class SatchelInventory implements Container {
     public final NonNullList<ItemStack> items = NonNullList.withSize(6, ItemStack.EMPTY);
     public final SatchelData satchelData;
@@ -91,5 +93,15 @@ public class SatchelInventory implements Container {
     @Override
     public void clearContent() {
         this.items.clear();
+    }
+
+    public void dropAll() {
+        for (int i = 0; i < items.size(); i++) {
+            ItemStack itemStack = items.get(i);
+            if (!itemStack.isEmpty()) {
+                this.satchelData.getPlayer().drop(itemStack, true, false);
+                items.set(i, ItemStack.EMPTY);
+            }
+        }
     }
 }

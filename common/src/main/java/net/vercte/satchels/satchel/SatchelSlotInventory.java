@@ -72,4 +72,11 @@ public class SatchelSlotInventory implements Container {
     public void clearContent() {
         this.stack = ItemStack.EMPTY;
     }
+
+    public void drop() {
+        if (!stack.isEmpty()) {
+            this.satchelData.getPlayer().drop(stack, true, false);
+            stack = ItemStack.EMPTY;
+        }
+    }
 }
