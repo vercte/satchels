@@ -30,7 +30,7 @@ public class SatchelData {
     public void save(CompoundTag tag) {
         CompoundTag satchelDataTag = new CompoundTag();
 
-        satchelDataTag.putBoolean("satchelEnabled", this.satchelEnabled); // TODO: This is not synced to the client
+        satchelDataTag.putBoolean("satchelEnabled", this.satchelEnabled);
         satchelDataTag.put("satchelInventory", this.satchelInventory.save(new ListTag()));
         satchelDataTag.put("satchelSlot", this.satchelSlotInventory.save(new CompoundTag()));
 

@@ -1,7 +1,6 @@
 package net.vercte.satchels.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.mojang.logging.LogUtils;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,9 +20,6 @@ public abstract class InventoryMixin {
     @Shadow
     @Final
     public Player player;
-
-    @Shadow
-    public static boolean isHotbarSlot(int i) { return false; }
 
     @Shadow
     public int selected;

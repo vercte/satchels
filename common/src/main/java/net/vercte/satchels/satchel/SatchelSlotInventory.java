@@ -1,6 +1,5 @@
 package net.vercte.satchels.satchel;
 
-import com.mojang.logging.LogUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.Container;

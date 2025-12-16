@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.vercte.satchels.Satchels;
 import net.vercte.satchels.platform.Services;
 import net.vercte.satchels.satchel.SatchelData;
+import org.jetbrains.annotations.NotNull;
 
 public record SatchelStatusPacketS2C(boolean enabled) implements CustomPacketPayload {
     public static final ResourceLocation ID = Satchels.at("satchel_status");
@@ -29,6 +30,7 @@ public record SatchelStatusPacketS2C(boolean enabled) implements CustomPacketPay
     }
 
     @Override
+    @NotNull
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
