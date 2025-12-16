@@ -8,6 +8,8 @@
   ],
   "mixins": [
     "InventoryMenuMixin",
+    "InventoryMixin",
+    "ItemEntityMixin",
     "PlayerMixin"
   ],
   "injectors": {

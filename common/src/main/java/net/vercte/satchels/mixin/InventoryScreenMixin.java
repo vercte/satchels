@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.vercte.satchels.ModSprites;
 import net.vercte.satchels.Satchels;
 import net.vercte.satchels.satchel.SatchelData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,9 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class InventoryScreenMixin extends EffectRenderingInventoryScreen<InventoryMenu> {
     public InventoryScreenMixin(InventoryMenu abstractContainerMenu, Inventory inventory, Component component) { super(abstractContainerMenu, inventory, component); }
 
-    @Unique
-    private static final ResourceLocation satchels$satchelInventorySprite = Satchels.at("satchel_inventory");
-
     @Inject(method = "renderBg", at = @At("TAIL"))
     public void renderBg(GuiGraphics guiGraphics, float f, int i, int j, CallbackInfo ci) {
         Player player = Minecraft.getInstance().player;
@@ -34,7 +32,7 @@ public abstract class InventoryScreenMixin extends EffectRenderingInventoryScree
         guiGraphics.blitSprite(ResourceLocation.withDefaultNamespace("container/slot"), this.leftPos + 151, this.topPos + 61, 18, 18);
 
         if(SatchelData.get(player).canAccessSatchelInventory()) {
-            guiGraphics.blitSprite(satchels$satchelInventorySprite, this.leftPos + 2, this.topPos + 165, 118, 27);
+            guiGraphics.blitSprite(ModSprites.SATCHEL_INVENTORY, this.leftPos + 2, this.topPos + 165, 118, 27);
         }
     }
 
