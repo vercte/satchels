@@ -14,7 +14,13 @@ public class ItemEntityMixin {
     @WrapOperation(method = "playerTouch", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;add(Lnet/minecraft/world/item/ItemStack;)Z"))
     public boolean playerTouch(Inventory inventory, ItemStack stack, Operation<Boolean> original) {
         SatchelData satchelData = SatchelData.get(inventory.player);
-        boolean addToSatchel = satchelData.isSatchelEnabled() && satchelData.getSatchelInventory().add(stack);
-        return addToSatchel || original.call(inventory, stack);
+
+        // if satchel is enabled, prioritize adding to that first
+        if(satchelData.isSatchelEnabled()) {
+            return satchelData.getSatchelInventory().add(stack) || original.call(inventory, stack);
+        }
+
+        // otherwise, prioritize adding to the inventory first
+        return original.call(inventory, stack) || (satchelData.canAccessSatchelInventory() && satchelData.getSatchelInventory().add(stack));
     }
 }
