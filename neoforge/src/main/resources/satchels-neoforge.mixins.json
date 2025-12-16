@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "net.vercte.satchels.neoforge.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "client": [],
+  "mixins": [
+    "PleaseExitMyDatagenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

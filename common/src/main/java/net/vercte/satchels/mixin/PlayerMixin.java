@@ -37,7 +37,7 @@ public abstract class PlayerMixin extends LivingEntity implements HasSatchelData
     @Inject(method = "dropEquipment", at = @At("TAIL"))
     public void dropSatchelEquipment(CallbackInfo ci) {
         SatchelData satchelData = SatchelData.get((Player)(Object) this);
-        satchelData.getSatchelInventory().dropAll();
+        satchelData.getSatchelInventory().dropAll(true);
         satchelData.getSatchelSlotInventory().drop();
     }
 

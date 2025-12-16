@@ -4,7 +4,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -13,6 +12,7 @@ import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.vercte.satchels.Satchels;
 import net.neoforged.fml.common.Mod;
+import net.vercte.satchels.neoforge.datagen.SatchelsDatagen;
 import net.vercte.satchels.neoforge.platform.NeoForgeRegistryHelper;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
 import net.vercte.satchels.network.ToggleSatchelPacketC2S;
@@ -26,6 +26,7 @@ public final class SatchelsNeoForge {
 
         bus.addListener(SatchelsNeoForge::registerBindings);
         bus.addListener(SatchelsNeoForge::registerPayloadHandlers);
+        bus.addListener(SatchelsDatagen::gatherData);
         NeoForgeRegistryHelper.register(bus);
     }
 

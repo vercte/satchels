@@ -98,11 +98,11 @@ public class SatchelInventory implements Container {
         this.items.clear();
     }
 
-    public void dropAll() {
+    public void dropAll(boolean died) {
         for (int i = 0; i < items.size(); i++) {
             ItemStack itemStack = items.get(i);
             if (!itemStack.isEmpty()) {
-                this.satchelData.getPlayer().drop(itemStack, true, false);
+                this.satchelData.getPlayer().drop(itemStack, died, !died);
                 items.set(i, ItemStack.EMPTY);
             }
         }

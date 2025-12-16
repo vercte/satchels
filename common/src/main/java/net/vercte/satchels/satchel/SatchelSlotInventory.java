@@ -1,5 +1,6 @@
 package net.vercte.satchels.satchel;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.Container;
@@ -54,6 +55,11 @@ public class SatchelSlotInventory implements Container {
 
     @Override
     public void setItem(int slot, ItemStack newStack) {
+        if(newStack.isEmpty()) {
+            this.satchelData.getSatchelInventory().dropAll(false);
+            this.satchelData.setSatchelEnabled(false);
+            this.satchelData.updateClient();
+        }
         this.stack = newStack;
     }
 

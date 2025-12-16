@@ -7,6 +7,21 @@ architectury {
     neoForge()
 }
 
+loom {
+    runs {
+        create("datagen") {
+            data()
+
+            name = "Minecraft Data"
+            programArgs("--all", "--mod", "satchels")
+            programArgs("--output", project(":common").file("src/generated/resources").absolutePath)
+            programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
+
+            environmentVariable("DATAGEN", "TRUE")
+        }
+    }
+}
+
 configurations {
     common {
         canBeResolved = true

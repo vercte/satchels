@@ -8,7 +8,6 @@ import net.vercte.satchels.platform.Services;
 import org.apache.logging.log4j.util.Lazy;
 import org.lwjgl.glfw.GLFW;
 
-// TODO: Datagen
 public final class Satchels {
     public static final String ID = "satchels";
 

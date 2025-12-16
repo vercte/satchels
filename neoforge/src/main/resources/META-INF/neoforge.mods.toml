@@ -30,3 +30,6 @@ side = "BOTH"
 
 [[mixins]]
 config = "satchels.mixins.json"
+
+[[mixins]]
+config = "satchels-neoforge.mixins.json"

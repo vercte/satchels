@@ -11,6 +11,8 @@ import net.minecraft.world.level.GameType;
 import net.vercte.satchels.ModSprites;
 
 public class SatchelHotbarOverlay {
+    private static float yOffset = 0;
+
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui || mc.gameMode == null || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
@@ -25,24 +27,29 @@ public class SatchelHotbarOverlay {
 
         SatchelData satchelData = SatchelData.get(player);
 
+        int offsetGoal = 22;
         if(satchelData.isSatchelEnabled()) {
-            graphics.pose().pushPose();
-            graphics.pose().translate(0, 0, 750.00);
-
-            graphics.blitSprite(ModSprites.SATCHEL_HOTBAR, x, y, 122, 22);
-
-            int selected = player.getInventory().selected;
-            boolean selectedInSatchel = satchelData.isSlotInSatchel(selected);
-            ResourceLocation selectionSprite = selectedInSatchel ? ModSprites.SATCHEL_HOTBAR_SELECTION : ModSprites.VANILLA_HOTBAR_SELECTION;
-
-            graphics.blitSprite(selectionSprite, x - 1 + (selected * 20), y - 1, 24, selectedInSatchel ? 24 : 23);
-
-            for(int i = 0; i < satchelData.getSatchelInventory().getContainerSize(); i++) {
-                ItemStack stack = satchelData.getSatchelInventory().getItem(i);
-                SatchelHotbarOverlay.renderSlot(graphics, x + (i*20) + 3, y + 3, deltaTracker, player, stack, i+1);
-            }
-            graphics.pose().popPose();
+            yOffset = Math.max(yOffset - (yOffset)/5, 0);
+        } else {
+            yOffset = Math.min(yOffset + (offsetGoal-yOffset)/5, offsetGoal);
         }
+
+        graphics.pose().pushPose();
+        graphics.pose().translate(0, yOffset, 750.00);
+
+        graphics.blitSprite(ModSprites.SATCHEL_HOTBAR, x, y, 122, 22);
+
+        int selected = player.getInventory().selected;
+        boolean selectedInSatchel = satchelData.isSlotInSatchel(selected);
+        ResourceLocation selectionSprite = selectedInSatchel ? ModSprites.SATCHEL_HOTBAR_SELECTION : ModSprites.VANILLA_HOTBAR_SELECTION;
+
+        graphics.blitSprite(selectionSprite, x - 1 + (selected * 20), y - 1, 24, selectedInSatchel ? 24 : 23);
+
+        for(int i = 0; i < satchelData.getSatchelInventory().getContainerSize(); i++) {
+            ItemStack stack = satchelData.getSatchelInventory().getItem(i);
+            SatchelHotbarOverlay.renderSlot(graphics, x + (i*20) + 3, y + 3, deltaTracker, player, stack, i+1);
+        }
+        graphics.pose().popPose();
     }
 
     // copied from Gui#renderSlot
