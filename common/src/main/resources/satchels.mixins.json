@@ -4,9 +4,11 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
+    "CreativeModeInventoryScreenMixin",
     "InventoryScreenMixin"
   ],
   "mixins": [
+    "GiveCommandMixin",
     "InventoryMenuMixin",
     "InventoryMixin",
     "ItemEntityMixin",

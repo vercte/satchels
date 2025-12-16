@@ -12,6 +12,7 @@ import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.vercte.satchels.Satchels;
 import net.neoforged.fml.common.Mod;
+import net.vercte.satchels.SatchelsClient;
 import net.vercte.satchels.neoforge.datagen.SatchelsDatagen;
 import net.vercte.satchels.neoforge.platform.NeoForgeRegistryHelper;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
@@ -31,7 +32,7 @@ public final class SatchelsNeoForge {
     }
 
     public static void registerBindings(final RegisterKeyMappingsEvent event) {
-        event.register(Satchels.KEYMAPPING_TOGGLE_SATCHEL.get());
+        event.register(SatchelsClient.KEYMAPPING_TOGGLE_SATCHEL.get());
     }
 
     public static void registerPayloadHandlers(final RegisterPayloadHandlersEvent event) {

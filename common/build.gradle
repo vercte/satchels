@@ -12,3 +12,7 @@ sourceSets.main {
         exclude("src/generated/resources/.cache")
     }
 }
+
+loom {
+    accessWidenerPath = file("src/main/resources/satchels.accesswidener")
+}

@@ -8,6 +8,8 @@ architectury {
 }
 
 loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
     runs {
         create("datagen") {
             data()
