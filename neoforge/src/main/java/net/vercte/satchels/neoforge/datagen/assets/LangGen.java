@@ -28,6 +28,7 @@ public class LangGen extends LanguageProvider {
     @Override
     protected void addTranslations() {
         add("key.satchels.toggle_satchel", "Toggle Satchel");
+        add("sound.satchels.satchel_rustle", "Satchel rustles");
 
         // scan items registry and generate names
         BuiltInRegistries.ITEM.stream()

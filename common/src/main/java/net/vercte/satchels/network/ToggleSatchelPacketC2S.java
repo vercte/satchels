@@ -22,9 +22,9 @@ public record ToggleSatchelPacketC2S(boolean enabled) implements CustomPacketPay
 
     public static void handle(ToggleSatchelPacketC2S packet, ServerPlayer player) {
         SatchelData satchelData = SatchelData.get(player);
-        if(!satchelData.canAccessSatchelInventory()) satchelData.setSatchelEnabled(false);
+        if(!satchelData.canAccessSatchelInventory()) satchelData.setSatchelEnabled(false, true);
         else {
-            satchelData.setSatchelEnabled(packet.enabled);
+            satchelData.setSatchelEnabled(packet.enabled, true);
         }
     }
 

@@ -23,15 +23,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class InventoryScreenMixin extends EffectRenderingInventoryScreen<InventoryMenu> {
     public InventoryScreenMixin(InventoryMenu abstractContainerMenu, Inventory inventory, Component component) { super(abstractContainerMenu, inventory, component); }
 
-    @Unique private float satchels$yOffset = 0;
+    @Unique private float satchels$yOffset = -1;
 
     @Inject(method = "renderBg", at = @At("HEAD"))
     public void renderSatchelInventory(GuiGraphics guiGraphics, float f, int i, int j, CallbackInfo ci) {
         Player player = Minecraft.getInstance().player;
         if(player == null) return;
 
+        SatchelData satchelData = SatchelData.get(player);
+
+        if(satchels$yOffset == -1) {
+            if(satchelData.canAccessSatchelInventory()) satchels$yOffset = 0;
+            else satchels$yOffset = 27;
+        }
+
         int offsetGoal = 27;
-        if(SatchelData.get(player).canAccessSatchelInventory()) {
+        if(satchelData.canAccessSatchelInventory()) {
             satchels$yOffset = Math.max(satchels$yOffset - (satchels$yOffset)/5, 0);
         } else {
             satchels$yOffset = Math.min(satchels$yOffset + (offsetGoal-satchels$yOffset)/5, offsetGoal);

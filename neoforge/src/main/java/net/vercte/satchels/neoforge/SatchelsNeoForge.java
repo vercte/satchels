@@ -13,6 +13,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.vercte.satchels.Satchels;
 import net.neoforged.fml.common.Mod;
 import net.vercte.satchels.SatchelsClient;
+import net.vercte.satchels.neoforge.client.NeoForgeClientPackets;
 import net.vercte.satchels.neoforge.datagen.SatchelsDatagen;
 import net.vercte.satchels.neoforge.platform.NeoForgeRegistryHelper;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
@@ -47,7 +48,7 @@ public final class SatchelsNeoForge {
         registrar.playToClient(
                 SatchelStatusPacketS2C.TYPE,
                 SatchelStatusPacketS2C.STREAM_CODEC,
-                (p, cx) -> SatchelStatusPacketS2C.handle(p)
+                NeoForgeClientPackets::handleSatchelStatusPacketS2C
         );
     }
 

@@ -22,11 +22,9 @@ public record SatchelStatusPacketS2C(boolean enabled) implements CustomPacketPay
         Services.NETWORK.sendPacketS2C(player, new SatchelStatusPacketS2C(enabled));
     }
 
-    public static void handle(SatchelStatusPacketS2C packet) {
-        Player player = Minecraft.getInstance().player;
-
+    public static void handle(SatchelStatusPacketS2C packet, Player player) {
         SatchelData satchelData = SatchelData.get(player);
-        satchelData.setSatchelEnabled(packet.enabled);
+        satchelData.setSatchelEnabled(packet.enabled, false);
     }
 
     @Override

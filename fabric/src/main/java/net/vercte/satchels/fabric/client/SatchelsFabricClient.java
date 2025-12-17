@@ -16,6 +16,6 @@ public final class SatchelsFabricClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(t -> SatchelsClient.endClientTick());
         HudRenderCallback.EVENT.register(SatchelHotbarOverlay::render);
 
-        ClientPlayNetworking.registerGlobalReceiver(SatchelStatusPacketS2C.TYPE, (p, cx) -> SatchelStatusPacketS2C.handle(p));
+        ClientPlayNetworking.registerGlobalReceiver(SatchelStatusPacketS2C.TYPE, (p, cx) -> SatchelStatusPacketS2C.handle(p, cx.player()));
     }
 }

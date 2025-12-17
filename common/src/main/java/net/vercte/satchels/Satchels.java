@@ -11,6 +11,7 @@ public final class Satchels {
         LogUtils.getLogger().info("Satchels loaded on platform: {}", Services.PLATFORM.getPlatform());
 
         ModItems.init();
+        ModSounds.init();
     }
 
     public static ResourceLocation at(String path) {

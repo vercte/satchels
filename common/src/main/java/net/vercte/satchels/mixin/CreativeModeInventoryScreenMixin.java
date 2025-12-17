@@ -11,8 +11,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(CreativeModeInventoryScreen.class)
 public class CreativeModeInventoryScreenMixin {
-
-
     @WrapOperation(method = "selectTab", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/NonNullList;add(Ljava/lang/Object;)Z", ordinal = 2))
     public boolean dontAddSatchelsSlots(NonNullList<?> list, Object object, Operation<Boolean> original) {
         if(object instanceof CreativeModeInventoryScreen.SlotWrapper slotWrapper) {

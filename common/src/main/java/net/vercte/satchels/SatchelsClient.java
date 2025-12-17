@@ -19,7 +19,7 @@ public class SatchelsClient {
 
             if(!satchelData.canAccessSatchelInventory()) continue;
             boolean willEnable = !satchelData.isSatchelEnabled();
-            satchelData.setSatchelEnabled(willEnable);
+            satchelData.setSatchelEnabled(willEnable, true);
             ToggleSatchelPacketC2S.send(willEnable);
         }
     }

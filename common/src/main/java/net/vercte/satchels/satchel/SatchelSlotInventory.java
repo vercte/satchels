@@ -56,7 +56,7 @@ public class SatchelSlotInventory implements Container {
     public void setItem(int slot, ItemStack newStack) {
         if(newStack.isEmpty()) {
             this.satchelData.getSatchelInventory().dropAll(false);
-            this.satchelData.setSatchelEnabled(false);
+            this.satchelData.setSatchelEnabled(false, true);
             this.satchelData.updateClient();
         }
         this.stack = newStack;

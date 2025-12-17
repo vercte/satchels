@@ -6,6 +6,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.vercte.satchels.neoforge.datagen.assets.ItemModelGen;
 import net.vercte.satchels.neoforge.datagen.assets.LangGen;
+import net.vercte.satchels.neoforge.datagen.assets.SoundGen;
 import net.vercte.satchels.neoforge.datagen.data.StandardRecipeProvider;
 
 import java.util.concurrent.CompletableFuture;
@@ -19,6 +20,7 @@ public class SatchelsDatagen {
         if(event.includeClient()) {
             event.addProvider(new ItemModelGen(output, existingFileHelper));
             event.addProvider(new LangGen(output));
+            event.addProvider(new SoundGen(output, existingFileHelper));
         }
 
         if(event.includeServer()) {

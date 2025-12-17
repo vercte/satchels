@@ -43,7 +43,14 @@ public class SatchelHotbarOverlay {
         boolean selectedInSatchel = satchelData.isSlotInSatchel(selected);
         ResourceLocation selectionSprite = selectedInSatchel ? ModSprites.SATCHEL_HOTBAR_SELECTION : ModSprites.VANILLA_HOTBAR_SELECTION;
 
+        float selectionYOffset = selectedInSatchel ? 0 : -yOffset;
+
+        graphics.pose().pushPose();
+        graphics.pose().translate(0, selectionYOffset, 0);
+
         graphics.blitSprite(selectionSprite, x - 1 + (selected * 20), y - 1, 24, selectedInSatchel ? 24 : 23);
+
+        graphics.pose().popPose();
 
         for(int i = 0; i < satchelData.getSatchelInventory().getContainerSize(); i++) {
             ItemStack stack = satchelData.getSatchelInventory().getItem(i);

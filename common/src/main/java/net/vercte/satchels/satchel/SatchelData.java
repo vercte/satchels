@@ -1,12 +1,18 @@
 package net.vercte.satchels.satchel;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.vercte.satchels.ModItems;
+import net.vercte.satchels.ModSounds;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,8 +69,13 @@ public class SatchelData {
         return this.getSatchelSlotInventory().getItem(0).is(ModItems.SATCHEL.get());
     }
 
-    public void setSatchelEnabled(boolean enabled) {
+    public void setSatchelEnabled(boolean enabled, boolean playSound) {
         this.satchelEnabled = enabled;
+
+        if(!playSound) return;
+        float pitch = 0.9f + (player.getRandom().nextFloat() / 5);
+        if (enabled) player.playSound(ModSounds.SATCHEL_OPEN.get(), 0.5f, pitch);
+        else player.playSound(ModSounds.SATCHEL_CLOSE.get(), 0.5f, pitch);
     }
 
     public boolean isSatchelEnabled() {
