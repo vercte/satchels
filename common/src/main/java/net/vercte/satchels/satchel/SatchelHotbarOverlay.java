@@ -37,7 +37,7 @@ public class SatchelHotbarOverlay {
         graphics.pose().pushPose();
         graphics.pose().translate(0, yOffset, 750.00);
 
-        graphics.blitSprite(ModSprites.SATCHEL_HOTBAR, x, y, 122, 22);
+        graphics.blitSprite(ModSprites.SATCHEL_HOTBAR, x, y, 121, 22);
 
         int selected = player.getInventory().selected;
         boolean selectedInSatchel = satchelData.isSlotInSatchel(selected);
