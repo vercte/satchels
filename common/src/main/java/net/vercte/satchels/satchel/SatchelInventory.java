@@ -109,9 +109,8 @@ public class SatchelInventory implements Container {
     }
 
     // EVERYTHING BELOW HERE IS TAKEN FROM Inventory
-    public boolean placeItemBackInInventory(ItemStack stack, boolean sendUpdate) {
+    public boolean placeItemBackInInventory(ItemStack stack) {
         while(!stack.isEmpty()) {
-            Player player = this.satchelData.getPlayer();
             int notQuiteFullStackIndex = this.getSlotWithRemainingSpace(stack);
             if (notQuiteFullStackIndex == -1) {
                 notQuiteFullStackIndex = this.getFreeSlot();
@@ -120,19 +119,7 @@ public class SatchelInventory implements Container {
             if (notQuiteFullStackIndex == -1) break;
 
             int j = stack.getMaxStackSize() - this.getItem(notQuiteFullStackIndex).getCount();
-            boolean added = this.add(notQuiteFullStackIndex, stack.split(j));
-            // commented out; see ClientPacketListenerMixin. It works without this regardless
-//            if (added && sendUpdate && player instanceof ServerPlayer sp) {
-//                Slot menuSlot = this.satchelData.getSatchelMenuSlot(notQuiteFullStackIndex);
-//                sp.connection.send(
-//                        new ClientboundContainerSetSlotPacket(
-//                                -2187, // random ass number for ClientPacketListenerMixin
-//                                0,
-//                                menuSlot.getContainerSlot(),
-//                                this.getItem(notQuiteFullStackIndex)
-//                        )
-//                );
-//            }
+            this.add(notQuiteFullStackIndex, stack.split(j));
         }
         return stack.isEmpty();
     }

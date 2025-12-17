@@ -53,7 +53,7 @@ public abstract class InventoryMixin {
     public void placeItemBackInInventory(ItemStack stack, boolean update, CallbackInfo ci) {
         SatchelData satchelData = SatchelData.get(player);
         if(satchelData.isSatchelEnabled()) {
-            boolean added = satchelData.getSatchelInventory().placeItemBackInInventory(stack, update);
+            boolean added = satchelData.getSatchelInventory().placeItemBackInInventory(stack);
             if(added) ci.cancel();
         }
     }

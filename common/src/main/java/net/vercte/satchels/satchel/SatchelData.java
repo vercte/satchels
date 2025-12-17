@@ -1,11 +1,9 @@
 package net.vercte.satchels.satchel;
 
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.Slot;
 import net.vercte.satchels.ModItems;
 import net.vercte.satchels.ModSounds;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
@@ -79,15 +77,6 @@ public class SatchelData {
 
     public boolean isSlotInSatchel(int slot) {
         return 0 <= slot && slot < 6;
-    }
-
-    public Slot getSatchelMenuSlot(int i) {
-        NonNullList<Slot> slots = this.player.inventoryMenu.slots;
-
-        for(Slot slot : slots) {
-            if(slot instanceof SatchelInventorySlot && slot.getContainerSlot() == i) return slot;
-        }
-        return null;
     }
 
     // TODO: Configure satchel position
