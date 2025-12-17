@@ -83,4 +83,8 @@ public class SatchelSlotInventory implements Container {
             stack = ItemStack.EMPTY;
         }
     }
+
+    public SatchelData getSatchelData() {
+        return satchelData;
+    }
 }
