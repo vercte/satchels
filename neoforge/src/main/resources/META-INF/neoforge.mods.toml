@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[2,)"
 #issueTrackerURL = ""
-license = "MIT"
+license = "CC BY-NC-SA 4.0"
 
 [[mods]]
 modId = "satchels"
@@ -9,7 +9,7 @@ version = "${version}"
 displayName = "Satchels"
 authors = "Vercte"
 description = '''
-satcheling it
+another kind of inventory expansion
 '''
 #logoFile = ""
 
