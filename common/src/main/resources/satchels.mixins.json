@@ -4,15 +4,28 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
-    "CreativeModeInventoryScreenMixin",
-    "InventoryScreenMixin"
+    "screen.AbstractContainerScreenMixin",
+    "screen.AnvilScreenMixin",
+    "screen.CartographyScreenMixin",
+    "screen.ContainerScreenMixin",
+    "screen.CraftingScreenMixin",
+    "screen.CreativeModeInventoryScreenMixin",
+    "screen.FurnaceScreenMixin",
+    "screen.InventoryScreenMixin",
+    "screen.SmithingScreenMixin"
   ],
   "mixins": [
     "GiveCommandMixin",
-    "InventoryMenuMixin",
     "InventoryMixin",
     "ItemEntityMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "menu.AnvilMenuMixin",
+    "menu.CartographyMenuMixin",
+    "menu.ChestMenuMixin",
+    "menu.CraftingMenuMixin",
+    "menu.FurnaceMenuMixin",
+    "menu.InventoryMenuMixin",
+    "menu.SmithingMenuMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,4 +1,4 @@
-package net.vercte.satchels.mixin;
+package net.vercte.satchels.mixin.screen;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

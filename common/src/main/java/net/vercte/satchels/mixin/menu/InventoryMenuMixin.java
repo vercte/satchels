@@ -1,18 +1,15 @@
-package net.vercte.satchels.mixin;
+package net.vercte.satchels.mixin.menu;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.RecipeBookMenu;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.vercte.satchels.ModItems;
+import net.vercte.satchels.satchel.MenuWithSatchel;
 import net.vercte.satchels.satchel.SatchelData;
 import net.vercte.satchels.satchel.SatchelEquipmentSlot;
-import net.vercte.satchels.satchel.SatchelInventorySlot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,15 +22,13 @@ import java.util.Optional;
 public abstract class InventoryMenuMixin extends RecipeBookMenu<CraftingInput, CraftingRecipe> {
     public InventoryMenuMixin(MenuType<?> menuType, int i) { super(menuType, i); }
 
+    @SuppressWarnings("Convert2MethodRef")
     @Inject(method = "<init>", at = @At("TAIL"))
     public void addMoreSlots(Inventory inventory, boolean bl, Player player, CallbackInfo ci) {
         SatchelData satchelData = SatchelData.get(player);
 
         this.addSlot(new SatchelEquipmentSlot(satchelData.getSatchelSlotInventory(), 152, 62));
-
-        for(int i = 0; i < 6; i++) {
-            this.addSlot(new SatchelInventorySlot(satchelData.getSatchelInventory(), i, 8 + i*18, 170));
-        }
+        MenuWithSatchel.addInventorySlots(satchelData, s -> this.addSlot(s), 8, 170, 18);
     }
 
     @Inject(method = "quickMoveStack", at = @At("HEAD"), cancellable = true)
