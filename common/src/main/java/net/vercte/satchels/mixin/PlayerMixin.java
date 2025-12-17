@@ -14,6 +14,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.vercte.satchels.satchel.HasSatchelData;
 import net.vercte.satchels.satchel.SatchelData;
+import net.vercte.satchels.satchel.SatchelInventory;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -57,12 +58,16 @@ public abstract class PlayerMixin extends LivingEntity implements HasSatchelData
         }
     }
 
-    @Inject(method = "setItemSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;onEquipItem(Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)V", ordinal = 0), cancellable = true)
+    @Inject(method = "setItemSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/NonNullList;set(ILjava/lang/Object;)Ljava/lang/Object;", ordinal = 0), cancellable = true)
     public void setSatchelSlotIfNeeded(EquipmentSlot equipmentSlot, ItemStack itemStack, CallbackInfo ci) {
         SatchelData satchelData = SatchelData.get((Player)(Object) this);
 
         if(satchelData.isSatchelEnabled()) {
-            this.onEquipItem(equipmentSlot, satchelData.getSatchelInventory().items.set(this.inventory.selected, itemStack), itemStack);
+            int satchelIndex = satchelData.convertToSatchelIndex(this.inventory.selected);
+            if(!satchelData.isSlotInSatchel(satchelIndex)) return;
+
+            SatchelInventory satchelInventory = satchelData.getSatchelInventory();
+            this.onEquipItem(equipmentSlot, satchelInventory.items.set(satchelIndex, itemStack), itemStack);
             ci.cancel();
         }
     }

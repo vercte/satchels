@@ -44,7 +44,8 @@ public abstract class InventoryMixin {
     public float getDestroySpeed(float original, BlockState state) {
         SatchelData satchelData = SatchelData.get(player);
         if(satchelData.isSlotInSatchel(this.selected) && satchelData.isSatchelEnabled()) {
-            return satchelData.getSatchelInventory().getItem(this.selected).getDestroySpeed(state);
+            int satchelIndex = satchelData.convertToSatchelIndex(this.selected);
+            return satchelData.getSatchelInventory().getItem(satchelIndex).getDestroySpeed(state);
         }
         return original;
     }
