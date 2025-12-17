@@ -6,13 +6,24 @@
   "client": [
     "screen.AbstractContainerScreenMixin",
     "screen.AnvilScreenMixin",
+    "screen.BeaconScreenMixin",
+    "screen.BrewingStandScreenMixin",
     "screen.CartographyScreenMixin",
     "screen.ContainerScreenMixin",
+    "screen.CrafterScreenMixin",
     "screen.CraftingScreenMixin",
     "screen.CreativeModeInventoryScreenMixin",
+    "screen.DispenserScreenMixin",
+    "screen.EnchantmentScreenMixin",
     "screen.FurnaceScreenMixin",
+    "screen.GrindstoneScreenMixin",
+    "screen.HopperScreenMixin",
     "screen.InventoryScreenMixin",
-    "screen.SmithingScreenMixin"
+    "screen.LoomScreenMixin",
+    "screen.MerchantScreenMixin",
+    "screen.ShulkerBoxScreenMixin",
+    "screen.SmithingScreenMixin",
+    "screen.StonecutterScreenMixin"
   ],
   "mixins": [
     "GiveCommandMixin",
@@ -20,12 +31,23 @@
     "ItemEntityMixin",
     "PlayerMixin",
     "menu.AnvilMenuMixin",
+    "menu.BeaconMenuMixin",
+    "menu.BrewingStandMenuMixin",
     "menu.CartographyMenuMixin",
     "menu.ChestMenuMixin",
+    "menu.CrafterMenuMixin",
     "menu.CraftingMenuMixin",
+    "menu.DispenserMenuMixin",
+    "menu.EnchantmentMenuMixin",
     "menu.FurnaceMenuMixin",
+    "menu.GrindstoneMenuMixin",
+    "menu.HopperMenuMixin",
     "menu.InventoryMenuMixin",
-    "menu.SmithingMenuMixin"
+    "menu.LoomMenuMixin",
+    "menu.MerchantMenuMixin",
+    "menu.ShulkerBoxMenuMixin",
+    "menu.SmithingMenuMixin",
+    "menu.StonecutterMenuMixin"
   ],
   "injectors": {
     "defaultRequire": 1

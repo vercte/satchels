@@ -16,8 +16,18 @@ public class AbstractContainerScreenMixin {
     public boolean hasClickedOutside(boolean original, double x, double y, int left, int top, int button) {
         if((Object)this instanceof ContainerScreen ||
                 (Object)this instanceof ItemCombinerScreen<?> ||
-                (Object)this instanceof CartographyTableScreen) {
-            return ScreenWithSatchel.hasClickedOutside(original, x, y, left, top, this.imageHeight);
+                (Object)this instanceof CartographyTableScreen ||
+                (Object)this instanceof StonecutterScreen ||
+                (Object)this instanceof GrindstoneScreen ||
+                (Object)this instanceof BrewingStandScreen ||
+                (Object)this instanceof EnchantmentScreen ||
+                (Object)this instanceof BeaconScreen ||
+                (Object)this instanceof MerchantScreen ||
+                (Object)this instanceof ShulkerBoxScreen ||
+                (Object)this instanceof DispenserScreen ||
+                (Object)this instanceof CrafterScreen ||
+                (Object)this instanceof HopperScreen) {
+            return ScreenWithSatchel.hasClickedOutside(original, x, y, left, top, this.imageHeight); // TODO: individualize this for the beacon and merchant
         }
         return original;
     }
