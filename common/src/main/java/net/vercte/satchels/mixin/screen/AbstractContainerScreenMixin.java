@@ -3,10 +3,12 @@ package net.vercte.satchels.mixin.screen;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.gui.screens.inventory.*;
 import net.vercte.satchels.satchel.ScreenWithSatchel;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
+@Debug(export = true)
 @Mixin(AbstractContainerScreen.class)
 public class AbstractContainerScreenMixin {
     @Shadow

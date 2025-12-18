@@ -27,9 +27,10 @@ public class ScreenWithSatchel {
         } else {
             this.satchelYOffset = Math.min(this.satchelYOffset + (offsetGoalDisabled-this.satchelYOffset)/5, offsetGoalDisabled);
         }
+        if(satchelYOffset > (offsetGoalDisabled - 0.1)) return;
 
-        if(satchelYOffset == offsetGoalDisabled) return;
-        graphics.blitSprite(ModSprites.SATCHEL_INVENTORY, left + 2, top + height - (int)this.satchelYOffset - 1, 118, 27);
+        int satchelXOffset = satchelData.getSatchelOffset() * 18;
+        graphics.blitSprite(ModSprites.SATCHEL_INVENTORY, left + 2 + satchelXOffset, top + height - (int)this.satchelYOffset - 1, 118, 27);
     }
 
     public void renderSatchelSlot(GuiGraphics graphics, int left, int top) {

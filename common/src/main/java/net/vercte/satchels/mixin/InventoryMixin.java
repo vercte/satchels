@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.logging.LogUtils;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
@@ -35,7 +34,8 @@ public abstract class InventoryMixin {
     public ItemStack getSelected(ItemStack original) {
         SatchelData satchelData = SatchelData.get(player);
         if(satchelData.isSatchelEnabled() && satchelData.isSlotInSatchel(this.selected)) {
-            return satchelData.getSatchelInventory().getItem(this.selected);
+            int satchelIndex = satchelData.convertToSatchelIndex(this.selected);
+            return satchelData.getSatchelInventory().getItem(satchelIndex);
         }
         return original;
     }
@@ -63,7 +63,6 @@ public abstract class InventoryMixin {
     public void removeFromSelected(boolean fullStack, CallbackInfoReturnable<ItemStack> cir) {
         SatchelData satchelData = SatchelData.get(this.player);
         if(satchelData.isSatchelEnabled() && satchelData.isSlotInSatchel(this.selected)) {
-            LogUtils.getLogger().info("dropped {}", this.selected);
             int slot = satchelData.convertToSatchelIndex(this.selected);
             ItemStack satchelSelected = satchelData.getSatchelInventory().getItem(slot);
             if(satchelSelected.isEmpty()) cir.setReturnValue(ItemStack.EMPTY);

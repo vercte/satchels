@@ -22,10 +22,6 @@ public class SatchelInventory implements Container {
         this.satchelData = parent;
     }
 
-    public boolean isAccessible() {
-        return this.satchelData.canAccessSatchelInventory();
-    }
-
     public ListTag save(ListTag tag) {
         for(int i = 0; i < this.items.size(); i++) {
             if(this.items.get(i).isEmpty()) continue;

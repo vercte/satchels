@@ -33,11 +33,13 @@ public class SatchelHotbarOverlay {
         } else {
             yOffset = Math.min(yOffset + (offsetGoal-yOffset)/5, offsetGoal);
         }
+        if(yOffset > (offsetGoal - 0.1)) return;
 
         graphics.pose().pushPose();
         graphics.pose().translate(0, yOffset, 750.00);
 
-        graphics.blitSprite(ModSprites.SATCHEL_HOTBAR, x, y, 121, 22);
+        int xOffset = satchelData.getSatchelOffset() * 20;
+        graphics.blitSprite(ModSprites.SATCHEL_HOTBAR, x + 1 + xOffset, y, 120, 22);
 
         int selected = player.getInventory().selected;
         boolean selectedInSatchel = satchelData.isSlotInSatchel(selected);
@@ -54,7 +56,7 @@ public class SatchelHotbarOverlay {
 
         for(int i = 0; i < satchelData.getSatchelInventory().getContainerSize(); i++) {
             ItemStack stack = satchelData.getSatchelInventory().getItem(i);
-            SatchelHotbarOverlay.renderSlot(graphics, x + (i*20) + 3, y + 3, deltaTracker, player, stack, i+1);
+            SatchelHotbarOverlay.renderSlot(graphics, x + (i*20) + 3 + xOffset, y + 3, deltaTracker, player, stack, i+1);
         }
         graphics.pose().popPose();
     }

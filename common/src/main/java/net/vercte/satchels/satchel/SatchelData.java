@@ -3,6 +3,7 @@ package net.vercte.satchels.satchel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.vercte.satchels.ModItems;
 import net.vercte.satchels.ModSounds;
@@ -15,11 +16,13 @@ public class SatchelData {
     private final SatchelSlotInventory satchelSlotInventory;
 
     boolean satchelEnabled;
+    int satchelOffset;
     int timesChanged;
 
     public SatchelData(Player player) {
         this.player = player;
         this.satchelEnabled = false;
+        this.satchelOffset = 0;
         this.timesChanged = 0;
 
         this.satchelInventory = new SatchelInventory(this);
@@ -76,12 +79,19 @@ public class SatchelData {
     }
 
     public boolean isSlotInSatchel(int slot) {
-        return 0 <= slot && slot < 6;
+        return getSatchelOffset() <= slot && slot < 6 + getSatchelOffset();
     }
 
-    // TODO: Configure satchel position
     public int convertToSatchelIndex(int slot) {
-        return slot;
+        return slot - getSatchelOffset();
+    }
+
+    public void setSatchelOffset(int satchelOffset) {
+        this.satchelOffset = Mth.clamp(0, satchelOffset, 3);
+    }
+
+    public int getSatchelOffset() {
+        return this.satchelOffset;
     }
 
     public void setChanged() { this.timesChanged += 1; }
