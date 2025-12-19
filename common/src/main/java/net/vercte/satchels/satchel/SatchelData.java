@@ -29,6 +29,49 @@ public class SatchelData {
         this.satchelSlotInventory = new SatchelSlotInventory(this);
     }
 
+    @NotNull
+    public static SatchelData get(Player player) {
+        return ((HasSatchelData)player).satchels$getSatchelData();
+    }
+
+    public boolean canAccessSatchelInventory() {
+        return this.getSatchelSlotInventory().getItem(0).is(ModItems.SATCHEL.get());
+    }
+
+    public boolean isSatchelEnabled() {
+        return canAccessSatchelInventory() && this.satchelEnabled;
+    }
+
+    public void setSatchelEnabled(boolean enabled, boolean playSound) {
+        this.satchelEnabled = enabled;
+
+        if(!playSound) return;
+        float pitch = 0.9f + (player.getRandom().nextFloat() / 5);
+        if (enabled) player.playSound(ModSounds.SATCHEL_OPEN.get(), 0.5f, pitch);
+        else player.playSound(ModSounds.SATCHEL_CLOSE.get(), 0.5f, pitch);
+    }
+
+    public boolean isSlotInSatchel(int slot) {
+        return getSatchelOffset() <= slot && slot < 6 + getSatchelOffset();
+    }
+
+    public int convertToSatchelIndex(int slot) {
+        return slot - getSatchelOffset();
+    }
+
+    public void setSatchelOffset(int satchelOffset) {
+        this.satchelOffset = Mth.clamp(0, satchelOffset, 3);
+    }
+
+    public int getSatchelOffset() {
+        return this.satchelOffset;
+    }
+
+    public void updateClient() {
+        if(!(this.player instanceof ServerPlayer sp)) return;
+        SatchelStatusPacketS2C.send(sp, this.satchelEnabled);
+    }
+
     public void save(CompoundTag tag) {
         CompoundTag satchelDataTag = new CompoundTag();
 
@@ -49,49 +92,6 @@ public class SatchelData {
 
         CompoundTag satchelSlotTag = satchelDataTag.getCompound("satchelSlot");
         this.satchelSlotInventory.load(satchelSlotTag);
-    }
-
-    public void updateClient() {
-        if(!(this.player instanceof ServerPlayer sp)) return;
-        SatchelStatusPacketS2C.send(sp, this.satchelEnabled);
-    }
-
-    @NotNull
-    public static SatchelData get(Player player) {
-        return ((HasSatchelData)player).satchels$getSatchelData();
-    }
-
-    public boolean canAccessSatchelInventory() {
-        return this.getSatchelSlotInventory().getItem(0).is(ModItems.SATCHEL.get());
-    }
-
-    public void setSatchelEnabled(boolean enabled, boolean playSound) {
-        this.satchelEnabled = enabled;
-
-        if(!playSound) return;
-        float pitch = 0.9f + (player.getRandom().nextFloat() / 5);
-        if (enabled) player.playSound(ModSounds.SATCHEL_OPEN.get(), 0.5f, pitch);
-        else player.playSound(ModSounds.SATCHEL_CLOSE.get(), 0.5f, pitch);
-    }
-
-    public boolean isSatchelEnabled() {
-        return canAccessSatchelInventory() && this.satchelEnabled;
-    }
-
-    public boolean isSlotInSatchel(int slot) {
-        return getSatchelOffset() <= slot && slot < 6 + getSatchelOffset();
-    }
-
-    public int convertToSatchelIndex(int slot) {
-        return slot - getSatchelOffset();
-    }
-
-    public void setSatchelOffset(int satchelOffset) {
-        this.satchelOffset = Mth.clamp(0, satchelOffset, 3);
-    }
-
-    public int getSatchelOffset() {
-        return this.satchelOffset;
     }
 
     public void setChanged() { this.timesChanged += 1; }
