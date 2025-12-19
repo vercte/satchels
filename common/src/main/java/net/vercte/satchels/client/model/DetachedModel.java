@@ -26,7 +26,7 @@ public class DetachedModel {
     }
 
     public static DetachedModel of(String path) {
-        return ALL.computeIfAbsent(Satchels.at(path), DetachedModel::new);
+        return of(Satchels.at(path));
     }
 
     @UnknownNullability
