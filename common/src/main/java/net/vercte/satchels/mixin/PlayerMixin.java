@@ -63,8 +63,8 @@ public abstract class PlayerMixin extends LivingEntity implements HasSatchelData
         SatchelData satchelData = SatchelData.get((Player)(Object) this);
 
         if(satchelData.isSatchelEnabled()) {
+            if(!satchelData.isSlotInSatchel(this.inventory.selected)) return;
             int satchelIndex = satchelData.convertToSatchelIndex(this.inventory.selected);
-            if(!satchelData.isSlotInSatchel(satchelIndex)) return;
 
             SatchelInventory satchelInventory = satchelData.getSatchelInventory();
             this.onEquipItem(equipmentSlot, satchelInventory.items.set(satchelIndex, itemStack), itemStack);
