@@ -2,7 +2,7 @@ package net.vercte.satchels.mixin.screen;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.gui.screens.inventory.*;
-import net.vercte.satchels.satchel.ScreenWithSatchel;
+import net.vercte.satchels.client.ScreenWithSatchel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

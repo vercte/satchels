@@ -51,6 +51,10 @@ public class SatchelData {
         else player.playSound(ModSounds.SATCHEL_CLOSE.get(), 0.5f, pitch);
     }
 
+    public boolean isSatchelRendered() {
+        return canAccessSatchelInventory();
+    }
+
     public boolean isSlotInSatchel(int slot) {
         return getSatchelOffset() <= slot && slot < 6 + getSatchelOffset();
     }

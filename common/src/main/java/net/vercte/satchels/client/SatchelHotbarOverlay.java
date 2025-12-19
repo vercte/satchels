@@ -1,4 +1,4 @@
-package net.vercte.satchels.satchel;
+package net.vercte.satchels.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.DeltaTracker;
@@ -9,8 +9,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.vercte.satchels.ModSprites;
+import net.vercte.satchels.satchel.SatchelData;
 
 public class SatchelHotbarOverlay {
+    public static final String ID = "satchel_hotbar";
     private static float yOffset = 0;
 
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {

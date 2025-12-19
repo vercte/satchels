@@ -1,42 +1,64 @@
 package net.vercte.satchels.neoforge.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.common.NeoForge;
 import net.vercte.satchels.Satchels;
 import net.vercte.satchels.SatchelsClient;
+import net.vercte.satchels.client.SatchelHotbarOverlay;
+import net.vercte.satchels.client.SatchelLayer;
 import net.vercte.satchels.config.ClientConfig;
 import net.vercte.satchels.network.ClientConfigUpdatePacketC2S;
 import net.vercte.satchels.satchel.SatchelData;
-import net.vercte.satchels.satchel.SatchelHotbarOverlay;
 
-@EventBusSubscriber
 @Mod(value = Satchels.ID, dist = Dist.CLIENT)
 public class SatchelsNeoForgeClient {
-    public SatchelsNeoForgeClient() {
+    public SatchelsNeoForgeClient(IEventBus modEventBus) {
         SatchelsClient.init();
+
+        NeoForge.EVENT_BUS.addListener(SatchelsNeoForgeClient::endClientTick);
+        NeoForge.EVENT_BUS.addListener(SatchelsNeoForgeClient::onLocalPlayerJoin);
+
+        modEventBus.addListener(SatchelsNeoForgeClient::registerOverlays);
+        modEventBus.addListener(SatchelsNeoForgeClient::addEntityRenderLayers);
+        modEventBus.addListener(NeoForgeDetachedModelPopulator::onRegisterAdditional);
+        modEventBus.addListener(NeoForgeDetachedModelPopulator::onBakingCompleted);
     }
 
-    @SubscribeEvent
     public static void endClientTick(final ClientTickEvent.Post event) {
         SatchelsClient.endClientTick();
     }
 
-    @SubscribeEvent
     public static void registerOverlays(final RegisterGuiLayersEvent event) {
-        event.registerAbove(VanillaGuiLayers.HOTBAR, Satchels.at("satchel_hotbar"), SatchelHotbarOverlay::render);
+        event.registerAbove(VanillaGuiLayers.HOTBAR, Satchels.at(SatchelHotbarOverlay.ID), SatchelHotbarOverlay::render);
     }
 
-    @SubscribeEvent
     public static void onLocalPlayerJoin(final ClientPlayerNetworkEvent.LoggingIn event) {
         int satchelOffset = ClientConfig.getSatchelOffset();
         SatchelData.get(Minecraft.getInstance().player).setSatchelOffset(satchelOffset);
         ClientConfigUpdatePacketC2S.send(satchelOffset);
+    }
+
+    public static void addEntityRenderLayers(final EntityRenderersEvent.AddLayers event) {
+        EntityRenderDispatcher erDispatcher = event.getContext().getEntityRenderDispatcher();
+        BlockRenderDispatcher brDispatcher = event.getContext().getBlockRenderDispatcher();
+
+        for(EntityRenderer<? extends Player> renderer : erDispatcher.getSkinMap().values()) {
+            if(renderer instanceof PlayerRenderer playerRenderer) {
+                playerRenderer.addLayer(new SatchelLayer<>(playerRenderer, brDispatcher));
+            }
+        }
     }
 }

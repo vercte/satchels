@@ -11,7 +11,7 @@ import net.vercte.satchels.config.ClientConfig;
 import net.vercte.satchels.network.ClientConfigUpdatePacketC2S;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
 import net.vercte.satchels.satchel.SatchelData;
-import net.vercte.satchels.satchel.SatchelHotbarOverlay;
+import net.vercte.satchels.client.SatchelHotbarOverlay;
 
 public final class SatchelsFabricClient implements ClientModInitializer {
     @Override
