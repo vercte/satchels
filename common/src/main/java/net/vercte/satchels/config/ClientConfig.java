@@ -15,7 +15,7 @@ import java.util.Objects;
 public class ClientConfig {
     private static ClientConfig INSTANCE = null;
 
-    @Comment("The first slot that the Satchel is placed on. 0 <= x <= 3")
+    @Comment("The first stack that the Satchel is placed on. 0 <= x <= 3")
     public int satchelOffset = 0;
 
     public static ClientConfig get() {

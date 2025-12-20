@@ -1,0 +1,69 @@
+package net.vercte.satchels.network;
+
+import com.mojang.logging.LogUtils;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.vercte.satchels.Satchels;
+import net.vercte.satchels.platform.Services;
+import net.vercte.satchels.satchel.SatchelData;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+public record SatchelSlotUpdatePacketS2C(Map<String, ItemStack> satchelSlots) implements CustomPacketPayload {
+    public static final ResourceLocation ID = Satchels.at("satchel_slot_update");
+    public static final CustomPacketPayload.Type<SatchelSlotUpdatePacketS2C> TYPE = new CustomPacketPayload.Type<>(ID);
+    public static final StreamCodec<RegistryFriendlyByteBuf, SatchelSlotUpdatePacketS2C> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.map(HashMap::new, ByteBufCodecs.STRING_UTF8, ItemStack.OPTIONAL_STREAM_CODEC), SatchelSlotUpdatePacketS2C::satchelSlots,
+            SatchelSlotUpdatePacketS2C::new
+    );
+
+    public static void broadcast(ServerPlayer player, ItemStack stack) {
+        Map<String, ItemStack> map = Map.of(player.getStringUUID(), stack);
+        Services.NETWORK.sendPacketToTrackers(
+                player,
+                new SatchelSlotUpdatePacketS2C(map)
+        );
+    }
+
+    public static void sendCurrentValues(ServerPlayer target, Map<ServerPlayer, ItemStack> slotMap) {
+        Map<String, ItemStack> transformedMap = new HashMap<>();
+        slotMap.forEach((p, s) -> transformedMap.put(p.getStringUUID(), s));
+
+        Services.NETWORK.sendPacketToTrackers(
+                target,
+                new SatchelSlotUpdatePacketS2C(transformedMap)
+        );
+    }
+
+    public static void handle(SatchelSlotUpdatePacketS2C packet, Level level) {
+        packet.satchelSlots().forEach((playerID, stack) -> {
+            Player handledPlayer = level.getPlayerByUUID(UUID.fromString(playerID));
+            if(handledPlayer == null) {
+                LogUtils.getLogger().warn("Could not find player {}", handledPlayer);
+                return;
+            }
+            if(handledPlayer.isLocalPlayer()) return;
+
+            SatchelData satchelData = SatchelData.get(handledPlayer);
+
+            ItemStack setStack = stack.copy();
+            satchelData.getSatchelSlotInventory().setItem(0, setStack);
+        });
+    }
+
+    @Override
+    @NotNull
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+}

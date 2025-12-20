@@ -5,16 +5,22 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.vercte.satchels.ModItems;
 import net.vercte.satchels.ModSounds;
+import net.vercte.satchels.network.SatchelSlotUpdatePacketS2C;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SatchelData {
     private final Player player;
     private final SatchelInventory satchelInventory;
     private final SatchelSlotInventory satchelSlotInventory;
 
+    ItemStack lastSatchelSlotValue = ItemStack.EMPTY;
     boolean satchelEnabled;
     int satchelOffset;
     int timesChanged;
@@ -55,6 +61,16 @@ public class SatchelData {
         return canAccessSatchelInventory();
     }
 
+    public boolean checkForSatchelSlotChange() {
+        ItemStack current = this.getSatchelSlotInventory().getItem(0);
+        if(!ItemStack.isSameItemSameComponents(current, this.lastSatchelSlotValue)) {
+            this.lastSatchelSlotValue = current.copy();
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean isSlotInSatchel(int slot) {
         return getSatchelOffset() <= slot && slot < 6 + getSatchelOffset();
     }
@@ -72,8 +88,21 @@ public class SatchelData {
     }
 
     public void updateClient() {
-        if(!(this.player instanceof ServerPlayer sp)) return;
-        SatchelStatusPacketS2C.send(sp, this.satchelEnabled);
+        if(!(this.player instanceof ServerPlayer serverPlayer)) return;
+        SatchelStatusPacketS2C.send(serverPlayer, this.satchelEnabled);
+
+        Map<ServerPlayer, ItemStack> serverSatchelSlots = new HashMap<>();
+        serverPlayer.level().players().forEach(p -> {
+            if(!(p instanceof ServerPlayer sp)) return;
+
+            SatchelData playerSatchelData = SatchelData.get(sp);
+
+            ItemStack equipped = playerSatchelData.getSatchelSlotInventory().getItem(0);
+            if(equipped.isEmpty()) return;
+
+            serverSatchelSlots.put(sp, equipped);
+        });
+        SatchelSlotUpdatePacketS2C.sendCurrentValues(serverPlayer, serverSatchelSlots);
     }
 
     public void save(CompoundTag tag) {

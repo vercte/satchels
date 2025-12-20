@@ -55,7 +55,7 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 
-    forgeRuntimeLibrary("blue.endless:jankson:$rootProject.jankson_version")
+    include forgeRuntimeLibrary("blue.endless:jankson:$rootProject.jankson_version")
 }
 
 processResources {
@@ -73,4 +73,5 @@ shadowJar {
 
 remapJar {
     input.set shadowJar.archiveFile
+    atAccessWideners.add("satchels.accesswidener")
 }
