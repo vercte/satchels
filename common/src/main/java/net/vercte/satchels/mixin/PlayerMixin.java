@@ -57,7 +57,7 @@ public abstract class PlayerMixin extends LivingEntity implements HasSatchelData
     public void dropSatchelEquipment(CallbackInfo ci) {
         SatchelData satchelData = SatchelData.get((Player)(Object) this);
         satchelData.getSatchelInventory().dropAll(true);
-        satchelData.getSatchelSlotInventory().drop();
+//        satchelData.getSatchelSlotInventory().drop();
     }
 
     @Inject(method = "destroyVanishingCursedItems", at = @At("TAIL"))
@@ -70,10 +70,10 @@ public abstract class PlayerMixin extends LivingEntity implements HasSatchelData
             }
         }
 
-        ItemStack satchelStack = satchelData.getSatchelSlotInventory().getItem(0);
-        if (!satchelStack.isEmpty() && EnchantmentHelper.has(satchelStack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
-            satchelData.getSatchelSlotInventory().removeItemNoUpdate(0);
-        }
+//        ItemStack satchelStack = satchelData.getSatchelSlotInventory().getItem(0);
+//        if (!satchelStack.isEmpty() && EnchantmentHelper.has(satchelStack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
+//            satchelData.getSatchelSlotInventory().removeItemNoUpdate(0);
+//        }
     }
 
     @Inject(method = "setItemSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/NonNullList;set(ILjava/lang/Object;)Ljava/lang/Object;", ordinal = 0), cancellable = true)

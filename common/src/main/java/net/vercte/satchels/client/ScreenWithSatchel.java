@@ -3,7 +3,6 @@ package net.vercte.satchels.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.vercte.satchels.ModSprites;
 import net.vercte.satchels.satchel.SatchelData;
@@ -34,9 +33,9 @@ public class ScreenWithSatchel {
         graphics.blitSprite(ModSprites.SATCHEL_INVENTORY, left + 2 + satchelXOffset, top + height - (int)this.satchelYOffset - 1, 118, 27);
     }
 
-    public void renderSatchelSlot(GuiGraphics graphics, int left, int top) {
-        graphics.blitSprite(ResourceLocation.withDefaultNamespace("container/slot"), left + 151, top + 61, 18, 18);
-    }
+//    public void renderSatchelSlot(GuiGraphics graphics, int left, int top) {
+//        graphics.blitSprite(ResourceLocation.withDefaultNamespace("container/slot"), left + 151, top + 61, 18, 18);
+//    }
 
     public static boolean hasClickedOutside(boolean original, double x, double y, int left, int top, int height) {
         // Prevent it from ejecting items if we click the satchel portion

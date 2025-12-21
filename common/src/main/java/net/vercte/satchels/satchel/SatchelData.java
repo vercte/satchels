@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.vercte.satchels.ModItems;
 import net.vercte.satchels.ModSounds;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class SatchelData {
     private final Player player;
     private final SatchelInventory satchelInventory;
-    private final SatchelSlotInventory satchelSlotInventory;
+//    private final SatchelSlotInventory satchelSlotInventory;
 
     ItemStack lastSatchelSlotValue = ItemStack.EMPTY;
     boolean satchelEnabled;
@@ -28,7 +27,7 @@ public class SatchelData {
         this.timesChanged = 0;
 
         this.satchelInventory = new SatchelInventory(this);
-        this.satchelSlotInventory = new SatchelSlotInventory(this);
+//        this.satchelSlotInventory = new SatchelSlotInventory(this);
     }
 
     @NotNull
@@ -37,7 +36,7 @@ public class SatchelData {
     }
 
     public boolean canAccessSatchelInventory() {
-        return this.getSatchelSlotInventory().getItem(0).is(ModItems.SATCHEL.get());
+        return true;
     }
 
     public boolean isSatchelEnabled() {
@@ -55,16 +54,6 @@ public class SatchelData {
 
     public boolean isSatchelRendered() {
         return canAccessSatchelInventory();
-    }
-
-    public boolean checkForSatchelSlotChange() {
-        ItemStack current = this.getSatchelSlotInventory().getItem(0);
-        if(!ItemStack.isSameItemSameComponents(current, this.lastSatchelSlotValue)) {
-            this.lastSatchelSlotValue = current.copy();
-            return true;
-        }
-
-        return false;
     }
 
     public boolean isSlotInSatchel(int slot) {
@@ -107,7 +96,7 @@ public class SatchelData {
 
         satchelDataTag.putBoolean("satchelEnabled", this.satchelEnabled);
         satchelDataTag.put("satchelInventory", this.satchelInventory.save(new ListTag()));
-        satchelDataTag.put("satchelSlot", this.satchelSlotInventory.save(new CompoundTag()));
+//        satchelDataTag.put("satchelSlot", this.satchelSlotInventory.save(new CompoundTag()));
 
         tag.put("satchels$satchelData", satchelDataTag);
     }
@@ -120,8 +109,8 @@ public class SatchelData {
         ListTag inventoryTag = satchelDataTag.getList("satchelInventory", ListTag.TAG_COMPOUND);
         this.satchelInventory.load(inventoryTag);
 
-        CompoundTag satchelSlotTag = satchelDataTag.getCompound("satchelSlot");
-        this.satchelSlotInventory.load(satchelSlotTag);
+//        CompoundTag satchelSlotTag = satchelDataTag.getCompound("satchelSlot");
+//        this.satchelSlotInventory.load(satchelSlotTag);
     }
 
     public void setChanged() { this.timesChanged += 1; }
@@ -129,5 +118,5 @@ public class SatchelData {
 
     public Player getPlayer() { return player; }
     public SatchelInventory getSatchelInventory() { return satchelInventory; }
-    public SatchelSlotInventory getSatchelSlotInventory() { return satchelSlotInventory; }
+//    public SatchelSlotInventory getSatchelSlotInventory() { return satchelSlotInventory; }
 }

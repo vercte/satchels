@@ -77,7 +77,7 @@ public abstract class InventoryMixin {
         int extraCleared = original.call(container, predicate, i - cleared, bl);
         SatchelData satchelData = SatchelData.get(this.player);
         extraCleared += ContainerHelper.clearOrCountMatchingItems(satchelData.getSatchelInventory(), predicate, i - extraCleared - cleared, bl);
-        extraCleared += ContainerHelper.clearOrCountMatchingItems(satchelData.getSatchelSlotInventory(), predicate, i - extraCleared - cleared, bl);
+//        extraCleared += ContainerHelper.clearOrCountMatchingItems(satchelData.getSatchelSlotInventory(), predicate, i - extraCleared - cleared, bl);
 
         return extraCleared;
     }

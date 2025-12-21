@@ -25,10 +25,10 @@ public abstract class InventoryScreenMixin<T extends AbstractContainerMenu> exte
         satchels$screenWithSatchel.renderSatchelInventory(guiGraphics, this.leftPos, this.topPos, this.imageHeight);
     }
 
-    @Inject(method = "renderBg", at = @At("TAIL"))
-    public void renderSatchelSlot(GuiGraphics guiGraphics, float f, int i, int j, CallbackInfo ci) {
-        satchels$screenWithSatchel.renderSatchelSlot(guiGraphics, this.leftPos, this.topPos);
-    }
+//    @Inject(method = "renderBg", at = @At("TAIL"))
+//    public void renderSatchelSlot(GuiGraphics guiGraphics, float f, int i, int j, CallbackInfo ci) {
+//        satchels$screenWithSatchel.renderSatchelSlot(guiGraphics, this.leftPos, this.topPos);
+//    }
 
     @ModifyReturnValue(method = "hasClickedOutside", at = @At("RETURN"))
     public boolean hasClickedOutside(boolean original, double x, double y, int left, int top, int button) {
