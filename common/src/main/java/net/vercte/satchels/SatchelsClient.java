@@ -12,7 +12,7 @@ import org.apache.logging.log4j.util.Lazy;
 import org.lwjgl.glfw.GLFW;
 
 public class SatchelsClient {
-    public static Lazy<KeyMapping> KEYMAPPING_TOGGLE_SATCHEL = Lazy.lazy(
+    public static final Lazy<KeyMapping> KEYMAPPING_TOGGLE_SATCHEL = Lazy.lazy(
             () -> new KeyMapping("key.satchels.toggle_satchel", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, KeyMapping.CATEGORY_INVENTORY)
     );
 

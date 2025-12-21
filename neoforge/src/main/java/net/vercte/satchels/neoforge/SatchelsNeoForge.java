@@ -3,9 +3,8 @@ package net.vercte.satchels.neoforge;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
@@ -17,21 +16,22 @@ import net.vercte.satchels.neoforge.client.NeoForgeClientPacketHandler;
 import net.vercte.satchels.neoforge.datagen.SatchelsDatagen;
 import net.vercte.satchels.neoforge.platform.NeoForgeRegistryHelper;
 import net.vercte.satchels.network.ClientConfigUpdatePacketC2S;
-import net.vercte.satchels.network.SatchelSlotUpdatePacketS2C;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
 import net.vercte.satchels.network.ToggleSatchelPacketC2S;
 import net.vercte.satchels.satchel.SatchelData;
 
 @Mod(Satchels.ID)
-@EventBusSubscriber
 public final class SatchelsNeoForge {
     public SatchelsNeoForge(IEventBus bus) {
         Satchels.init();
 
+        NeoForgeRegistryHelper.register(bus);
+
         bus.addListener(SatchelsNeoForge::registerBindings);
         bus.addListener(SatchelsNeoForge::registerPayloadHandlers);
         bus.addListener(SatchelsDatagen::gatherData);
-        NeoForgeRegistryHelper.register(bus);
+//        NeoForge.EVENT_BUS.addListener(SatchelsNeoForge::sendSatchelData);
+        NeoForge.EVENT_BUS.addListener(SatchelsNeoForge::playerJoin);
     }
 
     public static void registerBindings(final RegisterKeyMappingsEvent event) {
@@ -59,14 +59,18 @@ public final class SatchelsNeoForge {
                 NeoForgeClientPacketHandler::handleSatchelStatusPacket
         );
 
-        registrar.playToClient(
-                SatchelSlotUpdatePacketS2C.TYPE,
-                SatchelSlotUpdatePacketS2C.STREAM_CODEC,
-                NeoForgeClientPacketHandler::handleSatchelSlotUpdatePacket
-        );
+//        registrar.playToClient(
+//                SatchelSlotUpdatePacketS2C.TYPE,
+//                SatchelSlotUpdatePacketS2C.STREAM_CODEC,
+//                NeoForgeClientPacketHandler::handleSatchelSlotUpdatePacket
+//        );
     }
 
-    @SubscribeEvent
+//    public static void sendSatchelData(PlayerEvent.StartTracking event) {
+//        if(!(event.getTarget() instanceof Player targetPlayer)) return;
+//        SatchelData.updateTrackedSatchelsForPlayer(event.getEntity(), targetPlayer);
+//    }
+
     public static void playerJoin(final PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
         if(!(player instanceof ServerPlayer sp)) return;

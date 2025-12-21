@@ -8,12 +8,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.vercte.satchels.ModItems;
 import net.vercte.satchels.ModSounds;
-import net.vercte.satchels.network.SatchelSlotUpdatePacketS2C;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class SatchelData {
     private final Player player;
@@ -90,20 +86,21 @@ public class SatchelData {
     public void updateClient() {
         if(!(this.player instanceof ServerPlayer serverPlayer)) return;
         SatchelStatusPacketS2C.send(serverPlayer, this.satchelEnabled);
-
-        Map<ServerPlayer, ItemStack> serverSatchelSlots = new HashMap<>();
-        serverPlayer.level().players().forEach(p -> {
-            if(!(p instanceof ServerPlayer sp)) return;
-
-            SatchelData playerSatchelData = SatchelData.get(sp);
-
-            ItemStack equipped = playerSatchelData.getSatchelSlotInventory().getItem(0);
-            if(equipped.isEmpty()) return;
-
-            serverSatchelSlots.put(sp, equipped);
-        });
-        SatchelSlotUpdatePacketS2C.sendCurrentValues(serverPlayer, serverSatchelSlots);
     }
+
+//    public static void updateTrackedSatchelsForPlayer(Player player, Player targetEntity) {
+//        Map<Player, ItemStack> serverSatchelSlots = new HashMap<>();
+//
+//        SatchelData playerSatchelData = SatchelData.get(targetEntity);
+//
+//        ItemStack equipped = playerSatchelData.getSatchelSlotInventory().getItem(0);
+//        if(equipped.isEmpty()) return;
+//
+//        serverSatchelSlots.put(targetEntity, equipped);
+//
+//        LogUtils.getLogger().info("GOD DAMN IT!! SENDING {} TO {}", serverSatchelSlots, player.getName().getString());
+//        SatchelSlotUpdatePacketS2C.sendCurrentValues(player, serverSatchelSlots);
+//    }
 
     public void save(CompoundTag tag) {
         CompoundTag satchelDataTag = new CompoundTag();

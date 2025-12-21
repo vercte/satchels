@@ -26,7 +26,6 @@ import net.vercte.satchels.client.SatchelLayer;
 import net.vercte.satchels.client.model.DetachedModel;
 import net.vercte.satchels.config.ClientConfig;
 import net.vercte.satchels.network.ClientConfigUpdatePacketC2S;
-import net.vercte.satchels.network.SatchelSlotUpdatePacketS2C;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
 import net.vercte.satchels.satchel.SatchelData;
 
@@ -39,7 +38,7 @@ public final class SatchelsFabricClient implements ClientModInitializer {
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register(SatchelsFabricClient::addEntityRendererLayers);
 
         ClientPlayNetworking.registerGlobalReceiver(SatchelStatusPacketS2C.TYPE, (p, cx) -> SatchelStatusPacketS2C.handle(p, cx.player()));
-        ClientPlayNetworking.registerGlobalReceiver(SatchelSlotUpdatePacketS2C.TYPE, (p, cx) -> SatchelSlotUpdatePacketS2C.handle(p, cx.player().level()));
+//        ClientPlayNetworking.registerGlobalReceiver(SatchelSlotUpdatePacketS2C.TYPE, (p, cx) -> SatchelSlotUpdatePacketS2C.handle(p, cx.player().level()));
 
         HudRenderCallback.EVENT.register(SatchelHotbarOverlay::render);
         ClientPlayConnectionEvents.JOIN.register(SatchelsFabricClient::onJoinServer);

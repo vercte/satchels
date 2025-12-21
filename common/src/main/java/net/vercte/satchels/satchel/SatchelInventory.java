@@ -158,20 +158,20 @@ public class SatchelInventory implements Container {
         return this.add(-1, stack);
     }
 
-    public boolean add(int i, ItemStack stack) {
+    public boolean add(int slot, ItemStack stack) {
         if (stack.isEmpty()) {
             return false;
         } else {
             Player player = this.satchelData.getPlayer();
             try {
                 if (stack.isDamaged()) {
-                    if (i == -1) {
-                        i = this.getFreeSlot();
+                    if (slot == -1) {
+                        slot = this.getFreeSlot();
                     }
 
-                    if (i >= 0) {
-                        this.items.set(i, stack.copyAndClear());
-                        this.items.get(i).setPopTime(5);
+                    if (slot >= 0) {
+                        this.items.set(slot, stack.copyAndClear());
+                        this.items.get(slot).setPopTime(5);
                         return true;
                     } else if (player.hasInfiniteMaterials()) {
                         stack.setCount(0);
@@ -183,10 +183,10 @@ public class SatchelInventory implements Container {
                     int j;
                     do {
                         j = stack.getCount();
-                        if (i == -1) {
+                        if (slot == -1) {
                             stack.setCount(this.addResource(stack));
                         } else {
-                            stack.setCount(this.addResource(i, stack));
+                            stack.setCount(this.addResource(slot, stack));
                         }
                     } while (!stack.isEmpty() && stack.getCount() < j);
 
@@ -209,31 +209,29 @@ public class SatchelInventory implements Container {
     }
 
     private int addResource(ItemStack itemStack) {
-        int i = this.getSlotWithRemainingSpace(itemStack);
-        if (i == -1) {
-            i = this.getFreeSlot();
+        int slot = this.getSlotWithRemainingSpace(itemStack);
+        if (slot == -1) {
+            slot = this.getFreeSlot();
         }
 
-        return i == -1 ? itemStack.getCount() : this.addResource(i, itemStack);
+        return slot == -1 ? itemStack.getCount() : this.addResource(slot, itemStack);
     }
 
     private int addResource(int i, ItemStack itemStack) {
-        int j = itemStack.getCount();
-        ItemStack itemStack2 = this.getItem(i);
-        if (itemStack2.isEmpty()) {
-            itemStack2 = itemStack.copyWithCount(0);
-            this.setItem(i, itemStack2);
+        int count = itemStack.getCount();
+        ItemStack containedItem = this.getItem(i);
+        if (containedItem.isEmpty()) {
+            containedItem = itemStack.copyWithCount(0);
+            this.setItem(i, containedItem);
         }
 
-        int k = this.getMaxStackSize(itemStack2) - itemStack2.getCount();
-        int l = Math.min(j, k);
-        if (l == 0) {
-            return j;
-        } else {
-            j -= l;
-            itemStack2.grow(l);
-            itemStack2.setPopTime(5);
-            return j;
+        int max = this.getMaxStackSize(containedItem) - containedItem.getCount();
+        int added = Math.min(count, max);
+        if (added != 0) {
+            count -= added;
+            containedItem.grow(added);
+            containedItem.setPopTime(5);
         }
+        return count;
     }
 }

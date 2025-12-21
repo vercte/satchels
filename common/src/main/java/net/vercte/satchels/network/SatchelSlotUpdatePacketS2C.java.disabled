@@ -35,7 +35,7 @@ public record SatchelSlotUpdatePacketS2C(Map<String, ItemStack> satchelSlots) im
         );
     }
 
-    public static void sendCurrentValues(ServerPlayer target, Map<ServerPlayer, ItemStack> slotMap) {
+    public static void sendCurrentValues(Player target, Map<Player, ItemStack> slotMap) {
         Map<String, ItemStack> transformedMap = new HashMap<>();
         slotMap.forEach((p, s) -> transformedMap.put(p.getStringUUID(), s));
 
@@ -52,6 +52,7 @@ public record SatchelSlotUpdatePacketS2C(Map<String, ItemStack> satchelSlots) im
                 LogUtils.getLogger().warn("Could not find player {}", handledPlayer);
                 return;
             }
+
             if(handledPlayer.isLocalPlayer()) return;
 
             SatchelData satchelData = SatchelData.get(handledPlayer);
