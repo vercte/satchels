@@ -1,5 +1,6 @@
 package net.vercte.satchels.client;
 
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
@@ -9,6 +10,10 @@ import net.vercte.satchels.satchel.SatchelData;
 
 public class ScreenWithSatchel {
     private float satchelYOffset = -1;
+    private float yOffsetOnChange = 0;
+    private long startTime = 0;
+    private long endTime = 0;
+    private boolean lastState = false;
 
     public void renderSatchelInventory(GuiGraphics graphics, int left, int top, int height) {
         Player player = Minecraft.getInstance().player;
@@ -21,13 +26,21 @@ public class ScreenWithSatchel {
             else this.satchelYOffset = 27;
         }
 
-        int offsetGoalDisabled = 27;
-        if(satchelData.canAccessSatchelInventory()) {
-            this.satchelYOffset = Math.max(this.satchelYOffset - (this.satchelYOffset)/5, 0);
-        } else {
-            this.satchelYOffset = Math.min(this.satchelYOffset + (offsetGoalDisabled-this.satchelYOffset)/5, offsetGoalDisabled);
+        int offsetGoal = 27;
+        boolean enabled = satchelData.canAccessSatchelInventory();
+        boolean stateChanged = this.lastState != enabled;
+        long currentTime = Util.getMillis();
+
+        if(stateChanged) {
+            startTime = currentTime;
+            endTime = currentTime + 300;
+            yOffsetOnChange = this.satchelYOffset;
+            lastState = enabled;
         }
-        if(satchelYOffset > (offsetGoalDisabled - 0.1)) return;
+
+        float progress = LerpHelper.getProgress(currentTime, this.startTime, this.endTime);
+        this.satchelYOffset = (int)LerpFunctions.EXPONENTIAL.lerp(progress, this.yOffsetOnChange, enabled ? 0 : offsetGoal);
+        if(this.satchelYOffset == offsetGoal) return;
 
         int satchelXOffset = satchelData.getSatchelOffset() * 18;
         graphics.blitSprite(ModSprites.SATCHEL_INVENTORY, left + 2 + satchelXOffset, top + height - (int)this.satchelYOffset - 1, 118, 27);

@@ -234,4 +234,11 @@ public class SatchelInventory implements Container {
         }
         return count;
     }
+
+    public int getSlotMatchingItem(ItemStack item) {
+        for(int i = 0; i < this.items.size(); i++) {
+            if(ItemStack.isSameItemSameComponents(item, this.items.get(i))) return i;
+        }
+        return -1;
+    }
 }

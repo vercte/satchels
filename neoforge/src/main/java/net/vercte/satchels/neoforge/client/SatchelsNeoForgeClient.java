@@ -42,7 +42,7 @@ public class SatchelsNeoForgeClient {
     }
 
     public static void registerOverlays(final RegisterGuiLayersEvent event) {
-        event.registerAbove(VanillaGuiLayers.HOTBAR, Satchels.at(SatchelHotbarOverlay.ID), SatchelHotbarOverlay::render);
+        event.registerAbove(VanillaGuiLayers.HOTBAR, Satchels.at(SatchelHotbarOverlay.ID), SatchelHotbarOverlay.INSTANCE::render);
     }
 
     public static void addEntityRenderLayers(final EntityRenderersEvent.AddLayers event) {

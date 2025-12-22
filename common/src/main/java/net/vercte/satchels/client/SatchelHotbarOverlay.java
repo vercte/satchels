@@ -1,6 +1,7 @@
 package net.vercte.satchels.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.Util;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -13,9 +14,15 @@ import net.vercte.satchels.satchel.SatchelData;
 
 public class SatchelHotbarOverlay {
     public static final String ID = "satchel_hotbar";
-    private static float yOffset = 0;
+    public static final SatchelHotbarOverlay INSTANCE = new SatchelHotbarOverlay();
 
-    public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
+    private long startTime = 0;
+    private long endTime = 0;
+    private boolean lastState = false;
+    private int yOffset = 0;
+    private int yOffsetOnChange = 0;
+
+    public void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui || mc.gameMode == null || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
             return;
@@ -29,16 +36,25 @@ public class SatchelHotbarOverlay {
 
         SatchelData satchelData = SatchelData.get(player);
 
-        int offsetGoal = 22;
-        if(satchelData.isSatchelEnabled()) {
-            yOffset = Math.max(yOffset - (yOffset)/5, 0);
-        } else {
-            yOffset = Math.min(yOffset + (offsetGoal-yOffset)/5, offsetGoal);
+        boolean enabled = satchelData.isSatchelEnabled();
+        boolean stateChanged = this.lastState != enabled;
+
+        int offsetGoal = 24;
+        long currentTime = Util.getMillis();
+
+        if(stateChanged) {
+            startTime = currentTime;
+            endTime = currentTime + 300;
+            yOffsetOnChange = this.yOffset;
+            lastState = enabled;
         }
-        if(yOffset > (offsetGoal - 0.1)) return;
+
+        float progress = LerpHelper.getProgress(currentTime, this.startTime, this.endTime);
+        this.yOffset = (int)LerpFunctions.EXPONENTIAL.lerp(progress, this.yOffsetOnChange, enabled ? 0 : offsetGoal);
+        if(this.yOffset == offsetGoal) return;
 
         graphics.pose().pushPose();
-        graphics.pose().translate(0, yOffset, 750.00);
+        graphics.pose().translate(0, this.yOffset, 750.00);
 
         int xOffset = satchelData.getSatchelOffset() * 20;
         graphics.blitSprite(ModSprites.SATCHEL_HOTBAR, x + 1 + xOffset, y, 120, 22);
@@ -47,7 +63,7 @@ public class SatchelHotbarOverlay {
         boolean selectedInSatchel = satchelData.isSlotInSatchel(selected);
         ResourceLocation selectionSprite = selectedInSatchel ? ModSprites.SATCHEL_HOTBAR_SELECTION : ModSprites.VANILLA_HOTBAR_SELECTION;
 
-        float selectionYOffset = selectedInSatchel ? 0 : -yOffset;
+        float selectionYOffset = selectedInSatchel ? 0 : -this.yOffset;
 
         graphics.pose().pushPose();
         graphics.pose().translate(0, selectionYOffset, 0);

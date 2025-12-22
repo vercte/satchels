@@ -30,6 +30,14 @@ public abstract class InventoryMixin {
     @Shadow
     public int selected;
 
+    @Shadow
+    public abstract int findSlotMatchingItem(ItemStack arg);
+
+    @Shadow
+    public static boolean isHotbarSlot(int i) {
+        return false;
+    }
+
     @ModifyReturnValue(method = "getSelected", at = @At("RETURN"))
     public ItemStack getSelected(ItemStack original) {
         SatchelData satchelData = SatchelData.get(player);
@@ -81,5 +89,4 @@ public abstract class InventoryMixin {
 
         return extraCleared;
     }
-
 }
