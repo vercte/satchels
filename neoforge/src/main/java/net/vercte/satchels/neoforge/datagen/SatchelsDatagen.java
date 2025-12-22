@@ -7,7 +7,9 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.vercte.satchels.neoforge.datagen.assets.ItemModelGen;
 import net.vercte.satchels.neoforge.datagen.assets.LangGen;
 import net.vercte.satchels.neoforge.datagen.assets.SoundGen;
+import net.vercte.satchels.neoforge.datagen.data.ItemTagGen;
 import net.vercte.satchels.neoforge.datagen.data.StandardRecipeProvider;
+import net.vercte.satchels.neoforge.datagen.data.compat.CuriosProvider;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -25,6 +27,8 @@ public class SatchelsDatagen {
 
         if(event.includeServer()) {
             event.addProvider(new StandardRecipeProvider(output, lookupProvider));
+            event.addProvider(new ItemTagGen(output, lookupProvider));
+            event.addProvider(new CuriosProvider(output, existingFileHelper, lookupProvider));
         }
     }
 }

@@ -27,6 +27,12 @@ versionRange = "[1.21.1,)"
 ordering = "NONE"
 side = "BOTH"
 
+[[dependencies.satchels]]
+modId = "curios"
+type = "required"
+versionRange = "[9.2.0+1.21.1, 10.0.0+1.21.1)"
+ordering = "NONE"
+side = "BOTH"
 
 [[mixins]]
 config = "satchels.mixins.json"

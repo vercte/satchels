@@ -1,11 +1,14 @@
 {
-  "required": true,
+  "required": false,
   "package": "net.vercte.satchels.neoforge.mixin",
+  "plugin": "net.vercte.satchels.neoforge.mixin.SatchelsNeoForgeMixinPlugin",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [],
   "mixins": [
-    "PleaseExitMyDatagenMixin"
+    "PleaseExitMyDatagenMixin",
+    "compat.curios.CuriosMenuMixin",
+    "compat.curios.CuriosScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

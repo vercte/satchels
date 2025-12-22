@@ -30,7 +30,7 @@ public class LangGen extends LanguageProvider {
         add("key.satchels.toggle_satchel", "Toggle Satchel");
         add("sound.satchels.satchel_rustle", "Satchel rustles");
 
-        add("curios.identifier.shoulders", "Shoulder Slot");
+        add("curios.identifier.shoulders", "Shoulders");
 
         // scan items registry and generate names
         BuiltInRegistries.ITEM.stream()

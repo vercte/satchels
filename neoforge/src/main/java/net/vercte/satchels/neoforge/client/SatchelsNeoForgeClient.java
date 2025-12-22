@@ -1,6 +1,5 @@
 package net.vercte.satchels.neoforge.client;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -30,6 +29,7 @@ public class SatchelsNeoForgeClient {
 
         NeoForge.EVENT_BUS.addListener(SatchelsNeoForgeClient::endClientTick);
         NeoForge.EVENT_BUS.addListener(SatchelsNeoForgeClient::onLocalPlayerJoin);
+        NeoForge.EVENT_BUS.addListener(SatchelsNeoForgeClient::onPlayerRespawn);
 
         modEventBus.addListener(SatchelsNeoForgeClient::registerOverlays);
         modEventBus.addListener(SatchelsNeoForgeClient::addEntityRenderLayers);
@@ -45,12 +45,6 @@ public class SatchelsNeoForgeClient {
         event.registerAbove(VanillaGuiLayers.HOTBAR, Satchels.at(SatchelHotbarOverlay.ID), SatchelHotbarOverlay::render);
     }
 
-    public static void onLocalPlayerJoin(final ClientPlayerNetworkEvent.LoggingIn event) {
-        int satchelOffset = ClientConfig.getSatchelOffset();
-        SatchelData.get(Minecraft.getInstance().player).setSatchelOffset(satchelOffset);
-        ClientConfigUpdatePacketC2S.send(satchelOffset);
-    }
-
     public static void addEntityRenderLayers(final EntityRenderersEvent.AddLayers event) {
         EntityRenderDispatcher erDispatcher = event.getContext().getEntityRenderDispatcher();
         BlockRenderDispatcher brDispatcher = event.getContext().getBlockRenderDispatcher();
@@ -60,5 +54,19 @@ public class SatchelsNeoForgeClient {
                 playerRenderer.addLayer(new SatchelLayer<>(playerRenderer, brDispatcher));
             }
         }
+    }
+
+    public static void onLocalPlayerJoin(final ClientPlayerNetworkEvent.LoggingIn event) {
+        int satchelOffset = ClientConfig.getSatchelOffset();
+        SatchelData.get(event.getPlayer()).setSatchelOffset(satchelOffset);
+        ClientConfigUpdatePacketC2S.send(satchelOffset);
+    }
+
+    public static void onPlayerRespawn(final ClientPlayerNetworkEvent.Clone event) {
+        Player player = event.getPlayer();
+        if(!player.isLocalPlayer()) return;
+
+        int satchelOffset = ClientConfig.getSatchelOffset();
+        SatchelData.get(event.getPlayer()).setSatchelOffset(satchelOffset);
     }
 }

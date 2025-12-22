@@ -52,16 +52,23 @@ repositories {
         name = 'NeoForged'
         url = 'https://maven.neoforged.net/releases'
     }
+    maven {
+        name = "Curios"
+        url = uri("https://maven.theillusivec4.top/")
+    }
 }
 
 dependencies {
     neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
 
-
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 
     include forgeRuntimeLibrary("blue.endless:jankson:$rootProject.jankson_version")
+
+    // We have the mod implementation here so we can mixin-to the Curios screen and render the satchel there
+    modImplementation "top.theillusivec4.curios:curios-neoforge:$rootProject.curios_version+$rootProject.minecraft_version"
+    compileOnly "top.theillusivec4.curios:curios-neoforge:$rootProject.curios_version+$rootProject.minecraft_version:api"
 }
 
 processResources {

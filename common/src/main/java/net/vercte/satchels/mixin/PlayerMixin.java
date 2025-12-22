@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.vercte.satchels.satchel.HasSatchelData;
 import net.vercte.satchels.satchel.SatchelData;
@@ -56,8 +57,10 @@ public abstract class PlayerMixin extends LivingEntity implements HasSatchelData
     @Inject(method = "dropEquipment", at = @At("TAIL"), remap = false)
     public void dropSatchelEquipment(CallbackInfo ci) {
         SatchelData satchelData = SatchelData.get((Player)(Object) this);
-        satchelData.getSatchelInventory().dropAll(true);
-//        satchelData.getSatchelSlotInventory().drop();
+        if (!this.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+            satchelData.getSatchelInventory().dropAll(true);
+//            satchelData.getSatchelSlotInventory().drop();
+        }
     }
 
     @Inject(method = "destroyVanishingCursedItems", at = @At("TAIL"))

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.vercte.satchels.ModSounds;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
+import net.vercte.satchels.platform.Services;
 import org.jetbrains.annotations.NotNull;
 
 public class SatchelData {
@@ -15,7 +16,6 @@ public class SatchelData {
     private final SatchelInventory satchelInventory;
 //    private final SatchelSlotInventory satchelSlotInventory;
 
-    ItemStack lastSatchelSlotValue = ItemStack.EMPTY;
     boolean satchelEnabled;
     int satchelOffset;
     int timesChanged;
@@ -23,6 +23,7 @@ public class SatchelData {
     public SatchelData(Player player) {
         this.player = player;
         this.satchelEnabled = false;
+
         this.satchelOffset = 0;
         this.timesChanged = 0;
 
@@ -35,8 +36,15 @@ public class SatchelData {
         return ((HasSatchelData)player).satchels$getSatchelData();
     }
 
+    public void copyItemsTo(SatchelData satchelData) {
+        for(int slot = 0; slot < satchelData.getSatchelInventory().getContainerSize(); slot++) {
+            ItemStack held = this.getSatchelInventory().getItem(slot);
+            satchelData.getSatchelInventory().setItem(slot, held.copy());
+        }
+    }
+
     public boolean canAccessSatchelInventory() {
-        return true;
+        return Services.SLOT_MOD.playerHasSatchel(this.player);
     }
 
     public boolean isSatchelEnabled() {
@@ -53,7 +61,7 @@ public class SatchelData {
     }
 
     public boolean isSatchelRendered() {
-        return canAccessSatchelInventory();
+        return Services.SLOT_MOD.playerRendersSatchel(this.player);
     }
 
     public boolean isSlotInSatchel(int slot) {

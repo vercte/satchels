@@ -1,7 +1,6 @@
 package net.vercte.satchels;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.logging.LogUtils;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.vercte.satchels.client.model.ModDetachedModels;
@@ -21,8 +20,6 @@ public class SatchelsClient {
         if(!ClientConfig.getConfigFile().exists()) ClientConfig.saveConfig();
 
         ModDetachedModels.init();
-
-        LogUtils.getLogger().info("offset: {}", ClientConfig.getSatchelOffset());
     }
 
     public static void endClientTick() {
