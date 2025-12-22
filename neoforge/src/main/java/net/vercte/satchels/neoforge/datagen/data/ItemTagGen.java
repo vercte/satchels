@@ -20,12 +20,16 @@ public class ItemTagGen extends ItemTagsProvider {
 
     @Override
     protected void addTags(@NotNull HolderLookup.Provider provider) {
-        TagKey<Item> CURIOS_SHOULDERS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("curios", "shoulders"));
+        TagKey<Item> CURIOS_SATCHEL = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("curios", "satchel"));
+        TagKey<Item> TRINKETS_SATCHEL = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("trinkets", "chest/satchel"));
 
         tag(ModTags.SATCHEL)
                 .add(ModItems.SATCHEL.get());
 
-        tag(CURIOS_SHOULDERS)
+        tag(CURIOS_SATCHEL)
+                .addTag(ModTags.SATCHEL);
+
+        tag(TRINKETS_SATCHEL)
                 .addTag(ModTags.SATCHEL);
     }
 }

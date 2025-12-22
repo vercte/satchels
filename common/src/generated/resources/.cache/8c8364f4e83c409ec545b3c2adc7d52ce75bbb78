@@ -1,3 +1,4 @@
-// 1.21.1	2025-12-21T16:21:12.727918	Tags for minecraft:item mod id vanilla
-a03f1f0b13c02dc7a5e095dd675b3a1e6a05d673 data/curios/tags/item/shoulders.json
+// 1.21.1	2025-12-21T19:48:04.493838	Tags for minecraft:item mod id vanilla
+a03f1f0b13c02dc7a5e095dd675b3a1e6a05d673 data/curios/tags/item/satchel.json
 69e920a583e7ebe41d74521afcf5d433e7f2d61e data/satchels/tags/item/satchel.json
+a03f1f0b13c02dc7a5e095dd675b3a1e6a05d673 data/trinkets/tags/item/chest/satchel.json

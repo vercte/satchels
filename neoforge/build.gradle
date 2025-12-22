@@ -49,12 +49,12 @@ configurations {
 
 repositories {
     maven {
-        name = 'NeoForged'
-        url = 'https://maven.neoforged.net/releases'
+        name = "NeoForged"
+        url = "https://maven.neoforged.net/releases"
     }
     maven {
         name = "Curios"
-        url = uri("https://maven.theillusivec4.top/")
+        url = "https://maven.theillusivec4.top/"
     }
 }
 

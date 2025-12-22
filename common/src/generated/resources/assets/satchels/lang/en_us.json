@@ -1,6 +1,7 @@
 {
-  "curios.identifier.shoulders": "Shoulders",
+  "curios.identifier.satchel": "Satchel",
   "item.satchels.satchel": "Satchel",
   "key.satchels.toggle_satchel": "Toggle Satchel",
-  "sound.satchels.satchel_rustle": "Satchel rustles"
+  "sound.satchels.satchel_rustle": "Satchel rustles",
+  "trinkets.slot.chest.satchel": "Satchel"
 }

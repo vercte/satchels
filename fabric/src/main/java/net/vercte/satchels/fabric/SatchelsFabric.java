@@ -1,12 +1,15 @@
 package net.vercte.satchels.fabric;
 
+import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameRules;
+import net.vercte.satchels.ModItems;
 import net.vercte.satchels.Satchels;
+import net.vercte.satchels.fabric.compat.trinkets.SatchelTrinket;
 import net.vercte.satchels.network.ClientConfigUpdatePacketC2S;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
 import net.vercte.satchels.network.ToggleSatchelPacketC2S;
@@ -28,6 +31,8 @@ public final class SatchelsFabric implements ModInitializer {
 
         ServerPlayerEvents.JOIN.register(t -> SatchelData.get(t).updateClient());
         ServerPlayerEvents.AFTER_RESPAWN.register(this::onPlayerRespawn);
+
+        TrinketsApi.registerTrinket(ModItems.SATCHEL.get(), new SatchelTrinket());
     }
 
     public void onPlayerRespawn(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive) {
