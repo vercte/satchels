@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.vercte.satchels.SatchelsClient;
 import net.vercte.satchels.client.SatchelHotbarOverlay;
 import net.vercte.satchels.client.SatchelLayer;
@@ -63,5 +64,10 @@ public final class SatchelsFabricClient implements ClientModInitializer {
         int satchelOffset = ClientConfig.getSatchelOffset();
         satchelData.setSatchelOffset(satchelOffset);
         ClientConfigUpdatePacketC2S.send(satchelOffset);
+    }
+
+    public static void onRespawn(Player player) {
+        int satchelOffset = ClientConfig.getSatchelOffset();
+        SatchelData.get(player).setSatchelOffset(satchelOffset);
     }
 }

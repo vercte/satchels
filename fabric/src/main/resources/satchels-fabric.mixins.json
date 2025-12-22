@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.vercte.satchels.fabric.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "client": [
+    "ClientPacketListenerMixin"
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

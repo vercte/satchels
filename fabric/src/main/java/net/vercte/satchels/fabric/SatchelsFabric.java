@@ -4,6 +4,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.GameRules;
 import net.vercte.satchels.Satchels;
 import net.vercte.satchels.network.ClientConfigUpdatePacketC2S;
 import net.vercte.satchels.network.SatchelStatusPacketS2C;
@@ -25,5 +27,16 @@ public final class SatchelsFabric implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(ClientConfigUpdatePacketC2S.TYPE, (p, cx) -> ClientConfigUpdatePacketC2S.handle(p, cx.player()));
 
         ServerPlayerEvents.JOIN.register(t -> SatchelData.get(t).updateClient());
+        ServerPlayerEvents.AFTER_RESPAWN.register(this::onPlayerRespawn);
+    }
+
+    public void onPlayerRespawn(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive) {
+        SatchelData oldSatchelData = SatchelData.get(oldPlayer);
+        SatchelData newSatchelData = SatchelData.get(newPlayer);
+        newSatchelData.setSatchelOffset(oldSatchelData.getSatchelOffset());
+
+        GameRules gameRules = newPlayer.level().getGameRules();
+        if(gameRules.getBoolean(GameRules.RULE_KEEPINVENTORY))
+            oldSatchelData.copyItemsTo(newSatchelData);
     }
 }
