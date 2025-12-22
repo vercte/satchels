@@ -9,6 +9,15 @@ architectury {
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    runs {
+        create("client 2") {
+            client()
+
+            name = "Second Client"
+            programArgs("--username", "AnotherDev")
+        }
+    }
 }
 
 configurations {

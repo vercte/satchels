@@ -74,6 +74,11 @@ public class SatchelData {
 
     public void setSatchelOffset(int satchelOffset) {
         this.satchelOffset = Mth.clamp(0, satchelOffset, 3);
+        if(player.inventoryMenu != null) {
+            player.inventoryMenu.slots.forEach(s -> {
+                if(s instanceof SatchelInventorySlot ss) ss.updateX();
+            });
+        }
     }
 
     public int getSatchelOffset() {

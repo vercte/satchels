@@ -14,6 +14,10 @@ public class SatchelInventorySlot extends Slot {
         this.satchelData = inventory.satchelData;
     }
 
+    public void updateX() {
+        this.x = baseX + (satchelData.getSatchelOffset() * 18);
+    }
+
     @Override
     public boolean mayPlace(ItemStack itemStack) {
         return this.satchelData.canAccessSatchelInventory();
@@ -31,7 +35,6 @@ public class SatchelInventorySlot extends Slot {
     @Override
     @NotNull
     public ItemStack getItem() {
-        this.x = baseX + (satchelData.getSatchelOffset() * 18);
         return super.getItem();
     }
 }

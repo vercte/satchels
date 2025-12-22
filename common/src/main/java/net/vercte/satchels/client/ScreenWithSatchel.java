@@ -42,10 +42,15 @@ public class ScreenWithSatchel {
         if(original) {
             LocalPlayer player = Minecraft.getInstance().player;
             if(player == null) return true;
-            if(!SatchelData.get(player).canAccessSatchelInventory()) return true;
 
-            boolean clickedLeft = x < left;
-            boolean clickedRight = x >= left + 120;
+            SatchelData satchelData = SatchelData.get(player);
+            if(!satchelData.canAccessSatchelInventory()) return true;
+
+            int offset = satchelData.getSatchelOffset();
+
+            int finalLeft = left + (offset * 18);
+            boolean clickedLeft = x < finalLeft;
+            boolean clickedRight = x >= finalLeft + 120;
             boolean clickedBelow = y >= top + height + 26;
             return clickedLeft || clickedRight || clickedBelow;
         }
