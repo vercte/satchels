@@ -1,0 +1,80 @@
+{
+	"format_version": "1.21.1",
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"1": "satchels:block/layer/satchel"
+	},
+	"elements": [
+		{
+			"name": "StrapOutside",
+			"from": [3.7, -0.3, 5.7],
+			"to": [12.3, 12.3, 10.3],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 6, 8]},
+			"faces": {
+				"north": {"uv": [8, 2.5, 12, 8.5], "texture": "#1"},
+				"east": {"uv": [6, 2.5, 8, 8.5], "texture": "#1"},
+				"south": {"uv": [2, 2.5, 6, 8.5], "texture": "#1"},
+				"west": {"uv": [0, 2.5, 2, 8.5], "texture": "#1"},
+				"up": {"uv": [9.5, 2.5, 5.5, 0.5], "texture": "#1"},
+				"down": {"uv": [5.5, 0.5, 1.5, 2.5], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Satchel",
+			"from": [2.85, -2.45, 5.4],
+			"to": [4.05, 1.75, 10.6],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6.75, -12, 8]},
+			"faces": {
+				"north": {"uv": [5.5, 11, 6, 13], "texture": "#1"},
+				"east": {"uv": [3, 11, 5.5, 13], "texture": "#1"},
+				"south": {"uv": [2.5, 11, 3, 13], "texture": "#1"},
+				"west": {"uv": [0, 11, 2.5, 13], "texture": "#1"},
+				"up": {"uv": [3, 11, 2.5, 8.5], "texture": "#1"},
+				"down": {"uv": [3.5, 8.5, 3, 11], "texture": "#1"}
+			}
+		},
+		{
+			"name": "SatchelTop",
+			"from": [2.775, -0.5, 5.35],
+			"to": [4.075, 1.8, 10.65],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3.425, 0.65, 8]},
+			"faces": {
+				"north": {"uv": [8.5, 11, 9, 12], "texture": "#1"},
+				"east": {"uv": [9, 11, 11.5, 12], "texture": "#1"},
+				"south": {"uv": [11.5, 11, 12, 12], "texture": "#1"},
+				"west": {"uv": [6, 11, 8.5, 12], "texture": "#1"},
+				"up": {"uv": [9, 11, 8.5, 8.5], "texture": "#1"},
+				"down": {"uv": [9.5, 8.5, 9, 11], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Latch",
+			"from": [2.35, -1.175, 7.5],
+			"to": [2.85, 0.825, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-2.65, -12, 8]},
+			"faces": {
+				"north": {"uv": [6, 12.5, 6.5, 13.5], "texture": "#1"},
+				"east": {"uv": [6.5, 12.5, 7, 13.5], "texture": "#1"},
+				"south": {"uv": [7, 12.5, 7.5, 13.5], "texture": "#1"},
+				"west": {"uv": [7.5, 12.5, 8, 13.5], "texture": "#1"},
+				"up": {"uv": [6.5, 12, 7, 12.5], "texture": "#1"},
+				"down": {"uv": [7, 12, 7.5, 12.5], "texture": "#1"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "Strap",
+			"origin": [8, 6, 8],
+			"color": 0,
+			"children": [0]
+		},
+		{
+			"name": "Satchel",
+			"origin": [8, 6, 8],
+			"color": 0,
+			"children": [1, 2, 3]
+		}
+	]
+}
