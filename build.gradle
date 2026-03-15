@@ -18,6 +18,14 @@ repositories {
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
     }
+    maven {
+        name = "Figura"
+        url = "https://maven.figuramc.org/releases"
+    }
+    maven {
+        name = "JitPack"
+        url = "https://jitpack.io"
+    }
 }
 
 dependencies {
@@ -26,8 +34,17 @@ dependencies {
     compileOnly "top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version:api"
     if(curios_enabled) runtimeOnly("top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version")
 
+    // JEI
     compileOnly "mezz.jei:jei-$minecraft_version-neoforge-api:$jei_version"
     if(jei_enabled) runtimeOnly "mezz.jei:jei-$minecraft_version-neoforge:$jei_version"
+
+    // Figura
+    compileOnly "org.figuramc:figura-neoforge:$figura_version+$minecraft_version"
+    implementation "com.github.FiguraMC.luaj:luaj-core:$luaj_version-figura"
+    implementation "com.github.FiguraMC.luaj:luaj-jse:$luaj_version-figura"
+    implementation "com.neovisionaries:nv-websocket-client:$nv_websocket_version"
+
+    if(figura_enabled) runtimeOnly "org.figuramc:figura-neoforge:$figura_version+$minecraft_version"
 }
 
 base {
@@ -45,6 +62,12 @@ neoForge {
             client()
 
             systemProperty "neoforge.enabledGameTestNamespaces", project.mod_id
+        }
+
+        clientAuth {
+            client()
+
+            devLogin = true
         }
 
         secondClient {
