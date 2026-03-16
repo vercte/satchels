@@ -21,7 +21,9 @@ public class ItemModelGen extends ItemModelProvider {
 
         ModelFile item_generated = new ModelFile.UncheckedModelFile("item/generated");
 
-        ItemModelBuilder base = nested().parent(item_generated).texture("layer0", Satchels.at("item/satchel"));
+        ItemModelBuilder base = nested().parent(item_generated)
+                .texture("layer0", Satchels.at("item/satchel"))
+                .texture("layer1", Satchels.at("item/satchel_clip"));
         ItemModelBuilder worn = nested()
                 .parent(getExistingFile(Satchels.at("item/satchel_worn")));
 

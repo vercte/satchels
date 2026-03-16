@@ -8,25 +8,25 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.jarjar.nio.util.Lazy;
-import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.vercte.satchels.ModItems;
 import net.vercte.satchels.Satchels;
 import net.vercte.satchels.client.model.SatchelLayer;
 import net.vercte.satchels.client.satchel.SatchelHotbarOverlay;
 import net.vercte.satchels.network.packets.SatchelOffsetUpdatePacketC2S;
 import net.vercte.satchels.network.packets.ToggleSatchelPacketC2S;
 import net.vercte.satchels.satchel.SatchelData;
+import net.vercte.satchels.satchel.SatchelItem;
 import org.lwjgl.glfw.GLFW;
 
 @Mod(value = Satchels.ID, dist = Dist.CLIENT)
@@ -34,7 +34,9 @@ public class SatchelsClient {
     public SatchelsClient(IEventBus modEventBus, ModContainer container) {
         SatchelsClientConfig.load(modEventBus);
 
+        modEventBus.addListener(SatchelsClient::registerKeyMappings);
         modEventBus.addListener(SatchelsClient::registerOverlays);
+        modEventBus.addListener(SatchelsClient::registerItemColorHandlers);
 
         modEventBus.addListener(SatchelsClient::addEntityRenderLayers);
 
@@ -48,6 +50,10 @@ public class SatchelsClient {
     public static final Lazy<KeyMapping> KEYMAPPING_TOGGLE_SATCHEL = Lazy.of(
             () -> new KeyMapping("key.satchels.toggle_satchel", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, KeyMapping.CATEGORY_INVENTORY)
     );
+
+    public static void registerKeyMappings(final RegisterKeyMappingsEvent event) {
+        event.register(KEYMAPPING_TOGGLE_SATCHEL.get());
+    }
 
     public static void registerOverlays(final RegisterGuiLayersEvent event) {
         event.registerAbove(VanillaGuiLayers.HOTBAR, Satchels.at(SatchelHotbarOverlay.ID), SatchelHotbarOverlay.INSTANCE::render);
@@ -73,6 +79,15 @@ public class SatchelsClient {
                 playerRenderer.addLayer(new SatchelLayer<>(playerRenderer, itemRenderer));
             }
         }
+    }
+
+    public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
+        event.register((item, layer) -> {
+            if(item.getItem() instanceof SatchelItem) {
+                if(layer == 0) return DyedItemColor.getOrDefault(item, SatchelItem.DEFAULT_COLOR);
+            }
+            return 0xffffffff;
+        }, ModItems.SATCHEL.get());
     }
 
     public static void sendSatchelStatus() {

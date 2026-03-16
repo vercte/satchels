@@ -1,3 +1,4 @@
-// 1.21.1	2026-02-03T17:27:59.401202	Tags for minecraft:item mod id vanilla
+// 1.21.1	2026-03-16T09:20:07.19025	Tags for minecraft:item mod id vanilla
 615ca2cb55c976ec967f4de098238b92f1e9e3c3 data/curios/tags/item/satchel.json
+69e920a583e7ebe41d74521afcf5d433e7f2d61e data/minecraft/tags/item/dyeable.json
 69e920a583e7ebe41d74521afcf5d433e7f2d61e data/satchels/tags/item/satchels.json

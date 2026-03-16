@@ -1,5 +1,6 @@
 package net.vercte.satchels.api;
 
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -8,7 +9,16 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * A set of hooks and callbacks to interact with the Satchel.
+ */
 public class SatchelAccess {
+    /**
+     * A set of functions to call when the SatchelItem is right-clicked. Meant for equipping the satchel.
+     * True means that the satchel was equipped.
+     */
+    public static Set<SatchelEquipCallback> SATCHEL_EQUIP_CALLBACKS = new HashSet<>();
+
     /**
      * <p>
      *     A set of predicates to determine if the Satchel can be accessed.
@@ -32,6 +42,22 @@ public class SatchelAccess {
      * The first function that returns a non-empty item stack is the one rendered.
      */
     public static Set<Function<Player, ItemStack>> SATCHEL_STACK_GETTERS = new HashSet<>();
+
+    /**
+     * A set of functions to get the tint of the Satchel. This is used in ScreenWithSatchel
+     * to tint the GUI to match the satchel's color. The first function that returns a number != -1
+     * is the tint chosen.
+     */
+    public static Set<Function<Player, Integer>> SATCHEL_TINT_GETTERS = new HashSet<>();
+
+    /**
+     * Checks if a player can access their satchel.
+     * @param player The <code>Player</code> that this check concerns.
+     * @return Whether the <code>Player</code> can access their satchel.
+     */
+    public static boolean equipSatchelTo(Player player, InteractionHand hand) {
+        return SATCHEL_EQUIP_CALLBACKS.stream().anyMatch(p -> p.equip(player, hand));
+    }
 
     /**
      * Checks if a player can access their satchel.
@@ -68,5 +94,23 @@ public class SatchelAccess {
             if(!stack.isEmpty()) return stack;
         }
         return ItemStack.EMPTY;
+    }
+
+    /**
+     * Gets the satchel tint to be used in UI.
+     * @param player The <code>Player</code> that this query concerns.
+     * @return The first valid satchel tint. Returns -1 if no valid color is found.
+     */
+    public static int getSatchelTint(Player player) {
+        for(Function<Player, Integer> getter : SATCHEL_TINT_GETTERS) {
+            int tint = getter.apply(player);
+            if(tint != -1) return tint;
+        }
+        return -1;
+    }
+
+    @FunctionalInterface
+    public interface SatchelEquipCallback {
+        boolean equip(Player player, InteractionHand hand);
     }
 }

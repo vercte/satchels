@@ -6,13 +6,18 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
+import net.vercte.satchels.api.SatchelAccess;
 import net.vercte.satchels.client.ModSprites;
 import net.vercte.satchels.client.animation.LerpFunctions;
 import net.vercte.satchels.client.animation.LerpHelper;
 import net.vercte.satchels.satchel.SatchelData;
+import net.vercte.satchels.satchel.SatchelItem;
+
+import java.awt.*;
 
 public class SatchelHotbarOverlay {
     public static final String ID = "satchel_hotbar";
@@ -23,6 +28,8 @@ public class SatchelHotbarOverlay {
     private boolean lastState = false;
     private int yOffset = 0;
     private int yOffsetOnChange = 0;
+
+    private int lastColor = SatchelItem.DEFAULT_COLOR;
 
     public void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
         Minecraft mc = Minecraft.getInstance();
@@ -35,6 +42,9 @@ public class SatchelHotbarOverlay {
 
         Player player = mc.player;
         if(player == null) return;
+
+        int satchelTint = SatchelAccess.getSatchelTint(player);
+        if(satchelTint != -1) lastColor = satchelTint;
 
         SatchelData satchelData = SatchelData.get(player);
 
@@ -55,6 +65,17 @@ public class SatchelHotbarOverlay {
         this.yOffset = (int) LerpFunctions.EXPONENTIAL.lerp(progress, this.yOffsetOnChange, enabled ? 0 : offsetGoal);
         if(this.yOffset == offsetGoal) return;
 
+        int red = FastColor.ARGB32.red(lastColor);
+        int green = FastColor.ARGB32.green(lastColor);
+        int blue = FastColor.ARGB32.blue(lastColor);
+        int alpha = FastColor.ARGB32.alpha(lastColor);
+        graphics.setColor(
+                red / 255f,
+                green / 255f,
+                blue / 255f,
+                alpha / 255f
+        );
+
         graphics.pose().pushPose();
         graphics.pose().translate(0, this.yOffset, 750.00);
 
@@ -70,9 +91,27 @@ public class SatchelHotbarOverlay {
         graphics.pose().pushPose();
         graphics.pose().translate(0, selectionYOffset, 0);
 
+        if(selectedInSatchel) {
+            float[] hsb = Color.RGBtoHSB(red, green, blue, null);
+            hsb[0] = Math.max(hsb[0] - 0.01f, 0f);
+            hsb[1] = Math.max(hsb[1] - 0.1f, 0f);
+            hsb[2] = Math.min(hsb[2] + 0.1f, 1f);
+
+            int rgb = Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
+            graphics.setColor(
+                    FastColor.ARGB32.red(rgb) / 255f,
+                    FastColor.ARGB32.green(rgb) / 255f,
+                    FastColor.ARGB32.blue(rgb) / 255f,
+                    alpha / 255f
+            );
+        } else {
+            graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        }
         graphics.blitSprite(selectionSprite, x - 1 + (selected * 20), y - 1, 24, selectedInSatchel ? 24 : 23);
 
         graphics.pose().popPose();
+
+        if(selectedInSatchel) graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         for(int i = 0; i < satchelData.getSatchelInventory().getContainerSize(); i++) {
             ItemStack stack = satchelData.getSatchelInventory().getItem(i);

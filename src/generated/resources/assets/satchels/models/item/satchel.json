@@ -3,7 +3,8 @@
   "base": {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "satchels:item/satchel"
+      "layer0": "satchels:item/satchel",
+      "layer1": "satchels:item/satchel_clip"
     }
   },
   "loader": "neoforge:separate_transforms",
