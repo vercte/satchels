@@ -17,10 +17,9 @@ public class SatchelsMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if(mixinClassName.contains("compat.curios")) {
-            // only do this if curios is here (don't want to crash anything!)
-            return isClassPresent("top.theillusivec4.curios.CuriosConstants");
-        }
+        if(mixinClassName.contains("compat.curios")) return isClassPresent("top.theillusivec4.curios.CuriosConstants");
+        if(mixinClassName.contains("compat.figura")) return isClassPresent("org.figuramc.figura.FiguraMod");
+
         return true;
     }
 

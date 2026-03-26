@@ -9,6 +9,7 @@
     "ItemEntityMixin",
     "ServerPlaceRecipeMixin",
     "compat.curios.CuriosMenuMixin",
+    "compat.figura.ParentTypeMixin",
     "menu.BeaconMenuMixin",
     "menu.ChestMenuMixin",
     "menu.DispenserHopperShulkerBoxMenuMixin",
