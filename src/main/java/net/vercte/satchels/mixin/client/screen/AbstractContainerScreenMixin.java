@@ -1,4 +1,4 @@
-package net.vercte.satchels.mixin.screen;
+package net.vercte.satchels.mixin.client.screen;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.gui.screens.inventory.*;

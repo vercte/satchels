@@ -20,15 +20,16 @@
     "player.PlayerMixin"
   ],
   "client": [
+    "client.GameRendererMixin",
+    "client.screen.AbstractContainerScreenMixin",
+    "client.screen.ControlsScreenMixin",
+    "client.screen.CreativeModeInventoryScreenMixin",
+    "client.screen.InventoryScreenMixin",
+    "client.screen.RecipeBookComponentMixin",
+    "client.screen.SimpleWorkbenchScreenMixin",
+    "client.screen.WorkbenchOverridesClickedOutsideScreenMixin",
     "compat.curios.CuriosScreenMixin",
-    "player.PickBlockMixin",
-    "screen.AbstractContainerScreenMixin",
-    "screen.ControlsScreenMixin",
-    "screen.CreativeModeInventoryScreenMixin",
-    "screen.InventoryScreenMixin",
-    "screen.RecipeBookComponentMixin",
-    "screen.SimpleWorkbenchScreenMixin",
-    "screen.WorkbenchOverridesClickedOutsideScreenMixin"
+    "player.PickBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

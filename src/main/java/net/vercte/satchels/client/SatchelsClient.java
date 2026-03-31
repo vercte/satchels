@@ -5,6 +5,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.entity.player.Player;
@@ -19,10 +20,13 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.vercte.satchels.ModEntities;
 import net.vercte.satchels.ModItems;
 import net.vercte.satchels.Satchels;
 import net.vercte.satchels.client.model.SatchelLayer;
 import net.vercte.satchels.client.satchel.SatchelHotbarOverlay;
+import net.vercte.satchels.content.craftingmat.CraftingMat;
+import net.vercte.satchels.content.craftingmat.CraftingMatRenderer;
 import net.vercte.satchels.network.packets.SatchelOffsetUpdatePacketC2S;
 import net.vercte.satchels.network.packets.ToggleSatchelPacketC2S;
 import net.vercte.satchels.satchel.SatchelData;
@@ -31,9 +35,14 @@ import org.lwjgl.glfw.GLFW;
 
 @Mod(value = Satchels.ID, dist = Dist.CLIENT)
 public class SatchelsClient {
+    public static final Lazy<KeyMapping> KEYMAPPING_TOGGLE_SATCHEL = Lazy.of(
+            () -> new KeyMapping("key.satchels.toggle_satchel", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, KeyMapping.CATEGORY_INVENTORY)
+    );
+
     public SatchelsClient(IEventBus modEventBus, ModContainer container) {
         SatchelsClientConfig.load(modEventBus);
 
+        modEventBus.addListener(SatchelsClient::registerEntityRenderers);
         modEventBus.addListener(SatchelsClient::registerKeyMappings);
         modEventBus.addListener(SatchelsClient::registerOverlays);
         modEventBus.addListener(SatchelsClient::registerItemColorHandlers);
@@ -47,9 +56,9 @@ public class SatchelsClient {
         container.registerConfig(ModConfig.Type.CLIENT, SatchelsClientConfig.SPEC);
     }
 
-    public static final Lazy<KeyMapping> KEYMAPPING_TOGGLE_SATCHEL = Lazy.of(
-            () -> new KeyMapping("key.satchels.toggle_satchel", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, KeyMapping.CATEGORY_INVENTORY)
-    );
+    public static void registerEntityRenderers(final EntityRenderersEvent.RegisterRenderers event) {
+        EntityRenderers.register(ModEntities.CRAFTING_MAT.get(), CraftingMatRenderer<CraftingMat>::new);
+    }
 
     public static void registerKeyMappings(final RegisterKeyMappingsEvent event) {
         event.register(KEYMAPPING_TOGGLE_SATCHEL.get());

@@ -17,19 +17,34 @@ public class ItemModelGen extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        ResourceLocation satchel = Satchels.at("item/satchel");
-
         ModelFile item_generated = new ModelFile.UncheckedModelFile("item/generated");
 
-        ItemModelBuilder base = nested().parent(item_generated)
-                .texture("layer0", Satchels.at("item/satchel"))
-                .texture("layer1", Satchels.at("item/satchel_clip"));
-        ItemModelBuilder worn = nested()
-                .parent(getExistingFile(Satchels.at("item/satchel_worn")));
+        ResourceLocation satchel = Satchels.at("item/satchel");
 
-        withExistingParent(satchel.toString(), "item/generated")
+        dualContext(
+                satchel,
+                nested().parent(item_generated)
+                        .texture("layer0", Satchels.at("item/satchel"))
+                        .texture("layer1", Satchels.at("item/satchel_clip")),
+                nested().parent(getExistingFile(Satchels.at("item/satchel_worn"))),
+                ItemDisplayContext.HEAD
+        );
+
+        ResourceLocation crafting_mat = Satchels.at("item/crafting_mat");
+
+        dualContext(
+                crafting_mat,
+                nested().parent(item_generated)
+                        .texture("layer0", Satchels.at("item/crafting_mat")),
+                nested().parent(getExistingFile(Satchels.at("block/crafting_mat"))),
+                ItemDisplayContext.valueOf("SATCHELS_CRAFTING_MAT")
+        );
+    }
+
+    private void dualContext(ResourceLocation location, ItemModelBuilder base, ItemModelBuilder secondary, ItemDisplayContext context) {
+        withExistingParent(location.toString(), "item/generated")
                 .customLoader(SeparateTransformsModelBuilder::begin)
                 .base(base)
-                .perspective(ItemDisplayContext.HEAD, worn);
+                .perspective(context, secondary);
     }
 }
