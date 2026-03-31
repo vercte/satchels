@@ -14,17 +14,18 @@ import net.vercte.satchels.util.SatchelsDataGeneration;
 public class Satchels {
     public static final String ID = "satchels";
 
-    public Satchels(IEventBus modEventBus) {
-        ModItems.loadAndListen(modEventBus);
-        ModSounds.loadAndRegister(modEventBus);
+    public Satchels(IEventBus bus) {
+        ModItems.loadAndListen(bus);
+        ModEntities.loadAndListen(bus);
+        ModSounds.loadAndRegister(bus);
 
         NeoForge.EVENT_BUS.addListener(SatchelsEventHooks::playerJoin);
 
-        modEventBus.addListener(ModPackets::registerPayloadHandlers);
-        modEventBus.addListener(SatchelsDataGeneration::gatherData);
-        modEventBus.addListener(SatchelsEventHooks::creativeTabBuild);
+        bus.addListener(ModPackets::registerPayloadHandlers);
+        bus.addListener(SatchelsDataGeneration::gatherData);
+        bus.addListener(SatchelsEventHooks::creativeTabBuild);
 
-        modEventBus.addListener(Satchels::initExtra);
+        bus.addListener(Satchels::initExtra);
 
         SatchelsCompat.initialize();
     }

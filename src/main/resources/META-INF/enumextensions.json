@@ -1,0 +1,10 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/world/item/ItemDisplayContext",
+      "name": "SATCHELS_CRAFTING_MAT",
+      "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+      "parameters": [ -1, "satchels:crafting_mat", null ]
+    }
+  ]
+}

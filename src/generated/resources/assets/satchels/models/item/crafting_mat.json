@@ -1,0 +1,15 @@
+{
+  "parent": "minecraft:item/generated",
+  "base": {
+    "parent": "minecraft:item/generated",
+    "textures": {
+      "layer0": "satchels:item/crafting_mat"
+    }
+  },
+  "loader": "neoforge:separate_transforms",
+  "perspectives": {
+    "satchels:crafting_mat": {
+      "parent": "satchels:block/crafting_mat"
+    }
+  }
+}

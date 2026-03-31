@@ -4,6 +4,7 @@ import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.vercte.satchels.content.craftingmat.CraftingMatItem;
 import net.vercte.satchels.satchel.SatchelItem;
 
 public class ModItems {
@@ -12,6 +13,12 @@ public class ModItems {
     public static final DeferredItem<SatchelItem> SATCHEL = ITEMS.registerItem(
             "satchel",
             SatchelItem::new,
+            new Item.Properties().stacksTo(1)
+    );
+
+    public static final DeferredItem<CraftingMatItem> CRAFTING_MAT = ITEMS.registerItem(
+            "crafting_mat",
+            CraftingMatItem::new,
             new Item.Properties().stacksTo(1)
     );
 
