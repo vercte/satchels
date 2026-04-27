@@ -11,5 +11,8 @@
     "satchels:crafting_mat": {
       "parent": "satchels:block/crafting_mat"
     }
+  },
+  "textures": {
+    "layer0": "satchels:item/crafting_mat"
   }
 }
