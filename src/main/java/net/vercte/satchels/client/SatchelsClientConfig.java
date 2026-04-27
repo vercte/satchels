@@ -13,10 +13,14 @@ import net.vercte.satchels.satchel.SatchelData;
 
 public class SatchelsClientConfig {
     private static int satchelOffset = 0;
+    private static boolean satchelLayer = false;
+    private static boolean guiAnimation = false;
 
     public static int getSatchelOffset() {
         return satchelOffset;
     }
+    public static boolean shouldRenderSatchel() { return satchelLayer; }
+    public static boolean shouldAnimateGUI() { return guiAnimation; }
 
     // region Spec
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
@@ -24,6 +28,14 @@ public class SatchelsClientConfig {
     private static final ModConfigSpec.IntValue SATCHEL_OFFSET = BUILDER
             .comment("The offset in the position of your satchel on your hotbar. 0 = covers slots 1-6, 3 = covers slots 4-9")
             .defineInRange("satchel_offset", 0, 0, 3);
+
+    private static final ModConfigSpec.BooleanValue SATCHEL_LAYER = BUILDER
+            .comment("Whether the satchel should render on players when equipped.")
+            .define("satchel_layer", true);
+
+    private static final ModConfigSpec.BooleanValue GUI_ANIMATION = BUILDER
+            .comment("Whether the satchel should animate in the GUI.")
+            .define("gui_animation", true);
 
     static final ModConfigSpec SPEC = BUILDER.build();
     // endregion
@@ -49,6 +61,9 @@ public class SatchelsClientConfig {
     private static void onConfigUpdate(final ModConfigEvent event) {
         satchelOffset = SATCHEL_OFFSET.get();
         offsetOption.set(satchelOffset);
+
+        satchelLayer = SATCHEL_LAYER.get();
+        guiAnimation = GUI_ANIMATION.get();
 
         if(event.getConfig().getType() == ModConfig.Type.CLIENT && Minecraft.getInstance().getConnection() != null) {
             SatchelData.get(Minecraft.getInstance().player).setHotbarOffset(satchelOffset);

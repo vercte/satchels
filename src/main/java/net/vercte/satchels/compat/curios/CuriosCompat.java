@@ -1,14 +1,12 @@
 package net.vercte.satchels.compat.curios;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.TriState;
-import net.vercte.satchels.ModSounds;
 import net.vercte.satchels.ModTags;
 import net.vercte.satchels.api.SatchelAccess;
 import net.vercte.satchels.compat.CompatEntrypoint;
@@ -141,17 +139,7 @@ public class CuriosCompat implements CompatEntrypoint {
 
         if(event.getTo().is(ModTags.SATCHEL)) satchelTints.put(player, DyedItemColor.getOrDefault(event.getTo(), SatchelItem.DEFAULT_COLOR));
 
-        if (satchelEquipped) {
-            float pitch = 0.9f + (player.getRandom().nextFloat() / 5);
-            player.level().playSound(
-                    null,
-                    player.getX(), player.getY(), player.getZ(),
-                    ModSounds.SATCHEL_EQUIP.get(), SoundSource.PLAYERS,
-                    1, pitch
-            );
-            return;
-        }
-
+        if (satchelEquipped) return;
         if (event.getTo().is(ModTags.SATCHEL)) return;
 
         satchelTints.remove(player);

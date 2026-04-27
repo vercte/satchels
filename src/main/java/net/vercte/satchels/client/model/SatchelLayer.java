@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.vercte.satchels.api.SatchelAccess;
+import net.vercte.satchels.client.SatchelsClientConfig;
 import org.jetbrains.annotations.NotNull;
 
 public class SatchelLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
@@ -26,7 +27,7 @@ public class SatchelLayer<T extends LivingEntity, M extends EntityModel<T>> exte
     @Override
     public void render(@NotNull PoseStack poseStack, @NotNull MultiBufferSource buffer, int light, @NotNull T entity, float yaw, float pitch, float partialTicks, float j, float k, float l) {
         if(!(entity instanceof Player player)) return;
-
+        if(!SatchelsClientConfig.shouldRenderSatchel()) return;
         if(!SatchelAccess.satchelIsVisible(player)) return;
 
         M entityModel = getParentModel();

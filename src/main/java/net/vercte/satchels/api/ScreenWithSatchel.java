@@ -7,6 +7,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.player.Player;
 import net.vercte.satchels.client.ModSprites;
+import net.vercte.satchels.client.SatchelsClientConfig;
 import net.vercte.satchels.client.animation.LerpFunctions;
 import net.vercte.satchels.client.animation.LerpHelper;
 import net.vercte.satchels.satchel.SatchelData;
@@ -58,7 +59,8 @@ public class ScreenWithSatchel {
         }
 
         float progress = LerpHelper.getProgress(currentTime, this.startTime, this.endTime);
-        this.satchelYOffset = (int) LerpFunctions.EXPONENTIAL.lerp(progress, this.yOffsetOnChange, enabled ? 0 : offsetGoal);
+        if(SatchelsClientConfig.shouldAnimateGUI()) this.satchelYOffset = (int) LerpFunctions.EXPONENTIAL.lerp(progress, this.yOffsetOnChange, enabled ? 0 : offsetGoal);
+        else this.satchelYOffset = enabled ? 0 : offsetGoal;
         if(this.satchelYOffset == offsetGoal) return;
 
         int satchelXOffset = satchelData.getHotbarOffset() * 18;

@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.vercte.satchels.api.SatchelAccess;
 import net.vercte.satchels.client.ModSprites;
+import net.vercte.satchels.client.SatchelsClientConfig;
 import net.vercte.satchels.client.animation.LerpFunctions;
 import net.vercte.satchels.client.animation.LerpHelper;
 import net.vercte.satchels.satchel.SatchelData;
@@ -62,7 +63,8 @@ public class SatchelHotbarOverlay {
         }
 
         float progress = LerpHelper.getProgress(currentTime, this.startTime, this.endTime);
-        this.yOffset = (int) LerpFunctions.EXPONENTIAL.lerp(progress, this.yOffsetOnChange, enabled ? 0 : offsetGoal);
+        if(SatchelsClientConfig.shouldAnimateGUI()) this.yOffset = (int) LerpFunctions.EXPONENTIAL.lerp(progress, this.yOffsetOnChange, enabled ? 0 : offsetGoal);
+        else this.yOffset = enabled ? 0 : offsetGoal;
         if(this.yOffset == offsetGoal) return;
 
         int red = FastColor.ARGB32.red(lastColor);
