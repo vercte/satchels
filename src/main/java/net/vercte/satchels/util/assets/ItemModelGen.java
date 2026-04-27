@@ -24,10 +24,11 @@ public class ItemModelGen extends ItemModelProvider {
         dualContext(
                 satchel,
                 nested().parent(item_generated)
-                        .texture("layer0", Satchels.at("item/satchel"))
+                        .texture("layer0", satchel)
                         .texture("layer1", Satchels.at("item/satchel_clip")),
                 nested().parent(getExistingFile(Satchels.at("item/satchel_worn"))),
-                ItemDisplayContext.HEAD
+                ItemDisplayContext.HEAD,
+                satchel
         );
 
         ResourceLocation crafting_mat = Satchels.at("item/crafting_mat");
@@ -35,14 +36,16 @@ public class ItemModelGen extends ItemModelProvider {
         dualContext(
                 crafting_mat,
                 nested().parent(item_generated)
-                        .texture("layer0", Satchels.at("item/crafting_mat")),
+                        .texture("layer0", crafting_mat),
                 nested().parent(getExistingFile(Satchels.at("block/crafting_mat"))),
-                ItemDisplayContext.valueOf("SATCHELS_CRAFTING_MAT")
+                ItemDisplayContext.valueOf("SATCHELS_CRAFTING_MAT"),
+                crafting_mat
         );
     }
 
-    private void dualContext(ResourceLocation location, ItemModelBuilder base, ItemModelBuilder secondary, ItemDisplayContext context) {
+    private void dualContext(ResourceLocation location, ItemModelBuilder base, ItemModelBuilder secondary, ItemDisplayContext context, ResourceLocation extraTexture) {
         withExistingParent(location.toString(), "item/generated")
+                .texture("layer0", extraTexture)
                 .customLoader(SeparateTransformsModelBuilder::begin)
                 .base(base)
                 .perspective(context, secondary);

@@ -2,6 +2,8 @@ package net.vercte.satchels.content.craftingmat;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -9,6 +11,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -62,6 +65,7 @@ public class CraftingMat extends BlockAttachedEntity {
             this.checkBelowWorld();
             if (this.checkInterval++ == 500) {
                 this.checkInterval = 0;
+                this.recalculateBoundingBox();
                 if (!this.isRemoved() && !this.survives()) {
                     this.discard();
                     this.dropItem(null);
@@ -108,11 +112,18 @@ public class CraftingMat extends BlockAttachedEntity {
         this.playSound(this.getBreakSound(), 1.0F, 1.0F);
         this.gameEvent(GameEvent.BLOCK_CHANGE, entity);
 
+        spawnBreakParticles();
+
         if(this.fixed) return;
         if(!this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) return;
         if(entity instanceof Player player && player.hasInfiniteMaterials()) return;
 
         this.spawnAtLocation(this.getItemStack(), 0.6f);
+    }
+
+    private void spawnBreakParticles() {
+        if(!(this.level() instanceof ServerLevel serverLevel)) return;
+        serverLevel.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.getItemStack()),this.getX(), this.getY() + this.getBbHeight() / 2 + 0.1, this.getZ(), 16, 0.25, 0, 0.25, 0.05);
     }
 
     @Override
