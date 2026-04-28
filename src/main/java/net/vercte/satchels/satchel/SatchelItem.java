@@ -12,7 +12,7 @@ import net.vercte.satchels.api.SatchelAccess;
 import org.jetbrains.annotations.NotNull;
 
 public class SatchelItem extends Item {
-    public static final int DEFAULT_COLOR = 0xffaf5d2e; // af5d2e
+    public static final int DEFAULT_COLOR = 0xffaf5d2e;
 
     public SatchelItem(Properties properties) {
         super(properties);

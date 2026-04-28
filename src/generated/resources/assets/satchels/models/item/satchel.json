@@ -12,8 +12,5 @@
     "head": {
       "parent": "satchels:item/satchel_worn"
     }
-  },
-  "textures": {
-    "layer0": "satchels:item/satchel"
   }
 }

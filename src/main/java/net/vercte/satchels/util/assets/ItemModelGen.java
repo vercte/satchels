@@ -21,33 +21,30 @@ public class ItemModelGen extends ItemModelProvider {
 
         ResourceLocation satchel = Satchels.at("item/satchel");
 
-        dualContext(
-                satchel,
-                nested().parent(item_generated)
-                        .texture("layer0", satchel)
-                        .texture("layer1", Satchels.at("item/satchel_clip")),
-                nested().parent(getExistingFile(Satchels.at("item/satchel_worn"))),
-                ItemDisplayContext.HEAD,
-                satchel
-        );
+        ItemModelBuilder satchelHeld = nested().parent(item_generated)
+                .texture("layer0", satchel)
+                .texture("layer1", Satchels.at("item/satchel_clip"));
+
+        ItemModelBuilder satchelWorn = nested().parent(getExistingFile(Satchels.at("item/satchel_worn")));
+
+        withExistingParent(satchel.toString(), "item/generated")
+                .customLoader(SeparateTransformsModelBuilder::begin)
+                .base(satchelHeld)
+                .perspective(ItemDisplayContext.HEAD, satchelWorn);
 
         ResourceLocation crafting_mat = Satchels.at("item/crafting_mat");
 
-        dualContext(
-                crafting_mat,
-                nested().parent(item_generated)
-                        .texture("layer0", crafting_mat),
-                nested().parent(getExistingFile(Satchels.at("block/crafting_mat"))),
-                ItemDisplayContext.valueOf("SATCHELS_CRAFTING_MAT"),
-                crafting_mat
-        );
-    }
+        ItemModelBuilder heldModel = nested().parent(item_generated)
+                .texture("layer0", crafting_mat.withSuffix("_paper"))
+                .texture("layer1", crafting_mat.withSuffix("_grid"))
+                .texture("layer2", crafting_mat);
 
-    private void dualContext(ResourceLocation location, ItemModelBuilder base, ItemModelBuilder secondary, ItemDisplayContext context, ResourceLocation extraTexture) {
-        withExistingParent(location.toString(), "item/generated")
-                .texture("layer0", extraTexture)
+        ItemModelBuilder entityModel = nested().parent(getExistingFile(Satchels.at("block/crafting_mat")));
+
+        withExistingParent(crafting_mat.toString(), "item/generated")
+                .texture("layer0", crafting_mat.withSuffix("_paper"))
                 .customLoader(SeparateTransformsModelBuilder::begin)
-                .base(base)
-                .perspective(context, secondary);
+                .base(heldModel)
+                .perspective(ItemDisplayContext.valueOf("SATCHELS_CRAFTING_MAT"), entityModel);
     }
 }

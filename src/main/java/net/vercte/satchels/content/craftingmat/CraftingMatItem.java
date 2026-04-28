@@ -29,14 +29,14 @@ public class CraftingMatItem extends Item {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
-        context.getItemInHand().shrink(1);
-
         if(!level.isClientSide) {
-            CraftingMat mat = new CraftingMat(level, pos);
+            CraftingMat mat = new CraftingMat(context.getItemInHand().copy(), level, pos);
             level.playSound(null, pos, SoundEvents.WOOL_PLACE, SoundSource.BLOCKS);
             level.gameEvent(context.getPlayer(), GameEvent.ENTITY_PLACE, pos);
             level.addFreshEntity(mat);
         }
+
+        context.getItemInHand().shrink(1);
 
         return InteractionResult.sidedSuccess(level.isClientSide());
     }
