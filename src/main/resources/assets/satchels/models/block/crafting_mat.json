@@ -6,6 +6,8 @@
 		"0": "satchels:block/crafting_mat_top",
 		"1": "satchels:block/crafting_mat_side",
 		"2": "satchels:block/crafting_mat_bottom",
+		"3": "satchels:block/crafting_mat_top_paper",
+		"4": "satchels:block/crafting_mat_top_grid",
 		"particle": "satchels:block/crafting_mat_bottom"
 	},
 	"elements": [
@@ -17,6 +19,24 @@
 			"faces": {
 				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
 				"down": {"uv": [0, 0, 16, 16], "texture": "#2"}
+			}
+		},
+		{
+			"name": "paper",
+			"from": [0, 16, 0],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"up": {"uv": [0, 0, 16, 16], "texture": "#3", "tintindex": 0}
+			}
+		},
+		{
+			"name": "grid",
+			"from": [0, 16, 0],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"up": {"uv": [0, 0, 16, 16], "texture": "#4", "tintindex": 1}
 			}
 		},
 		{

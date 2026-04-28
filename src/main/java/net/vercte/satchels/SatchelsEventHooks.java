@@ -21,6 +21,7 @@ public class SatchelsEventHooks {
     public static void creativeTabBuild(final BuildCreativeModeTabContentsEvent event) {
         if(event.getTabKey().equals(CreativeModeTabs.TOOLS_AND_UTILITIES)) {
             event.insertAfter(new ItemStack(Items.LEAD), ModItems.SATCHEL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(new ItemStack(Items.MAP), ModItems.CRAFTING_MAT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
     }
 }

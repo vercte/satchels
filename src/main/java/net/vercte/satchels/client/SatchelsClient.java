@@ -91,12 +91,15 @@ public class SatchelsClient {
     }
 
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register((item, layer) -> {
-            if(item.getItem() instanceof SatchelItem) {
-                if(layer == 0) return DyedItemColor.getOrDefault(item, SatchelItem.DEFAULT_COLOR);
+        event.register((stack, layer) -> {
+            if(stack.is(ModItems.SATCHEL)) {
+                if(layer == 0) return DyedItemColor.getOrDefault(stack, SatchelItem.DEFAULT_COLOR);
+            } else if(stack.is(ModItems.CRAFTING_MAT)) {
+                if(layer == 0) return CraftingMat.calculateColor(stack, false);
+                if(layer == 1) return CraftingMat.calculateColor(stack, true);
             }
             return 0xffffffff;
-        }, ModItems.SATCHEL.get());
+        }, ModItems.SATCHEL.get(), ModItems.CRAFTING_MAT.get());
     }
 
     public static void sendSatchelStatus() {

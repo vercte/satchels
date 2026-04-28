@@ -3,7 +3,9 @@
   "base": {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "satchels:item/crafting_mat"
+      "layer0": "satchels:item/crafting_mat_paper",
+      "layer1": "satchels:item/crafting_mat_grid",
+      "layer2": "satchels:item/crafting_mat"
     }
   },
   "loader": "neoforge:separate_transforms",
@@ -13,6 +15,6 @@
     }
   },
   "textures": {
-    "layer0": "satchels:item/crafting_mat"
+    "layer0": "satchels:item/crafting_mat_paper"
   }
 }
