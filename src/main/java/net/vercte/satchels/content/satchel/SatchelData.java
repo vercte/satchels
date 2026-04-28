@@ -1,6 +1,5 @@
 package net.vercte.satchels.content.satchel;
 
-import com.mojang.logging.LogUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -129,11 +128,8 @@ public class SatchelData implements INBTSerializable<CompoundTag> {
 
     @Override
     public void deserializeNBT(@NotNull HolderLookup.Provider provider, @NotNull CompoundTag tag) {
-        LogUtils.getLogger().info("Deserializing the Satchel");
-
         this.active = tag.getBoolean(KEY_ACTIVE);
         this.satchelInventory.deserializeNBT(provider, tag.getCompound(KEY_INVENTORY));
-        LogUtils.getLogger().info("active: {}", active);
     }
     // endregion
 }
