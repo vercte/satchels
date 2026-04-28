@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.vercte.satchels.satchel.SatchelData;
+import net.vercte.satchels.content.satchel.SatchelData;
 
 public class SatchelsEventHooks {
     public static void playerJoin(final PlayerEvent.PlayerLoggedInEvent event) {

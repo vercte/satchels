@@ -9,7 +9,7 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.vercte.satchels.network.packets.SatchelOffsetUpdatePacketC2S;
-import net.vercte.satchels.satchel.SatchelData;
+import net.vercte.satchels.content.satchel.SatchelData;
 
 public class SatchelsClientConfig {
     private static int satchelOffset = 0;

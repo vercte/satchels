@@ -1,4 +1,4 @@
-package net.vercte.satchels.satchel;
+package net.vercte.satchels.content.satchel;
 
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;

@@ -1,8 +1,8 @@
 package net.vercte.satchels.api;
 
 import net.minecraft.world.inventory.Slot;
-import net.vercte.satchels.satchel.SatchelData;
-import net.vercte.satchels.satchel.SatchelInventorySlot;
+import net.vercte.satchels.content.satchel.SatchelData;
+import net.vercte.satchels.content.satchel.SatchelInventorySlot;
 
 import java.util.function.Consumer;
 

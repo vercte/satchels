@@ -1,4 +1,4 @@
-package net.vercte.satchels.satchel;
+package net.vercte.satchels.content.satchel;
 
 public interface IHaveSatchelData {
     SatchelData satchels$getSatchelData();

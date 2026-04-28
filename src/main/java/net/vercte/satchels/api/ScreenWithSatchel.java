@@ -10,10 +10,8 @@ import net.vercte.satchels.client.ModSprites;
 import net.vercte.satchels.client.SatchelsClientConfig;
 import net.vercte.satchels.client.animation.LerpFunctions;
 import net.vercte.satchels.client.animation.LerpHelper;
-import net.vercte.satchels.satchel.SatchelData;
-import net.vercte.satchels.satchel.SatchelItem;
-
-import java.awt.*;
+import net.vercte.satchels.content.satchel.SatchelData;
+import net.vercte.satchels.content.satchel.SatchelItem;
 
 /**
  * <p>A class that contains utilities for implementing the Satchel rendering (background, animation) into screens.</p>

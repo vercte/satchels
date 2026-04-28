@@ -7,7 +7,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.vercte.satchels.Satchels;
-import net.vercte.satchels.satchel.SatchelData;
+import net.vercte.satchels.content.satchel.SatchelData;
 import org.jetbrains.annotations.NotNull;
 
 public record SatchelStatusPacketS2C(boolean enabled) implements CustomPacketPayload {

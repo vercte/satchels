@@ -1,4 +1,4 @@
-package net.vercte.satchels.satchel;
+package net.vercte.satchels.content.satchel;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;

@@ -3,7 +3,7 @@ package net.vercte.satchels.mixin.client.screen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.world.entity.player.StackedContents;
-import net.vercte.satchels.satchel.SatchelData;
+import net.vercte.satchels.content.satchel.SatchelData;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

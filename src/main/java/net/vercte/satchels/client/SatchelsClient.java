@@ -29,8 +29,8 @@ import net.vercte.satchels.content.craftingmat.CraftingMat;
 import net.vercte.satchels.content.craftingmat.CraftingMatRenderer;
 import net.vercte.satchels.network.packets.SatchelOffsetUpdatePacketC2S;
 import net.vercte.satchels.network.packets.ToggleSatchelPacketC2S;
-import net.vercte.satchels.satchel.SatchelData;
-import net.vercte.satchels.satchel.SatchelItem;
+import net.vercte.satchels.content.satchel.SatchelData;
+import net.vercte.satchels.content.satchel.SatchelItem;
 import org.lwjgl.glfw.GLFW;
 
 @Mod(value = Satchels.ID, dist = Dist.CLIENT)

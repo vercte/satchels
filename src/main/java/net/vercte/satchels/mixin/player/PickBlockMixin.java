@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.vercte.satchels.network.packets.ToggleSatchelPacketC2S;
-import net.vercte.satchels.satchel.SatchelData;
+import net.vercte.satchels.content.satchel.SatchelData;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

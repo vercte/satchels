@@ -5,7 +5,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.vercte.satchels.content.craftingmat.CraftingMatItem;
-import net.vercte.satchels.satchel.SatchelItem;
+import net.vercte.satchels.content.satchel.SatchelItem;
 
 public class ModItems {
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Satchels.ID);

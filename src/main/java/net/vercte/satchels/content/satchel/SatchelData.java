@@ -1,4 +1,4 @@
-package net.vercte.satchels.satchel;
+package net.vercte.satchels.content.satchel;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.HolderLookup;
