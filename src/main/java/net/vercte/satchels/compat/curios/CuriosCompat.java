@@ -135,12 +135,14 @@ public class CuriosCompat implements CompatEntrypoint {
     public void curioChangeMaybeSatchel(final CurioChangeEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
 
-        boolean satchelEquipped = !event.getFrom().is(ModTags.SATCHEL) && event.getTo().is(ModTags.SATCHEL);
+        boolean satchelUnequipped = event.getFrom().is(ModTags.SATCHEL) && !event.getTo().is(ModTags.SATCHEL);
 
-        if(event.getTo().is(ModTags.SATCHEL)) satchelTints.put(player, DyedItemColor.getOrDefault(event.getTo(), SatchelItem.DEFAULT_COLOR));
+        if(event.getTo().is(ModTags.SATCHEL)) {
+            satchelTints.put(player, DyedItemColor.getOrDefault(event.getTo(), SatchelItem.DEFAULT_COLOR));
+            return;
+        }
 
-        if (satchelEquipped) return;
-        if (event.getTo().is(ModTags.SATCHEL)) return;
+        if (!satchelUnequipped) return;
 
         satchelTints.remove(player);
 
