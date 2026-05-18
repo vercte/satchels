@@ -16,11 +16,5 @@ public class ModItems {
             new Item.Properties().stacksTo(1)
     );
 
-    public static final DeferredItem<CraftingMatItem> CRAFTING_MAT = ITEMS.registerItem(
-            "crafting_mat",
-            CraftingMatItem::new,
-            new Item.Properties().stacksTo(1)
-    );
-
     public static void loadAndListen(IEventBus bus) { ITEMS.register(bus); }
 }

@@ -16,7 +16,6 @@ public class Satchels {
 
     public Satchels(IEventBus bus) {
         ModItems.loadAndListen(bus);
-        ModEntities.loadAndListen(bus);
         ModSounds.loadAndRegister(bus);
 
         NeoForge.EVENT_BUS.addListener(SatchelsEventHooks::playerJoin);

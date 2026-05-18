@@ -5,7 +5,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.entity.player.Player;
@@ -20,13 +19,10 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.vercte.satchels.ModEntities;
 import net.vercte.satchels.ModItems;
 import net.vercte.satchels.Satchels;
 import net.vercte.satchels.client.model.SatchelLayer;
 import net.vercte.satchels.client.satchel.SatchelHotbarOverlay;
-import net.vercte.satchels.content.craftingmat.CraftingMat;
-import net.vercte.satchels.content.craftingmat.CraftingMatRenderer;
 import net.vercte.satchels.network.packets.SatchelOffsetUpdatePacketC2S;
 import net.vercte.satchels.network.packets.ToggleSatchelPacketC2S;
 import net.vercte.satchels.content.satchel.SatchelData;
@@ -42,7 +38,6 @@ public class SatchelsClient {
     public SatchelsClient(IEventBus modEventBus, ModContainer container) {
         SatchelsClientConfig.load(modEventBus);
 
-        modEventBus.addListener(SatchelsClient::registerEntityRenderers);
         modEventBus.addListener(SatchelsClient::registerKeyMappings);
         modEventBus.addListener(SatchelsClient::registerOverlays);
         modEventBus.addListener(SatchelsClient::registerItemColorHandlers);
@@ -54,10 +49,6 @@ public class SatchelsClient {
         NeoForge.EVENT_BUS.addListener(SatchelsClient::onPlayerRespawn);
 
         container.registerConfig(ModConfig.Type.CLIENT, SatchelsClientConfig.SPEC);
-    }
-
-    public static void registerEntityRenderers(final EntityRenderersEvent.RegisterRenderers event) {
-        EntityRenderers.register(ModEntities.CRAFTING_MAT.get(), CraftingMatRenderer<CraftingMat>::new);
     }
 
     public static void registerKeyMappings(final RegisterKeyMappingsEvent event) {
@@ -92,14 +83,9 @@ public class SatchelsClient {
 
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
         event.register((stack, layer) -> {
-            if(stack.is(ModItems.SATCHEL)) {
-                if(layer == 0) return DyedItemColor.getOrDefault(stack, SatchelItem.DEFAULT_COLOR);
-            } else if(stack.is(ModItems.CRAFTING_MAT)) {
-                if(layer == 0) return CraftingMat.calculateColor(stack, false);
-                if(layer == 1) return CraftingMat.calculateColor(stack, true);
-            }
+            if(stack.is(ModItems.SATCHEL) && layer == 0) return DyedItemColor.getOrDefault(stack, SatchelItem.DEFAULT_COLOR);
             return 0xffffffff;
-        }, ModItems.SATCHEL.get(), ModItems.CRAFTING_MAT.get());
+        }, ModItems.SATCHEL.get());
     }
 
     public static void sendSatchelStatus() {
