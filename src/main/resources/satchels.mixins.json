@@ -8,7 +8,6 @@
     "GiveCommandMixin",
     "ItemEntityMixin",
     "ServerPlaceRecipeMixin",
-    "compat.curios.CuriosMenuMixin",
     "menu.InventoryMenuMixin",
     "player.InventoryMixin",
     "player.PlayerMixin"
@@ -19,9 +18,6 @@
     "client.screen.CreativeModeInventoryScreenMixin",
     "client.screen.InventoryScreenMixin",
     "client.screen.RecipeBookComponentMixin",
-    "client.screen.SimpleWorkbenchScreenMixin",
-    "client.screen.WorkbenchOverridesClickedOutsideScreenMixin",
-    "compat.curios.CuriosScreenMixin",
     "player.PickBlockMixin"
   ],
   "injectors": {

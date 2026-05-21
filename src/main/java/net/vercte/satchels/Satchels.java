@@ -17,6 +17,8 @@ public class Satchels {
     public static final String ID = "satchels";
 
     public Satchels(IEventBus bus, ModContainer container) {
+        SatchelsCommonConfig.load(bus);
+
         ModItems.loadAndListen(bus);
         ModSounds.loadAndRegister(bus);
 

@@ -5,10 +5,10 @@ import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.inventory.LecternMenu;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
@@ -17,9 +17,7 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.vercte.satchels.api.MenuWithSatchel;
-import net.vercte.satchels.compat.vanilla.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelData;
-import net.vercte.satchels.content.satchel.SatchelInventorySlot;
 
 public class SatchelsEventHooks {
     public static void playerJoin(final PlayerEvent.PlayerLoggedInEvent event) {
@@ -48,9 +46,10 @@ public class SatchelsEventHooks {
         ResourceLocation menuLocation = BuiltInRegistries.MENU.getKey(menu.getType());
 
         assert menuLocation != null;
-        if(!player.isLocalPlayer()) LogUtils.getLogger().info("opened {}", menuLocation);
+        if(SatchelsCommonConfig.shouldLog()) LogUtils.getLogger().info("satchels: opened {}", menuLocation);
         if(!SatchelsCommonConfig.isAllowed(menuLocation)) return;
 
-        MenuWithSatchel.addInventorySlots(satchelData, menu::addSlot, 8, 170, 18);
+        Tuple<Integer, Integer> offset = SatchelsCommonConfig.getOffset(menuLocation);
+        MenuWithSatchel.addInventorySlots(satchelData, menu::addSlot, 8 + offset.getA(), 170 + offset.getB(), 18);
     }
 }

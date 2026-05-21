@@ -1,5 +1,6 @@
 package net.vercte.satchels.mixin.client.screen;
 
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
@@ -20,6 +21,13 @@ public abstract class ControlsScreenMixin extends OptionsSubScreen {
     @Inject(method = "addOptions", at = @At("TAIL"))
     public void addSatchelOffsetOption(CallbackInfo ci) {
         assert this.list != null;
-        this.list.addSmall(SatchelsClientConfig.getOffsetOption());
+        this.list.addSmall(new OptionInstance<>(
+                "satchels.options.offset",
+                OptionInstance.cachedConstantTooltip(Component.translatable("satchels.options.offset.tooltip")),
+                (c, v) -> Component.translatable("satchels.options.offset.selection", v+1, v+6),
+                new OptionInstance.ClampingLazyMaxIntRange(0, () -> 3, 3),
+                SatchelsClientConfig.getSatchelOffset(),
+                SatchelsClientConfig::updateOffset
+        ));
     }
 }

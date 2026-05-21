@@ -41,26 +41,16 @@ public class SatchelsClientConfig {
     // endregion
 
     // region Controls Hook
-    private static final OptionInstance<Integer> offsetOption = new OptionInstance<>(
-            "satchels.options.offset",
-            OptionInstance.cachedConstantTooltip(Component.translatable("satchels.options.offset.tooltip")),
-            (c, v) -> Component.translatable("satchels.options.offset.selection", v+1, v+6),
-            new OptionInstance.ClampingLazyMaxIntRange(0, () -> 3, 3),
-            0,
-            v -> {
-                SATCHEL_OFFSET.set(v);
-                SATCHEL_OFFSET.save();
-            }
-    );
-
-    public static OptionInstance<Integer> getOffsetOption() {
-        return offsetOption;
+    public static void updateOffset(int offset) {
+        SATCHEL_OFFSET.set(offset);
+        SATCHEL_OFFSET.save();
     }
     // endregion
 
     private static void onConfigUpdate(final ModConfigEvent event) {
+        if(event.getConfig().getType() != ModConfig.Type.CLIENT) return;
+
         satchelOffset = SATCHEL_OFFSET.get();
-        offsetOption.set(satchelOffset);
 
         satchelLayer = SATCHEL_LAYER.get();
         guiAnimation = GUI_ANIMATION.get();

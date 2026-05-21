@@ -3,7 +3,6 @@ package net.vercte.satchels.util.data;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.Tags;
 import net.vercte.satchels.ModItems;
 import org.jetbrains.annotations.NotNull;

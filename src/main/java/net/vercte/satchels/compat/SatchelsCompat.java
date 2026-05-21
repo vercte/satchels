@@ -1,6 +1,5 @@
 package net.vercte.satchels.compat;
 
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.LoadingModList;
 import net.vercte.satchels.compat.curios.CuriosCompat;
