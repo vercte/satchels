@@ -24,8 +24,7 @@ public class ItemTagGen extends ItemTagsProvider {
         TagKey<Item> CURIOS_SATCHEL = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("curios", "satchel"));
 
         tag(ItemTags.DYEABLE)
-                .add(ModItems.SATCHEL.get())
-                .add(ModItems.CRAFTING_MAT.get());
+                .add(ModItems.SATCHEL.get());
 
         tag(ModTags.SATCHEL)
                 .add(ModItems.SATCHEL.get());

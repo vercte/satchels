@@ -26,14 +26,5 @@ public class StandardRecipeProvider extends RecipeProvider {
                 .define('g', Tags.Items.INGOTS_GOLD)
                 .unlockedBy("has_gold", has(Tags.Items.INGOTS_GOLD))
                 .save(output);
-
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, ModItems.CRAFTING_MAT.get())
-                .requires(Tags.Items.STRINGS)
-                .requires(Items.PAPER)
-                .requires(Tags.Items.PLAYER_WORKSTATIONS_CRAFTING_TABLES)
-                .requires(Tags.Items.LEATHERS)
-                .unlockedBy("has_paper", has(Items.PAPER))
-                .unlockedBy("has_leather", has(Tags.Items.LEATHERS))
-                .save(output);
     }
 }

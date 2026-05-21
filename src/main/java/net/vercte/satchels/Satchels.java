@@ -3,7 +3,9 @@ package net.vercte.satchels;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.vercte.satchels.compat.SatchelsCompat;
@@ -14,11 +16,12 @@ import net.vercte.satchels.util.SatchelsDataGeneration;
 public class Satchels {
     public static final String ID = "satchels";
 
-    public Satchels(IEventBus bus) {
+    public Satchels(IEventBus bus, ModContainer container) {
         ModItems.loadAndListen(bus);
         ModSounds.loadAndRegister(bus);
 
         NeoForge.EVENT_BUS.addListener(SatchelsEventHooks::playerJoin);
+        NeoForge.EVENT_BUS.addListener(SatchelsEventHooks::onContainerOpen);
 
         bus.addListener(ModPackets::registerPayloadHandlers);
         bus.addListener(SatchelsDataGeneration::gatherData);
@@ -27,6 +30,8 @@ public class Satchels {
         bus.addListener(Satchels::initExtra);
 
         SatchelsCompat.initialize();
+
+        container.registerConfig(ModConfig.Type.COMMON, SatchelsCommonConfig.SPEC);
     }
 
     public static void initExtra(final FMLCommonSetupEvent event) {

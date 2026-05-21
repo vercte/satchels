@@ -1,14 +1,25 @@
 package net.vercte.satchels;
 
+import com.mojang.logging.LogUtils;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.LecternMenu;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.vercte.satchels.api.MenuWithSatchel;
+import net.vercte.satchels.compat.vanilla.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelData;
+import net.vercte.satchels.content.satchel.SatchelInventorySlot;
 
 public class SatchelsEventHooks {
     public static void playerJoin(final PlayerEvent.PlayerLoggedInEvent event) {
@@ -19,9 +30,27 @@ public class SatchelsEventHooks {
     }
 
     public static void creativeTabBuild(final BuildCreativeModeTabContentsEvent event) {
-        if(event.getTabKey().equals(CreativeModeTabs.TOOLS_AND_UTILITIES)) {
-            event.insertAfter(new ItemStack(Items.LEAD), ModItems.SATCHEL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.insertAfter(new ItemStack(Items.MAP), ModItems.CRAFTING_MAT.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-        }
+        if(!event.getTabKey().equals(CreativeModeTabs.TOOLS_AND_UTILITIES)) return;
+        event.insertAfter(new ItemStack(Items.LEAD), ModItems.SATCHEL.toStack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+    }
+
+    public static void onContainerOpen(final PlayerContainerEvent.Open event) {
+        SatchelsEventHooks.onMenuOpen(event.getEntity(), event.getContainer());
+    }
+
+    public static void onMenuOpen(Player player, AbstractContainerMenu menu) {
+        SatchelData satchelData = SatchelData.get(player);
+
+        boolean inventory = menu instanceof InventoryMenu;
+        boolean creative = menu instanceof CreativeModeInventoryScreen.ItemPickerMenu;
+        if(inventory || creative) return;
+
+        ResourceLocation menuLocation = BuiltInRegistries.MENU.getKey(menu.getType());
+
+        assert menuLocation != null;
+        if(!player.isLocalPlayer()) LogUtils.getLogger().info("opened {}", menuLocation);
+        if(!SatchelsCommonConfig.isAllowed(menuLocation)) return;
+
+        MenuWithSatchel.addInventorySlots(satchelData, menu::addSlot, 8, 170, 18);
     }
 }

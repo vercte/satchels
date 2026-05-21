@@ -10,6 +10,17 @@ group = mod_group_id
 
 repositories {
     mavenLocal()
+    exclusiveContent { // Modrinth
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
     maven { // Curios
         name = "Illusive Soulworks"
         url = "https://maven.theillusivec4.top/"
@@ -21,6 +32,8 @@ repositories {
 }
 
 dependencies {
+    runtimeOnly "maven.modrinth:farmers-delight:$minecraft_version-$farmers_delight_version"
+
     // Curios
     compileOnly "top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version"
     compileOnly "top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version:api"

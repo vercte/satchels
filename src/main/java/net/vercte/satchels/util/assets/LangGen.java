@@ -14,7 +14,6 @@ public class LangGen extends LanguageProvider {
     @Override
     protected void addTranslations() {
         addItem(ModItems.SATCHEL, "Satchel");
-        addItem(ModItems.CRAFTING_MAT, "Crafting Mat");
 
         addTag(() -> ModTags.SATCHEL, "Satchels");
         add("key.satchels.toggle_satchel", "Toggle Satchel");

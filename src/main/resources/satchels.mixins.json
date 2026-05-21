@@ -9,18 +9,11 @@
     "ItemEntityMixin",
     "ServerPlaceRecipeMixin",
     "compat.curios.CuriosMenuMixin",
-    "menu.BeaconMenuMixin",
-    "menu.ChestMenuMixin",
-    "menu.DispenserHopperShulkerBoxMenuMixin",
-    "menu.FurnaceMenuMixin",
     "menu.InventoryMenuMixin",
-    "menu.MerchantMenuMixin",
-    "menu.SimpleMenuMixin",
     "player.InventoryMixin",
     "player.PlayerMixin"
   ],
   "client": [
-    "client.GameRendererMixin",
     "client.screen.AbstractContainerScreenMixin",
     "client.screen.ControlsScreenMixin",
     "client.screen.CreativeModeInventoryScreenMixin",

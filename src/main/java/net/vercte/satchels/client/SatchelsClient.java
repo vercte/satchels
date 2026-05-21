@@ -3,11 +3,13 @@ package net.vercte.satchels.client;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -21,6 +23,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.vercte.satchels.ModItems;
 import net.vercte.satchels.Satchels;
+import net.vercte.satchels.SatchelsEventHooks;
 import net.vercte.satchels.client.model.SatchelLayer;
 import net.vercte.satchels.client.satchel.SatchelHotbarOverlay;
 import net.vercte.satchels.network.packets.SatchelOffsetUpdatePacketC2S;
@@ -47,6 +50,7 @@ public class SatchelsClient {
         NeoForge.EVENT_BUS.addListener(SatchelsClient::endClientTick);
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingIn e) -> sendSatchelStatus());
         NeoForge.EVENT_BUS.addListener(SatchelsClient::onPlayerRespawn);
+        NeoForge.EVENT_BUS.addListener(SatchelsClient::onScreenOpen);
 
         container.registerConfig(ModConfig.Type.CLIENT, SatchelsClientConfig.SPEC);
     }
@@ -98,5 +102,11 @@ public class SatchelsClient {
         if(!player.isLocalPlayer()) return;
 
         sendSatchelStatus();
+    }
+
+    public static void onScreenOpen(final ScreenEvent.Opening event) {
+        if(!(event.getNewScreen() instanceof AbstractContainerScreen<?> abs)) return;
+        AbstractContainerMenu menu = abs.getMenu();
+        SatchelsEventHooks.onMenuOpen(Minecraft.getInstance().player, menu);
     }
 }
