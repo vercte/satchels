@@ -32,6 +32,10 @@ public enum SatchelsCompat {
         this(id, entrypoint, m -> true);
     }
 
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+
     public static void initialize() {
         for(SatchelsCompat compat : values()) {
             if(!compat.shouldLoad.test(ModList.get())) continue;

@@ -21,6 +21,7 @@ public class Satchels {
 
         ModItems.loadAndListen(bus);
         ModSounds.loadAndRegister(bus);
+        ModAttachmentTypes.loadAndRegister(bus);
 
         NeoForge.EVENT_BUS.addListener(SatchelsEventHooks::playerJoin);
         NeoForge.EVENT_BUS.addListener(SatchelsEventHooks::onContainerOpen);

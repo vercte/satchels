@@ -35,9 +35,8 @@ dependencies {
     runtimeOnly "maven.modrinth:farmers-delight:$minecraft_version-$farmers_delight_version"
 
     // Curios
-    compileOnly "top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version"
     compileOnly "top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version:api"
-    if(curios_enabled) runtimeOnly("top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version")
+//    if(curios_enabled) runtimeOnly("top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version")
 
     compileOnly "mezz.jei:jei-$minecraft_version-neoforge-api:$jei_version"
     if(jei_enabled) runtimeOnly "mezz.jei:jei-$minecraft_version-neoforge:$jei_version"

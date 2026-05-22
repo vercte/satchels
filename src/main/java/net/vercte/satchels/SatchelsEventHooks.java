@@ -9,6 +9,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
@@ -17,11 +18,16 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.vercte.satchels.api.MenuWithSatchel;
+import net.vercte.satchels.compat.vanilla.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelData;
 
 public class SatchelsEventHooks {
     public static void playerJoin(final PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
+
+        for(Slot slot : event.getEntity().inventoryMenu.slots) {
+            if(slot instanceof SatchelEquipmentSlot equipmentSlot) equipmentSlot.onLoad(event.getEntity());
+        }
         if(!(player instanceof ServerPlayer sp)) return;
 
         SatchelData.get(sp).sendData();
