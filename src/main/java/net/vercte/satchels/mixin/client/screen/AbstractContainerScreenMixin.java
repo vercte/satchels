@@ -1,18 +1,20 @@
 package net.vercte.satchels.mixin.client.screen;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.inventory.ShulkerBoxMenu;
+import net.minecraft.world.inventory.Slot;
 import net.vercte.satchels.SatchelsCommonConfig;
 import net.vercte.satchels.api.ScreenWithSatchel;
+import net.vercte.satchels.compat.vanilla.SatchelEquipmentSlot;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractContainerScreen.class)
-public class AbstractContainerScreenMixin<T extends AbstractContainerMenu> {
+public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMenu> {
     @Unique
     private final ScreenWithSatchel satchels$screenWithSatchel = new ScreenWithSatchel();
 
@@ -38,6 +40,9 @@ public class AbstractContainerScreenMixin<T extends AbstractContainerMenu> {
 
     @Shadow
     protected int topPos;
+
+    @Shadow
+    public abstract T getMenu();
 
     @ModifyExpressionValue(method = {"mouseClicked", "mouseReleased"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;hasClickedOutside(DDIII)Z"))
     public boolean hasClickedOutside(boolean original, double x, double y, int click) {
@@ -66,5 +71,18 @@ public class AbstractContainerScreenMixin<T extends AbstractContainerMenu> {
 
         Tuple<Integer, Integer> offset = SatchelsCommonConfig.getOverlayOffset(location);
         satchels$screenWithSatchel.renderSatchelInventory(guiGraphics, this.leftPos + offset.getA(), this.topPos + offset.getB(), this.imageHeight);
+    }
+
+    @WrapOperation(method = "findSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/Slot;isActive()Z"))
+    public boolean changeIsActive(Slot slot, Operation<Boolean> original) {
+        if(slot instanceof SatchelEquipmentSlot satchelSlot) return satchelSlot.isShown(Minecraft.getInstance().player, this.getMenu());
+        return original.call(slot);
+    }
+
+
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/Slot;isActive()Z"))
+    public boolean changeIsActiveInRender(Slot slot, Operation<Boolean> original) {
+        if(slot instanceof SatchelEquipmentSlot satchelSlot) return satchelSlot.isShown(Minecraft.getInstance().player, this.getMenu());
+        return original.call(slot);
     }
 }

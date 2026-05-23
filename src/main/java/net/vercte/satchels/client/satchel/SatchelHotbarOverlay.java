@@ -117,29 +117,8 @@ public class SatchelHotbarOverlay {
 
         for(int i = 0; i < satchelData.getSatchelInventory().getContainerSize(); i++) {
             ItemStack stack = satchelData.getSatchelInventory().getItem(i);
-            SatchelHotbarOverlay.renderSlot(graphics, x + (i*20) + 3 + xOffset, y + 3, deltaTracker, player, stack, i+1);
+            SatchelRenderUtils.renderSlot(graphics, x + (i*20) + 3 + xOffset, y + 3, deltaTracker, player, stack, i+1);
         }
         graphics.pose().popPose();
-    }
-
-    // copied from Gui#renderSlot
-    private static void renderSlot(GuiGraphics guiGraphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack itemStack, int k) {
-        if (!itemStack.isEmpty()) {
-            float f = itemStack.getPopTime() - deltaTracker.getGameTimeDeltaPartialTick(false);
-            if (f > 0.0F) {
-                float g = 1.0F + f / 5.0F;
-                guiGraphics.pose().pushPose();
-                guiGraphics.pose().translate((float)(x + 8), (float)(y + 12), 0.0F);
-                guiGraphics.pose().scale(1.0F / g, (g + 1.0F) / 2.0F, 1.0F);
-                guiGraphics.pose().translate((float)(-(x + 8)), (float)(-(y + 12)), 0.0F);
-            }
-
-            guiGraphics.renderItem(player, itemStack, x, y, k);
-            if (f > 0.0F) {
-                guiGraphics.pose().popPose();
-            }
-
-            guiGraphics.renderItemDecorations(Minecraft.getInstance().font, itemStack, x, y);
-        }
     }
 }

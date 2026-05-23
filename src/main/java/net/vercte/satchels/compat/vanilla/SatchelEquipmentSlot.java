@@ -3,13 +3,13 @@ package net.vercte.satchels.compat.vanilla;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.items.SlotItemHandler;
 import net.vercte.satchels.ModAttachmentTypes;
+import net.vercte.satchels.ModTags;
 import net.vercte.satchels.content.satchel.SatchelData;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,6 +26,14 @@ public class SatchelEquipmentSlot extends Slot {
 
     public void onLoad(Player player) {
         this.handler = player.getData(ModAttachmentTypes.SATCHEL_SLOT);
+    }
+
+    public boolean isShown(Player player, AbstractContainerMenu menu) {
+        SatchelData data = SatchelData.get(player);
+        return menu.getCarried().is(ModTags.SATCHEL) || (
+                data.getSatchelInventory().isEmpty() &&
+                this.getItem().is(ModTags.SATCHEL)
+        );
     }
 
     @Override

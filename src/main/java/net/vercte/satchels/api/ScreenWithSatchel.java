@@ -6,10 +6,14 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.vercte.satchels.ModTags;
 import net.vercte.satchels.client.ModSprites;
 import net.vercte.satchels.client.SatchelsClientConfig;
 import net.vercte.satchels.client.animation.LerpFunctions;
 import net.vercte.satchels.client.animation.LerpHelper;
+import net.vercte.satchels.compat.SatchelsCompat;
+import net.vercte.satchels.compat.vanilla.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelData;
 import net.vercte.satchels.content.satchel.SatchelItem;
 
@@ -20,9 +24,15 @@ import net.vercte.satchels.content.satchel.SatchelItem;
 public class ScreenWithSatchel {
     private float satchelYOffset = -1;
     private float yOffsetOnChange = 0;
-    private long startTime = 0;
-    private long endTime = 0;
-    private boolean lastState = false;
+    private long inventoryTweenStartTime = 0;
+    private long inventoryTweenEndTime = 0;
+    private boolean lastInventoryState = false;
+
+    private float slotXOffset = -1;
+    private long slotTweenStartTime = 0;
+    private long slotTweenEndTime = 0;
+    private float xOffsetOnChange = 0;
+    private boolean lastSlotState = false;
 
     private int lastColor = SatchelItem.DEFAULT_COLOR;
 
@@ -39,27 +49,26 @@ public class ScreenWithSatchel {
 
         SatchelData satchelData = SatchelData.get(player);
 
-        if(this.satchelYOffset == -1) {
-            if(satchelData.canAccess()) this.satchelYOffset = 0;
-            else this.satchelYOffset = 27;
+        if(satchelYOffset == -1) {
+            satchelYOffset = satchelData.canAccess() ? 0 : 27;
         }
 
         int offsetGoal = 27;
         boolean enabled = satchelData.canAccess();
-        boolean stateChanged = this.lastState != enabled;
+        boolean stateChanged = lastInventoryState != enabled;
         long currentTime = Util.getMillis();
 
         if(stateChanged) {
-            startTime = currentTime;
-            endTime = currentTime + 300;
-            yOffsetOnChange = this.satchelYOffset;
-            lastState = enabled;
+            inventoryTweenStartTime = currentTime;
+            inventoryTweenEndTime = currentTime + 300;
+            yOffsetOnChange = satchelYOffset;
+            lastInventoryState = enabled;
         }
 
-        float progress = LerpHelper.getProgress(currentTime, this.startTime, this.endTime);
-        if(SatchelsClientConfig.shouldAnimateGUI()) this.satchelYOffset = (int) LerpFunctions.EXPONENTIAL.lerp(progress, this.yOffsetOnChange, enabled ? 0 : offsetGoal);
-        else this.satchelYOffset = enabled ? 0 : offsetGoal;
-        if(this.satchelYOffset == offsetGoal) return;
+        float progress = LerpHelper.getProgress(currentTime, inventoryTweenStartTime, inventoryTweenEndTime);
+        if(SatchelsClientConfig.shouldAnimateGUI()) satchelYOffset = (int) LerpFunctions.EXPONENTIAL.lerp(progress, yOffsetOnChange, enabled ? 0 : offsetGoal);
+        else satchelYOffset = enabled ? 0 : offsetGoal;
+        if(satchelYOffset == offsetGoal) return;
 
         int satchelXOffset = satchelData.getHotbarOffset() * 18;
 
@@ -72,13 +81,56 @@ public class ScreenWithSatchel {
                 FastColor.ARGB32.blue(lastColor) / 255f,
                 FastColor.ARGB32.alpha(lastColor) / 255f
         );
-        graphics.blitSprite(ModSprites.SATCHEL_INVENTORY, left + 2 + satchelXOffset, top + height - (int)this.satchelYOffset - 1, 118, 27);
+        graphics.blitSprite(ModSprites.SATCHEL_INVENTORY, left + 2 + satchelXOffset, top + height - (int)satchelYOffset - 1, 118, 27);
         graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-//    public void renderSatchelSlot(GuiGraphics graphics, int left, int top) {
-//        graphics.blitSprite(ResourceLocation.withDefaultNamespace("container/slot"), left + 151, top + 61, 18, 18);
-//    }
+    public void renderSatchelSlot(GuiGraphics graphics, int left, int top, int width, int height) {
+        if(!SatchelsCompat.VANILLA.isLoaded()) return;
+
+        Player player = Minecraft.getInstance().player;
+        if(player == null) return;
+
+        SatchelData data = SatchelData.get(player);
+        ItemStack carried = player.containerMenu.getCarried();
+        SatchelEquipmentSlot slot = (SatchelEquipmentSlot)player.containerMenu.slots.stream()
+                .filter(s -> s instanceof SatchelEquipmentSlot)
+                .findFirst()
+                .orElse(null);
+
+        if(slot == null) return;
+
+        boolean shown = carried.is(ModTags.SATCHEL) || (
+                data.getSatchelInventory().isEmpty() &&
+                        slot.getItem().is(ModTags.SATCHEL)
+        );
+
+        if(slotXOffset == -1) {
+            slotXOffset = shown ? 0 : 27;
+        }
+
+        int offsetGoal = -27;
+        boolean stateChanged = lastSlotState != shown;
+        long currentTime = Util.getMillis();
+
+        if(stateChanged) {
+            slotTweenStartTime = currentTime;
+            slotTweenEndTime = currentTime + 300;
+            xOffsetOnChange = slotXOffset;
+            lastSlotState = shown;
+        }
+
+        float progress = LerpHelper.getProgress(currentTime, slotTweenStartTime, slotTweenEndTime);
+        if(SatchelsClientConfig.shouldAnimateGUI()) slotXOffset = (int) LerpFunctions.EXPONENTIAL.lerp(progress, xOffsetOnChange, shown ? 0 : offsetGoal);
+        else slotXOffset = shown ? 0 : offsetGoal;
+        if(slotXOffset == offsetGoal) return;
+
+
+        int x = left + width + (int)slotXOffset - 1;
+        int y = top + height - 30;
+        graphics.blitSprite(ModSprites.SATCHEL_SLOT_INVENTORY, x, y, 27, 28);
+        graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+    }
 
     /**
      * Use to determine if a click is within the satchel.

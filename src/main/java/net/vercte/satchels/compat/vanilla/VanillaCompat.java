@@ -1,8 +1,6 @@
 package net.vercte.satchels.compat.vanilla;
 
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.fml.ModList;
@@ -11,8 +9,6 @@ import net.vercte.satchels.ModTags;
 import net.vercte.satchels.api.SatchelAccess;
 import net.vercte.satchels.compat.CompatEntrypoint;
 import net.vercte.satchels.content.satchel.SatchelItem;
-
-import java.util.Optional;
 
 public class VanillaCompat implements CompatEntrypoint {
     @Override
@@ -32,6 +28,8 @@ public class VanillaCompat implements CompatEntrypoint {
     }
 
     private int getSatchelTint(Player player) {
+        ItemStack satchel = getSatchel(player);
+        if(satchel.isEmpty()) return -1;
         return DyedItemColor.getOrDefault(getSatchel(player), SatchelItem.DEFAULT_COLOR);
     }
 

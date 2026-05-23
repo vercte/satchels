@@ -1,6 +1,5 @@
 package net.vercte.satchels.mixin.client.screen;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -23,11 +22,7 @@ public abstract class InventoryScreenMixin<T extends AbstractContainerMenu> exte
 
     @Inject(method = "renderBg", at = @At("HEAD"))
     public void renderSatchelInventory(GuiGraphics guiGraphics, float f, int i, int j, CallbackInfo ci) {
+        satchels$screenWithSatchel.renderSatchelSlot(guiGraphics, this.leftPos, this.topPos, this.imageWidth, this.imageHeight);
         satchels$screenWithSatchel.renderSatchelInventory(guiGraphics, this.leftPos, this.topPos, this.imageHeight);
     }
-
-//    @Inject(method = "renderBg", at = @At("TAIL"))
-//    public void renderSatchelSlot(GuiGraphics guiGraphics, float f, int i, int j, CallbackInfo ci) {
-//        satchels$screenWithSatchel.renderSatchelSlot(guiGraphics, this.leftPos, this.topPos);
-//    }
 }

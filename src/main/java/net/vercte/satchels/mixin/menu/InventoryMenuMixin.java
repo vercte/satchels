@@ -7,12 +7,9 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.RecipeBookMenu;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.vercte.satchels.ModAttachmentTypes;
 import net.vercte.satchels.api.MenuWithSatchel;
 import net.vercte.satchels.compat.SatchelsCompat;
 import net.vercte.satchels.compat.vanilla.SatchelEquipmentSlot;
-import net.vercte.satchels.compat.vanilla.SatchelSlotItemStackHandler;
-import net.vercte.satchels.compat.vanilla.VanillaCompat;
 import net.vercte.satchels.content.satchel.SatchelData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,7 +28,7 @@ public abstract class InventoryMenuMixin extends RecipeBookMenu<CraftingInput, C
         SatchelData satchelData = SatchelData.get(player);
 
         if(SatchelsCompat.VANILLA.isLoaded()) this.addSlot(
-                new SatchelEquipmentSlot(player, 170 + 8, 142)
+                new SatchelEquipmentSlot(player, 170 + 10, 142)
         );
         MenuWithSatchel.addInventorySlots(satchelData, s -> this.addSlot(s), 8, 170, 18);
     }
