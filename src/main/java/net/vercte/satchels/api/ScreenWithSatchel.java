@@ -13,7 +13,7 @@ import net.vercte.satchels.client.SatchelsClientConfig;
 import net.vercte.satchels.client.animation.LerpFunctions;
 import net.vercte.satchels.client.animation.LerpHelper;
 import net.vercte.satchels.compat.SatchelsCompat;
-import net.vercte.satchels.compat.vanilla.SatchelEquipmentSlot;
+import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelData;
 import net.vercte.satchels.content.satchel.SatchelItem;
 

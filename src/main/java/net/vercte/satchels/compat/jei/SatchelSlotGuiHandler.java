@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.vercte.satchels.ModTags;
-import net.vercte.satchels.compat.vanilla.SatchelEquipmentSlot;
+import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelData;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,11 +25,6 @@ public class SatchelSlotGuiHandler<T extends AbstractContainerScreen<InventoryMe
 
         ItemStack carried = containerScreen.getMenu().getCarried();
         SatchelData data = SatchelData.get(containerScreen.getMinecraft().player);
-        // if inventory is empty and slot is filled, show
-        // if inventory is full and slot is filled, hide
-        // if inventory is empty and slot is empty, hide
-        // if inventory is full and slot is empty, show
-        // if satchel is being carried, show
 
         boolean shown = carried.is(ModTags.SATCHEL) || (
                     data.getSatchelInventory().isEmpty() &&

@@ -14,11 +14,12 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.vercte.satchels.api.MenuWithSatchel;
-import net.vercte.satchels.compat.vanilla.SatchelEquipmentSlot;
+import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelData;
 
 public class SatchelsEventHooks {
@@ -31,6 +32,24 @@ public class SatchelsEventHooks {
         if(!(player instanceof ServerPlayer sp)) return;
 
         SatchelData.get(sp).sendData();
+    }
+
+    public static void playerClone(final PlayerEvent.Clone event) {
+        if(!event.isWasDeath()) return;
+
+        if(!event.getOriginal().level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) return;
+
+        if(event.getOriginal().hasData(ModAttachmentTypes.SATCHEL_SLOT)) {
+            ItemStack previous = event.getOriginal().getData(ModAttachmentTypes.SATCHEL_SLOT).getStackInSlot(0);
+
+            ItemStack newStack = previous.copy();
+            event.getEntity().getData(ModAttachmentTypes.SATCHEL_SLOT).setStackInSlot(0, newStack);
+            event.getEntity().syncData(ModAttachmentTypes.SATCHEL_SLOT);
+            // FIXME: the slot doesn't re-sync for some fuckin reason
+        }
+
+        SatchelData original = SatchelData.get(event.getOriginal());
+        SatchelData.get(event.getEntity()).copyFrom(original);
     }
 
     public static void creativeTabBuild(final BuildCreativeModeTabContentsEvent event) {

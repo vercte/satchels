@@ -27,12 +27,12 @@ public class ServerPlaceRecipeMixin {
     protected Inventory inventory;
 
     @Inject(method = "recipeClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/RecipeBookMenu;fillCraftSlotsStackedContents(Lnet/minecraft/world/entity/player/StackedContents;)V", shift = At.Shift.AFTER))
-    public void placeWithSatchelContents(ServerPlayer player, RecipeHolder<?> holder, boolean idgaf, CallbackInfo ci) {
+    public void satchels$placeWithSatchelContents(ServerPlayer player, RecipeHolder<?> holder, boolean idgaf, CallbackInfo ci) {
         SatchelData.get(player).getSatchelInventory().fillStackedContents(stackedContents);
     }
 
     @ModifyReturnValue(method = "moveItemToGrid", at = @At(value = "RETURN", ordinal = 0))
-    protected int searchSatchel(int original, Slot slot, ItemStack stack, int amount) {
+    protected int satchels$searchSatchel(int original, Slot slot, ItemStack stack, int amount) {
         SatchelData data = SatchelData.get(this.inventory.player);
         SatchelInventory satchelInventory = data.getSatchelInventory();
         int s = satchelInventory.findSlotMatchingUnusedItem(stack);

@@ -14,7 +14,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.vercte.satchels.SatchelsCommonConfig;
 import net.vercte.satchels.api.ScreenWithSatchel;
-import net.vercte.satchels.compat.vanilla.SatchelEquipmentSlot;
+import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

@@ -9,7 +9,7 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.vercte.satchels.api.MenuWithSatchel;
 import net.vercte.satchels.compat.SatchelsCompat;
-import net.vercte.satchels.compat.vanilla.SatchelEquipmentSlot;
+import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

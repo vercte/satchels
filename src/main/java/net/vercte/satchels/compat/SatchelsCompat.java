@@ -14,7 +14,7 @@ public enum SatchelsCompat {
     CURIOS("curios", CuriosCompat::new);
 
     final String id;
-    final boolean isLoaded;
+    boolean isLoaded;
 
     @Nullable
     final CompatEntrypoint entrypoint;
@@ -24,7 +24,7 @@ public enum SatchelsCompat {
         this.id = id;
 
         this.entrypoint = entrypoint.get();
-        this.isLoaded = LoadingModList.get().getModFileById(id) != null;
+        this.isLoaded = SatchelsCompat.isLoaded(id);
         this.shouldLoad = shouldLoad;
     }
 
@@ -36,10 +36,22 @@ public enum SatchelsCompat {
         return isLoaded;
     }
 
+    private void shouldNotLoad() {
+        isLoaded = false;
+    }
+
     public static void initialize() {
         for(SatchelsCompat compat : values()) {
-            if(!compat.shouldLoad.test(ModList.get())) continue;
+            if(!compat.shouldLoad.test(ModList.get())) {
+                compat.shouldNotLoad();
+                continue;
+            }
+
             if(compat.entrypoint != null && compat.isLoaded) compat.entrypoint.initialize();
         }
+    }
+
+    public static boolean isLoaded(String modId) {
+        return LoadingModList.get().getModFileById(modId) != null;
     }
 }

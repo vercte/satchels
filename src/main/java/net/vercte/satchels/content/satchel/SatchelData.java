@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -13,6 +14,8 @@ import net.vercte.satchels.api.SatchelAccess;
 import net.vercte.satchels.client.SatchelsClientConfig;
 import net.vercte.satchels.network.packets.SatchelStatusPacketS2C;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class SatchelData implements INBTSerializable<CompoundTag> {
     public static final String KEY_SATCHEL = "satchels:satchel_data";
@@ -38,6 +41,12 @@ public class SatchelData implements INBTSerializable<CompoundTag> {
 
     public static SatchelData get(Player player) {
         return ((IHaveSatchelData)player).satchels$getSatchelData();
+    }
+
+    public void copyFrom(SatchelData data) {
+        List<ItemStack> original = data.satchelInventory.getItems();
+
+        for(int i = 0; i < original.size(); i++) satchelInventory.setItem(i, original.get(i).copy());
     }
 
     public void sendData() {

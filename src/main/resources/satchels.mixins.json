@@ -2,12 +2,12 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.vercte.satchels.mixin",
-  "plugin": "net.vercte.satchels.mixin.SatchelsMixinPlugin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "GiveCommandMixin",
     "ItemEntityMixin",
     "ServerPlaceRecipeMixin",
+    "menu.AbstractContainerMenuMixin",
     "menu.InventoryMenuMixin",
     "player.InventoryMixin",
     "player.PlayerMixin"

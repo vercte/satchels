@@ -13,6 +13,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.CommonHooks;
+import net.vercte.satchels.ModAttachmentTypes;
+import net.vercte.satchels.compat.vanilla.SatchelSlotItemStackHandler;
 import net.vercte.satchels.content.satchel.IHaveSatchelData;
 import net.vercte.satchels.content.satchel.SatchelData;
 import net.vercte.satchels.content.satchel.SatchelInventory;
@@ -73,7 +75,10 @@ public abstract class PlayerMixin extends LivingEntity implements IHaveSatchelDa
         SatchelData satchelData = SatchelData.get((Player)(Object) this);
         if (!this.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
             satchelData.getSatchelInventory().dropAll(true);
-//            satchelData.getSatchelSlotInventory().drop();
+
+            ItemStack slotStack = this.getData(ModAttachmentTypes.SATCHEL_SLOT).getStackInSlot(0);
+            if(slotStack.isEmpty()) return;
+            satchelData.getPlayer().drop(slotStack, true, false);
         }
     }
 
@@ -87,10 +92,10 @@ public abstract class PlayerMixin extends LivingEntity implements IHaveSatchelDa
             }
         }
 
-//        ItemStack satchelStack = satchelData.getSatchelSlotInventory().getItem(0);
-//        if (!satchelStack.isEmpty() && EnchantmentHelper.has(satchelStack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
-//            satchelData.getSatchelSlotInventory().removeItemNoUpdate(0);
-//        }
+        ItemStack satchelStack = this.getData(ModAttachmentTypes.SATCHEL_SLOT).getStackInSlot(0);
+        if (!satchelStack.isEmpty() && EnchantmentHelper.has(satchelStack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
+            this.setData(ModAttachmentTypes.SATCHEL_SLOT, new SatchelSlotItemStackHandler());
+        }
     }
 
     @Inject(method = "getProjectile", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ProjectileWeaponItem;getAllSupportedProjectiles(Lnet/minecraft/world/item/ItemStack;)Ljava/util/function/Predicate;", shift = At.Shift.AFTER), cancellable = true)

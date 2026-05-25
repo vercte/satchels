@@ -1,5 +1,6 @@
 package net.vercte.satchels.compat.vanilla;
 
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
@@ -8,15 +9,33 @@ import net.vercte.satchels.ModAttachmentTypes;
 import net.vercte.satchels.ModTags;
 import net.vercte.satchels.api.SatchelAccess;
 import net.vercte.satchels.compat.CompatEntrypoint;
+import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelItem;
 
 public class VanillaCompat implements CompatEntrypoint {
     @Override
     public void initialize() {
+        SatchelAccess.SATCHEL_EQUIP_CALLBACKS.add(this::equipSatchel);
         SatchelAccess.CAN_ACCESS_PREDICATES.add(this::canAccessSatchel);
         SatchelAccess.IS_VISIBLE_PREDICATES.add(this::isSatchelVisible);
         SatchelAccess.SATCHEL_STACK_GETTERS.add(this::getSatchel);
         SatchelAccess.SATCHEL_TINT_GETTERS.add(this::getSatchelTint);
+    }
+
+    private boolean equipSatchel(Player player, InteractionHand hand) {
+        SatchelEquipmentSlot slot = (SatchelEquipmentSlot)player.inventoryMenu.slots.stream()
+                .filter(p -> p instanceof SatchelEquipmentSlot)
+                .findFirst()
+                .orElse(null);
+
+        if(slot == null) return false;
+
+        ItemStack current = slot.getItem();
+        ItemStack held = player.getItemInHand(hand).copy();
+
+        slot.setByPlayer(held, current);
+        player.setItemInHand(hand, current.copy());
+        return true;
     }
 
     private ItemStack getSatchel(Player player) {

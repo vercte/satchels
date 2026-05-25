@@ -10,6 +10,7 @@ import net.neoforged.neoforge.common.util.TriState;
 import net.vercte.satchels.ModTags;
 import net.vercte.satchels.api.SatchelAccess;
 import net.vercte.satchels.compat.CompatEntrypoint;
+import net.vercte.satchels.compat.SatchelsCompat;
 import net.vercte.satchels.content.satchel.SatchelData;
 import net.vercte.satchels.content.satchel.SatchelItem;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -41,6 +42,8 @@ public class CuriosCompat implements CompatEntrypoint {
     }
 
     public boolean equipSatchel(Player player, InteractionHand hand) {
+        if(SatchelsCompat.isLoaded("accessories")) return false; // because accessories has right-click stuff that this interferes with (glup)
+
         Optional<ICuriosItemHandler> optCuriosInventory = CuriosApi.getCuriosInventory(player);
         if(optCuriosInventory.isEmpty()) return false;
 
@@ -58,9 +61,11 @@ public class CuriosCompat implements CompatEntrypoint {
             return true;
         }
 
-        for(ICurioStacksHandler handler: optCuriosInventory.get().getCurios().values()) {
+        for(ICurioStacksHandler handler: curiosInventory.getCurios().values()) {
             IDynamicStackHandler stacks = handler.getStacks();
             for(int i = 0; i < stacks.getSlots(); i++) {
+                if(!stacks.isItemValid(i, stack)) continue;
+
                 ItemStack current = stacks.getStackInSlot(i);
                 if(!current.isEmpty()) continue;
 
@@ -139,6 +144,7 @@ public class CuriosCompat implements CompatEntrypoint {
 
         if(event.getTo().is(ModTags.SATCHEL)) {
             satchelTints.put(player, DyedItemColor.getOrDefault(event.getTo(), SatchelItem.DEFAULT_COLOR));
+            if(!event.getEntity().firstTick) SatchelItem.playEquipSound(player);
             return;
         }
 
@@ -148,7 +154,7 @@ public class CuriosCompat implements CompatEntrypoint {
 
         SatchelData satchelData = SatchelData.get(player);
         satchelData.getSatchelInventory().dropAll(false);
-        satchelData.setActive(false, true);
+        if(satchelData.isActive()) satchelData.setActive(false, true);
         satchelData.sendData();
     }
 }

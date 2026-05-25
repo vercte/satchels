@@ -2,7 +2,6 @@ package net.vercte.satchels;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -80,7 +79,12 @@ public class SatchelsCommonConfig {
                 "minecraft:merchant 100 0 100 0",
                 "minecraft:beacon 28 53 28 0",
                 "farmersdelight:cooking_pot",
-                "curios:curios_container"
+                "curios:curios_container",
+                "accessories:original_menu",
+                "create:schematic_table 30 23 30 -8",
+                "create:schematicannon 29 77 29 -8",
+                "create:toolbox 0 81 0 -8",
+                "create:package_port 30 24 30 0"
         );
     }
 

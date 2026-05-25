@@ -1,4 +1,4 @@
-package net.vercte.satchels.compat.vanilla;
+package net.vercte.satchels.content.satchel;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -10,7 +10,8 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.vercte.satchels.ModAttachmentTypes;
 import net.vercte.satchels.ModTags;
-import net.vercte.satchels.content.satchel.SatchelData;
+import net.vercte.satchels.compat.SatchelsCompat;
+import net.vercte.satchels.compat.vanilla.SatchelSlotItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class SatchelEquipmentSlot extends Slot {
@@ -28,7 +29,15 @@ public class SatchelEquipmentSlot extends Slot {
         this.handler = player.getData(ModAttachmentTypes.SATCHEL_SLOT);
     }
 
+    @Override
+    public void setByPlayer(@NotNull ItemStack to, @NotNull ItemStack from) {
+        super.setByPlayer(to, from);
+
+        if(!ItemStack.isSameItemSameComponents(to, from) && to.is(ModTags.SATCHEL)) SatchelItem.playEquipSound(player);
+    }
+
     public boolean isShown(Player player, AbstractContainerMenu menu) {
+        if(!SatchelsCompat.VANILLA.isLoaded()) return false;
         SatchelData data = SatchelData.get(player);
         return menu.getCarried().is(ModTags.SATCHEL) || (
                 data.getSatchelInventory().isEmpty() &&

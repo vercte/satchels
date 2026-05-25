@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.vercte.satchels.ModAttachmentTypes;
 import net.vercte.satchels.network.packets.ToggleSatchelPacketC2S;
 import net.vercte.satchels.content.satchel.SatchelData;
 import net.vercte.satchels.content.satchel.SatchelInventory;
@@ -43,27 +44,27 @@ public abstract class InventoryMixin {
     public NonNullList<ItemStack> items;
 
     @ModifyReturnValue(method = "getSelected", at = @At("RETURN"))
-    public ItemStack getSelected(ItemStack original) {
+    public ItemStack satchels$getSelected(ItemStack original) {
         SatchelData satchelData = SatchelData.get(player);
-        if(satchelData.isActive() && satchelData.isSlotInSatchel(this.selected)) {
-            int satchelIndex = satchelData.convertToSatchelIndex(this.selected);
+        if(satchelData.isActive() && satchelData.isSlotInSatchel(selected)) {
+            int satchelIndex = satchelData.convertToSatchelIndex(selected);
             return satchelData.getSatchelInventory().getItem(satchelIndex);
         }
         return original;
     }
 
     @ModifyReturnValue(method = "getDestroySpeed", at = @At("RETURN"))
-    public float getDestroySpeed(float original, BlockState state) {
+    public float satchels$getDestroySpeed(float original, BlockState state) {
         SatchelData satchelData = SatchelData.get(player);
-        if(satchelData.isSlotInSatchel(this.selected) && satchelData.isActive()) {
-            int satchelIndex = satchelData.convertToSatchelIndex(this.selected);
+        if(satchelData.isSlotInSatchel(selected) && satchelData.isActive()) {
+            int satchelIndex = satchelData.convertToSatchelIndex(selected);
             return satchelData.getSatchelInventory().getItem(satchelIndex).getDestroySpeed(state);
         }
         return original;
     }
 
     @Inject(method = "placeItemBackInInventory(Lnet/minecraft/world/item/ItemStack;Z)V", at = @At("HEAD"), cancellable = true)
-    public void placeItemBackInInventory(ItemStack stack, boolean update, CallbackInfo ci) {
+    public void satchels$placeItemBackInInventory(ItemStack stack, boolean update, CallbackInfo ci) {
         SatchelData satchelData = SatchelData.get(player);
         if(satchelData.isActive() || !update) {
             boolean added = satchelData.getSatchelInventory().placeItemBackInInventory(stack);
@@ -72,10 +73,10 @@ public abstract class InventoryMixin {
     }
 
     @Inject(method = "removeFromSelected", at = @At("HEAD"), cancellable = true)
-    public void removeFromSelected(boolean fullStack, CallbackInfoReturnable<ItemStack> cir) {
-        SatchelData satchelData = SatchelData.get(this.player);
-        if(satchelData.isActive() && satchelData.isSlotInSatchel(this.selected)) {
-            int slot = satchelData.convertToSatchelIndex(this.selected);
+    public void satchels$removeFromSelected(boolean fullStack, CallbackInfoReturnable<ItemStack> cir) {
+        SatchelData satchelData = SatchelData.get(player);
+        if(satchelData.isActive() && satchelData.isSlotInSatchel(selected)) {
+            int slot = satchelData.convertToSatchelIndex(selected);
             ItemStack satchelSelected = satchelData.getSatchelInventory().getItem(slot);
             if(satchelSelected.isEmpty()) cir.setReturnValue(ItemStack.EMPTY);
             else {
@@ -85,48 +86,62 @@ public abstract class InventoryMixin {
     }
 
     @WrapOperation(method = "clearOrCountMatchingItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/ContainerHelper;clearOrCountMatchingItems(Lnet/minecraft/world/Container;Ljava/util/function/Predicate;IZ)I", ordinal = 1))
-    public int clearOrCountMatchingItems(Container container, Predicate<ItemStack> predicate, int i, boolean bl, Operation<Integer> original, @Local(ordinal=1) int cleared) {
+    public int satchels$clearOrCountMatchingItems(Container container, Predicate<ItemStack> predicate, int i, boolean bl, Operation<Integer> original, @Local(ordinal=1) int cleared) {
         int extraCleared = original.call(container, predicate, i - cleared, bl);
-        SatchelData satchelData = SatchelData.get(this.player);
+        SatchelData satchelData = SatchelData.get(player);
         extraCleared += ContainerHelper.clearOrCountMatchingItems(satchelData.getSatchelInventory(), predicate, i - extraCleared - cleared, bl);
-//        extraCleared += ContainerHelper.clearOrCountMatchingItems(satchelData.getSatchelSlotInventory(), predicate, i - extraCleared - cleared, bl);
+
+        if(player.hasData(ModAttachmentTypes.SATCHEL_SLOT)) {
+            ItemStack satchelSlot = player.getData(ModAttachmentTypes.SATCHEL_SLOT).getStackInSlot(0);
+            extraCleared += ContainerHelper.clearOrCountMatchingItems(satchelSlot, predicate, i - extraCleared - cleared, bl);
+
+            player.getData(ModAttachmentTypes.SATCHEL_SLOT).setStackInSlot(0, satchelSlot);
+            player.syncData(ModAttachmentTypes.SATCHEL_SLOT);
+            if (satchelSlot.isEmpty()) {
+                satchelData.getSatchelInventory().dropAll(false);
+                if (satchelData.isActive()) {
+                    satchelData.setActive(false, true);
+                    satchelData.sendData();
+                }
+            }
+        }
 
         return extraCleared;
     }
 
     @Inject(method = "removeItem(Lnet/minecraft/world/item/ItemStack;)V", at = @At(value = "TAIL"))
-    public void removeItem(ItemStack stack, CallbackInfo ci) {
-        SatchelData.get(this.player)
+    public void satchels$removeItem(ItemStack stack, CallbackInfo ci) {
+        SatchelData.get(player)
                 .getSatchelInventory()
                 .removeItem(stack);
     }
 
     @Inject(method = "pickSlot", at = @At("HEAD"), cancellable = true)
-    public void putIntoSatchelIfActive(int slot, CallbackInfo ci) {
-        SatchelData data = SatchelData.get(this.player);
+    public void satchels$putIntoSatchelIfActive(int slot, CallbackInfo ci) {
+        SatchelData data = SatchelData.get(player);
         SatchelInventory satchelInventory = data.getSatchelInventory();
         if(!data.isActive()) return;
 
-        int inventorySuitable = this.getSuitableHotbarSlot();
+        int inventorySuitable = getSuitableHotbarSlot();
         int satchelSuitable = satchelInventory.getFreeSlot();
 
         if(!data.isSlotInSatchel(inventorySuitable) && (inventorySuitable < satchelSuitable + data.getHotbarOffset() || satchelSuitable == -1)) return;
         if(satchelSuitable == -1 && inventorySuitable != -1 && !data.isSlotInSatchel(inventorySuitable)) return;
 
-        if(satchelSuitable != -1) this.selected = satchelSuitable + data.getHotbarOffset();
-        int satchelSelected = data.convertToSatchelIndex(this.selected);
+        if(satchelSuitable != -1) selected = satchelSuitable + data.getHotbarOffset();
+        int satchelSelected = data.convertToSatchelIndex(selected);
 
         ItemStack held = satchelInventory.getItem(satchelSelected);
 
-        satchelInventory.setItem(satchelSelected, this.items.get(slot));
-        this.items.set(slot, held);
+        satchelInventory.setItem(satchelSelected, items.get(slot));
+        items.set(slot, held);
         ci.cancel();
     }
 
     @Inject(method = "setPickedItem", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/player/Inventory;selected:I", opcode = Opcodes.PUTFIELD, shift = At.Shift.AFTER))
-    public void deselectSatchelIfNeeded(CallbackInfo ci) {
-        SatchelData data = SatchelData.get(this.player);
-        if(!data.isSlotInSatchel(this.selected)) return;
+    public void satchels$deselectSatchelIfNeeded(CallbackInfo ci) {
+        SatchelData data = SatchelData.get(player);
+        if(!data.isSlotInSatchel(selected)) return;
 
         if(!data.isActive()) return;
         data.setActive(false, true);
