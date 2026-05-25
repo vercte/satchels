@@ -21,12 +21,12 @@ public class RecipeBookComponentMixin {
     private StackedContents stackedContents;
 
     @Inject(method = "initVisuals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/RecipeBookMenu;fillCraftSlotsStackedContents(Lnet/minecraft/world/entity/player/StackedContents;)V", shift = At.Shift.AFTER))
-    private void fillInitContentsWithSatchel(CallbackInfo ci) {
+    private void satchels$fillInitContentsWithSatchel(CallbackInfo ci) {
         SatchelData.get(minecraft.player).getSatchelInventory().fillStackedContents(stackedContents);
     }
 
     @Inject(method = "updateStackedContents", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/RecipeBookMenu;fillCraftSlotsStackedContents(Lnet/minecraft/world/entity/player/StackedContents;)V", shift = At.Shift.AFTER))
-    private void fillContentsWithSatchel(CallbackInfo ci) {
+    private void satchels$fillContentsWithSatchel(CallbackInfo ci) {
         SatchelData.get(minecraft.player).getSatchelInventory().fillStackedContents(stackedContents);
     }
 }

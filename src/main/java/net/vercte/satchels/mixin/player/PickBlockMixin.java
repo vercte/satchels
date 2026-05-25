@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public class PickBlockMixin {
     @Inject(method = "pickBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;findSlotMatchingItem(Lnet/minecraft/world/item/ItemStack;)I"), cancellable = true)
-    public void checkSatchelAfter(CallbackInfo ci, @Local ItemStack stack, @Local Inventory inventory, @Local boolean creative) {
+    public void satchels$checkSatchelAfter(CallbackInfo ci, @Local ItemStack stack, @Local Inventory inventory, @Local boolean creative) {
         SatchelData data = SatchelData.get(inventory.player);
         int invSlot = inventory.findSlotMatchingItem(stack);
         if(!creative && (data.isActive() || invSlot == -1 || invSlot > 8)) {
@@ -35,7 +35,7 @@ public class PickBlockMixin {
     }
 
     @Inject(method = "pickBlock", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/player/Inventory;selected:I", opcode = Opcodes.PUTFIELD, shift = At.Shift.AFTER))
-    public void deselectSatchelIfNeeded(CallbackInfo ci, @Local Inventory inventory) {
+    public void satchels$deselectSatchelIfNeeded(CallbackInfo ci, @Local Inventory inventory) {
         SatchelData data = SatchelData.get(inventory.player);
         if(!data.isSlotInSatchel(inventory.selected)) return;
 

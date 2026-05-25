@@ -45,7 +45,7 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     public abstract T getMenu();
 
     @ModifyExpressionValue(method = {"mouseClicked", "mouseReleased"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;hasClickedOutside(DDIII)Z"))
-    public boolean hasClickedOutside(boolean original, double x, double y, int click) {
+    public boolean satchels$hasClickedOutside(boolean original, double x, double y, int click) {
         if(!original) return false;
 
         boolean inventory = menu instanceof InventoryMenu;
@@ -60,7 +60,7 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     }
 
     @Inject(method = "renderBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderBg(Lnet/minecraft/client/gui/GuiGraphics;FII)V"))
-    public void renderSatchelInventory(GuiGraphics guiGraphics, int p_283661_, int p_281248_, float p_281886_, CallbackInfo ci) {
+    public void satchels$renderSatchelInventory(GuiGraphics guiGraphics, int p_283661_, int p_281248_, float p_281886_, CallbackInfo ci) {
         boolean inventory = menu instanceof InventoryMenu;
         boolean creative = menu instanceof CreativeModeInventoryScreen.ItemPickerMenu;
         ResourceLocation location = inventory ? ResourceLocation.withDefaultNamespace("inventory") :
@@ -74,14 +74,14 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     }
 
     @WrapOperation(method = "findSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/Slot;isActive()Z"))
-    public boolean changeIsActive(Slot slot, Operation<Boolean> original) {
+    public boolean satchels$changeIsActive(Slot slot, Operation<Boolean> original) {
         if(slot instanceof SatchelEquipmentSlot satchelSlot) return satchelSlot.isShown(Minecraft.getInstance().player, this.getMenu());
         return original.call(slot);
     }
 
 
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/Slot;isActive()Z"))
-    public boolean changeIsActiveInRender(Slot slot, Operation<Boolean> original) {
+    public boolean satchels$changeIsActiveInRender(Slot slot, Operation<Boolean> original) {
         if(slot instanceof SatchelEquipmentSlot satchelSlot) return satchelSlot.isShown(Minecraft.getInstance().player, this.getMenu());
         return original.call(slot);
     }

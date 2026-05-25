@@ -45,19 +45,19 @@ public abstract class PlayerMixin extends LivingEntity implements IHaveSatchelDa
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    public void addAdditionalData(CompoundTag compoundTag, CallbackInfo ci) {
+    public void satchels$addAdditionalData(CompoundTag compoundTag, CallbackInfo ci) {
         CompoundTag tag = satchels$satchelData.serializeNBT(this.registryAccess());
         compoundTag.put(SatchelData.KEY_SATCHEL, tag);
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    public void readAdditionalData(CompoundTag compoundTag, CallbackInfo ci) {
+    public void satchels$readAdditionalData(CompoundTag compoundTag, CallbackInfo ci) {
         satchels$satchelData.deserializeNBT(this.registryAccess(), compoundTag.getCompound(SatchelData.KEY_SATCHEL));
     }
 
     // Satchel Inventory Hooks
     @Inject(method = "setItemSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/NonNullList;set(ILjava/lang/Object;)Ljava/lang/Object;", ordinal = 0), cancellable = true)
-    public void setSatchelSlotIfNeeded(EquipmentSlot equipmentSlot, ItemStack itemStack, CallbackInfo ci) {
+    public void satchels$setSatchelSlotIfNeeded(EquipmentSlot equipmentSlot, ItemStack itemStack, CallbackInfo ci) {
         if(satchels$satchelData.isActive()) {
             if(!satchels$satchelData.isSlotInSatchel(this.inventory.selected)) return;
             int satchelIndex = satchels$satchelData.convertToSatchelIndex(this.inventory.selected);
@@ -69,7 +69,7 @@ public abstract class PlayerMixin extends LivingEntity implements IHaveSatchelDa
     }
 
     @Inject(method = "dropEquipment", at = @At("TAIL"), remap = false)
-    public void dropSatchelEquipment(CallbackInfo ci) {
+    public void satchels$dropSatchelEquipment(CallbackInfo ci) {
         SatchelData satchelData = SatchelData.get((Player)(Object) this);
         if (!this.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
             satchelData.getSatchelInventory().dropAll(true);
@@ -78,7 +78,7 @@ public abstract class PlayerMixin extends LivingEntity implements IHaveSatchelDa
     }
 
     @Inject(method = "destroyVanishingCursedItems", at = @At("TAIL"))
-    public void destroyVanishingCursedItems(CallbackInfo ci) {
+    public void satchels$destroyVanishingCursedItems(CallbackInfo ci) {
         SatchelData satchelData = SatchelData.get((Player)(Object) this);
         for (int i = 0; i < satchelData.getSatchelInventory().getContainerSize(); i++) {
             ItemStack itemStack = satchelData.getSatchelInventory().getItem(i);
@@ -94,7 +94,7 @@ public abstract class PlayerMixin extends LivingEntity implements IHaveSatchelDa
     }
 
     @Inject(method = "getProjectile", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ProjectileWeaponItem;getAllSupportedProjectiles(Lnet/minecraft/world/item/ItemStack;)Ljava/util/function/Predicate;", shift = At.Shift.AFTER), cancellable = true)
-    public void prioritizeSatchelProjectiles(ItemStack weapon, CallbackInfoReturnable<ItemStack> cir, @Local Predicate<ItemStack> supportedPredicate) {
+    public void satchels$prioritizeSatchelProjectiles(ItemStack weapon, CallbackInfoReturnable<ItemStack> cir, @Local Predicate<ItemStack> supportedPredicate) {
         Player player = (Player)(Object)this;
         SatchelData satchelData = SatchelData.get(player);
         for(ItemStack item : satchelData.getSatchelInventory().getItems()) {

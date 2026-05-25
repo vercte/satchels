@@ -19,7 +19,7 @@ public abstract class ControlsScreenMixin extends OptionsSubScreen {
     }
 
     @Inject(method = "addOptions", at = @At("TAIL"))
-    public void addSatchelOffsetOption(CallbackInfo ci) {
+    public void satchels$addSatchelOffsetOption(CallbackInfo ci) {
         assert this.list != null;
         this.list.addSmall(new OptionInstance<>(
                 "satchels.options.offset",

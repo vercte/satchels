@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ItemEntity.class)
 public class ItemEntityMixin {
     @WrapOperation(method = "playerTouch", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;add(Lnet/minecraft/world/item/ItemStack;)Z"))
-    public boolean playerTouch(Inventory inventory, ItemStack stack, Operation<Boolean> original) {
+    public boolean satchels$playerTouch(Inventory inventory, ItemStack stack, Operation<Boolean> original) {
         SatchelData satchelData = SatchelData.get(inventory.player);
 
         // if satchel is enabled, prioritize adding to that first

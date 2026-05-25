@@ -24,7 +24,7 @@ public abstract class InventoryMenuMixin extends RecipeBookMenu<CraftingInput, C
 
     @SuppressWarnings("Convert2MethodRef")
     @Inject(method = "<init>", at = @At("TAIL"))
-    public void addMoreSlots(Inventory inventory, boolean bl, Player player, CallbackInfo ci) {
+    public void satchels$addMoreSlots(Inventory inventory, boolean bl, Player player, CallbackInfo ci) {
         SatchelData satchelData = SatchelData.get(player);
 
         if(SatchelsCompat.VANILLA.isLoaded()) this.addSlot(

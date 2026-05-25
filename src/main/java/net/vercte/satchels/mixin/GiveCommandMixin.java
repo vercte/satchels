@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(GiveCommand.class)
 public class GiveCommandMixin {
     @WrapOperation(method = "giveItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;add(Lnet/minecraft/world/item/ItemStack;)Z"))
-    private static boolean prioritizeSatchel(Inventory inventory, ItemStack stack, Operation<Boolean> original, @Local ServerPlayer player) {
+    private static boolean satchels$prioritizeSatchel(Inventory inventory, ItemStack stack, Operation<Boolean> original, @Local ServerPlayer player) {
         SatchelData satchelData = SatchelData.get(player);
         if(satchelData.isActive()) {
             return satchelData.getSatchelInventory().pickup(stack) || original.call(inventory, stack);
