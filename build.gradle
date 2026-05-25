@@ -41,9 +41,13 @@ dependencies {
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version"
 
     // Accessories
-    runtimeOnly "maven.modrinth:owo-lib:$owo_lib_version"
-    runtimeOnly "maven.modrinth:accessories:$accessories_version+$minecraft_version"
-    runtimeOnly "maven.modrinth:accessories-compat-layer:$accessories_compat_version"
+//    runtimeOnly "maven.modrinth:owo-lib:$owo_lib_version"
+//    runtimeOnly "maven.modrinth:accessories:$accessories_version+$minecraft_version"
+//    runtimeOnly "maven.modrinth:accessories-compat-layer:$accessories_compat_version"
+
+    // Raised
+    compileOnly "maven.modrinth:raised:$raised_version"
+//    runtimeOnly "maven.modrinth:raised:$raised_version"
 
     // Create
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }

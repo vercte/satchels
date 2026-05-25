@@ -15,6 +15,8 @@ import net.vercte.satchels.client.ModSprites;
 import net.vercte.satchels.client.SatchelsClientConfig;
 import net.vercte.satchels.client.animation.LerpFunctions;
 import net.vercte.satchels.client.animation.LerpHelper;
+import net.vercte.satchels.compat.SatchelsCompat;
+import net.vercte.satchels.compat.raised.RaisedCompat;
 import net.vercte.satchels.content.satchel.SatchelData;
 import net.vercte.satchels.content.satchel.SatchelItem;
 
@@ -53,6 +55,7 @@ public class SatchelHotbarOverlay {
         boolean stateChanged = this.lastState != enabled;
 
         int offsetGoal = 24;
+        if(SatchelsCompat.RAISED.isLoaded()) offsetGoal -= RaisedCompat.getSatchelYOffset();
         long currentTime = Util.getMillis();
 
         if(stateChanged) {

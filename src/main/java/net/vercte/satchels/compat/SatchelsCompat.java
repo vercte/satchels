@@ -3,6 +3,7 @@ package net.vercte.satchels.compat;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.LoadingModList;
 import net.vercte.satchels.compat.curios.CuriosCompat;
+import net.vercte.satchels.compat.raised.RaisedCompat;
 import net.vercte.satchels.compat.vanilla.VanillaCompat;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +12,8 @@ import java.util.function.Supplier;
 
 public enum SatchelsCompat {
     VANILLA("minecraft", VanillaCompat::new, VanillaCompat::shouldBeLoaded), // for vanilla slots
-    CURIOS("curios", CuriosCompat::new);
+    CURIOS("curios", CuriosCompat::new),
+    RAISED("raised", RaisedCompat::new);
 
     final String id;
     boolean isLoaded;
