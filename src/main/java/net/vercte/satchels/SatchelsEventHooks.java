@@ -1,14 +1,12 @@
 package net.vercte.satchels;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -64,13 +62,13 @@ public class SatchelsEventHooks {
     public static void onMenuOpen(Player player, AbstractContainerMenu menu) {
         SatchelData satchelData = SatchelData.get(player);
 
-        boolean inventory = menu instanceof InventoryMenu;
-        boolean creative = menu instanceof CreativeModeInventoryScreen.ItemPickerMenu;
-        if(inventory || creative) return;
+        ResourceLocation menuLocation;
+        try {
+             menuLocation = BuiltInRegistries.MENU.getKey(menu.getType());
+        } catch(Exception ignored) {
+            return;
+        }
 
-        ResourceLocation menuLocation = BuiltInRegistries.MENU.getKey(menu.getType());
-
-        assert menuLocation != null;
         if(SatchelsCommonConfig.shouldLog()) LogUtils.getLogger().info("satchels: opened {}", menuLocation);
         if(!SatchelsCommonConfig.isAllowed(menuLocation)) return;
 
