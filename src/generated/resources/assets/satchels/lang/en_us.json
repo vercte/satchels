@@ -1,4 +1,5 @@
 {
+  "curios.identifier.satchel": "Satchel",
   "item.satchels.satchel": "Satchel",
   "key.satchels.toggle_satchel": "Toggle Satchel",
   "satchels.configuration.allowed_menus": "Menus with Satchel Slots",

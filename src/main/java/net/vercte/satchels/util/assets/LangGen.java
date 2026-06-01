@@ -29,5 +29,7 @@ public class LangGen extends LanguageProvider {
 
         add("satchels.configuration.log_opened_menu", "Log Opened Menus");
         add("satchels.configuration.allowed_menus", "Menus with Satchel Slots");
+
+        add("curios.identifier.satchel", "Satchel");
     }
 }
