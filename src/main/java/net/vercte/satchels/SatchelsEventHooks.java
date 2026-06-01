@@ -35,6 +35,10 @@ public class SatchelsEventHooks {
     public static void playerClone(final PlayerEvent.Clone event) {
         if(!event.isWasDeath()) return;
 
+        for(Slot slot : event.getEntity().inventoryMenu.slots) {
+            if(slot instanceof SatchelEquipmentSlot equipmentSlot) equipmentSlot.onLoad(event.getEntity());
+        }
+
         if(!event.getOriginal().level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) return;
 
         if(event.getOriginal().hasData(ModAttachmentTypes.SATCHEL_SLOT)) {
@@ -43,7 +47,6 @@ public class SatchelsEventHooks {
             ItemStack newStack = previous.copy();
             event.getEntity().getData(ModAttachmentTypes.SATCHEL_SLOT).setStackInSlot(0, newStack);
             event.getEntity().syncData(ModAttachmentTypes.SATCHEL_SLOT);
-            // FIXME: the slot doesn't re-sync for some fuckin reason
         }
 
         SatchelData original = SatchelData.get(event.getOriginal());

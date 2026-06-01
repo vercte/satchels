@@ -21,9 +21,9 @@ public class SatchelsCommonConfig {
 
     private static final ModConfigSpec.ConfigValue<List<? extends String>> ALLOWED_MENUS = BUILDER
             .comment("""
-                     The menus that the Satchel can have its contents injected into.
-                     Format: resource:location [xOffset YOffset] [overlayXOffset overlayYOffset]
-                     Example: minecraft:beacon 28 53 28 0
+                    The menus that the Satchel can have its contents injected into.
+                    Format: resource:location [xOffset YOffset] [overlayXOffset overlayYOffset]
+                    Example: minecraft:beacon 28 53 28 0
                               minecraft:generic_9x6 0 55
                               minecraft:crafting\
                     """)
@@ -84,7 +84,12 @@ public class SatchelsCommonConfig {
                 "create:schematic_table 30 23 30 -8",
                 "create:schematicannon 29 77 29 -8",
                 "create:toolbox 0 81 0 -8",
-                "create:package_port 30 24 30 0"
+                "create:package_port 30 24 30 0",
+                "supplementaries:sack",
+                "slag:melter",
+                "slag:interface",
+                "slag:forge",
+                "brewinandchewin:keg"
         );
     }
 

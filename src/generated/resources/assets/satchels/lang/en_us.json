@@ -1,6 +1,11 @@
 {
   "item.satchels.satchel": "Satchel",
   "key.satchels.toggle_satchel": "Toggle Satchel",
+  "satchels.configuration.allowed_menus": "Menus with Satchel Slots",
+  "satchels.configuration.gui_animation": "GUI/HUD Animation",
+  "satchels.configuration.log_opened_menu": "Log Opened Menus",
+  "satchels.configuration.satchel_layer": "Render Satchel on Players",
+  "satchels.configuration.satchel_offset": "Satchel Position",
   "satchels.options.offset": "Satchel Position",
   "satchels.options.offset.selection": "Slots %s-%s",
   "satchels.options.offset.tooltip": "The position of the Satchel on your hotbar.",

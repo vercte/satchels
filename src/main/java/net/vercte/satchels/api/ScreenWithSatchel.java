@@ -16,6 +16,7 @@ import net.vercte.satchels.compat.SatchelsCompat;
 import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelData;
 import net.vercte.satchels.content.satchel.SatchelItem;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * <p>A class that contains utilities for implementing the Satchel rendering (background, animation) into screens.</p>
@@ -85,6 +86,34 @@ public class ScreenWithSatchel {
         graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
+    /**
+     * Use to determine if a click is within the satchel.
+     * @param x The x-position of the mouse.
+     * @param y the y-position of the mouse.
+     * @param left The left edge of the bounds (when {@link SatchelData#getHotbarOffset()} is 0).
+     * @param top The position of the top edge of your screen.
+     * @param height The height of your screen.
+     */
+    public static boolean hasClickedOutside(double x, double y, int left, int top, int height) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if(player == null) return true;
+
+        SatchelData satchelData = SatchelData.get(player);
+        if(!satchelData.canAccess()) return true;
+
+        int offset = satchelData.getHotbarOffset();
+
+        int finalLeft = left + (offset * 18);
+        boolean clickedLeft = x < finalLeft;
+        boolean clickedRight = x >= finalLeft + 120;
+        boolean clickedBelow = y >= top + height + 26;
+        return clickedLeft || clickedRight || clickedBelow;
+    }
+
+    /**
+     * For use in the vanilla slot handler only.
+     */
+    @ApiStatus.Internal
     public void renderSatchelSlot(GuiGraphics graphics, int left, int top, int width, int height) {
         if(!SatchelsCompat.VANILLA.isLoaded()) return;
 
@@ -100,9 +129,10 @@ public class ScreenWithSatchel {
 
         if(slot == null) return;
 
+        ItemStack slotHeld = slot.getItem();
         boolean shown = carried.is(ModTags.SATCHEL) || (
                 data.getSatchelInventory().isEmpty() &&
-                        slot.getItem().is(ModTags.SATCHEL)
+                        slotHeld.is(ModTags.SATCHEL)
         );
 
         if(slotXOffset == -1) {
@@ -129,30 +159,7 @@ public class ScreenWithSatchel {
         int x = left + width + (int)slotXOffset - 1;
         int y = top + height - 30;
         graphics.blitSprite(ModSprites.SATCHEL_SLOT_INVENTORY, x, y, 27, 28);
+        if(slotHeld.isEmpty()) graphics.blitSprite(ModSprites.SATCHEL_SLOT_ICON, x + 5, y + 6, 16, 16);
         graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    /**
-     * Use to determine if a click is within the satchel.
-     * @param x The x-position of the mouse.
-     * @param y the y-position of the mouse.
-     * @param left The left edge of the bounds (when {@link SatchelData#getHotbarOffset()} is 0).
-     * @param top The position of the top edge of your screen.
-     * @param height The height of your screen.
-     */
-    public static boolean hasClickedOutside(double x, double y, int left, int top, int height) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if(player == null) return true;
-
-        SatchelData satchelData = SatchelData.get(player);
-        if(!satchelData.canAccess()) return true;
-
-        int offset = satchelData.getHotbarOffset();
-
-        int finalLeft = left + (offset * 18);
-        boolean clickedLeft = x < finalLeft;
-        boolean clickedRight = x >= finalLeft + 120;
-        boolean clickedBelow = y >= top + height + 26;
-        return clickedLeft || clickedRight || clickedBelow;
     }
 }

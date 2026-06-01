@@ -38,7 +38,7 @@ dependencies {
 
     // Curios
     compileOnly "top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version:api"
-//    runtimeOnly "top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version"
+    runtimeOnly "top.theillusivec4.curios:curios-neoforge:$curios_version+$minecraft_version"
 
     // Accessories
 //    runtimeOnly "maven.modrinth:owo-lib:$owo_lib_version"
@@ -57,7 +57,7 @@ dependencies {
     implementation "com.tterrag.registrate:Registrate:${registrate_version}"
 
     compileOnly "mezz.jei:jei-$minecraft_version-neoforge-api:$jei_version"
-    runtimeOnly "mezz.jei:jei-$minecraft_version-neoforge:$jei_version"
+//    runtimeOnly "mezz.jei:jei-$minecraft_version-neoforge:$jei_version"
 }
 
 base {

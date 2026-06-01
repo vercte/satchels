@@ -7,6 +7,8 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.vercte.satchels.compat.SatchelsCompat;
 import net.vercte.satchels.network.ModPackets;
@@ -36,6 +38,7 @@ public class Satchels {
         SatchelsCompat.initialize();
 
         container.registerConfig(ModConfig.Type.COMMON, SatchelsCommonConfig.SPEC);
+        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 
     public static void initExtra(final FMLCommonSetupEvent event) {
