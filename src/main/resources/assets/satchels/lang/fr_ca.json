@@ -1,0 +1,15 @@
+{
+  "curios.identifier.satchel": "Sacoche",
+  "item.satchels.satchel": "Sacoche",
+  "key.satchels.toggle_satchel": "Basculer la sacoche",
+  "satchels.configuration.allowed_menus": "Menus avec les emplacements de sacoche",
+  "satchels.configuration.gui_animation": "Animation de l'interface graphique/utilisateur",
+  "satchels.configuration.log_opened_menu": "Enregistrer les menus ouverts",
+  "satchels.configuration.satchel_layer": "Afficher la sacoche sur le joueur",
+  "satchels.configuration.satchel_offset": "Position de la sacoche",
+  "satchels.options.offset": "Position de la sacoche",
+  "satchels.options.offset.selection": "Emplacements %s-%s",
+  "satchels.options.offset.tooltip": "La position de la sacoche sur votre barre d'action.",
+  "sound.satchels.satchel_rustle": "Sacoche bruit",
+  "tag.item.satchels.satchels": "Sachoches"
+}
