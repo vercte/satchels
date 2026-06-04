@@ -51,7 +51,7 @@ dependencies {
 
     // Raised
     compileOnly "maven.modrinth:raised:$raised_version"
-//    runtimeOnly "maven.modrinth:raised:$raised_version"
+    runtimeOnly "maven.modrinth:raised:$raised_version"
 
     // Create
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }

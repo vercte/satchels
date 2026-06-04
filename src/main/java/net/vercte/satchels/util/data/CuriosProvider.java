@@ -16,7 +16,7 @@ public class CuriosProvider extends CuriosDataProvider {
     @Override
     public void generate(HolderLookup.Provider provider, ExistingFileHelper existingFileHelper) {
         this.createSlot("satchel")
-                .icon(Satchels.at("gui/sprites/slot/satchel"))
+                .icon(Satchels.at("slot/satchel"))
                 .order(65);
         this.createEntities("satchel")
                 .addPlayer()
