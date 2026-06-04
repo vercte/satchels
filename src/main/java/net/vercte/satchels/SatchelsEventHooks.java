@@ -19,6 +19,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.vercte.satchels.api.MenuWithSatchel;
 import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelData;
+import net.vercte.satchels.content.satchel.SatchelInventorySlot;
 
 public class SatchelsEventHooks {
     public static void playerJoin(final PlayerEvent.PlayerLoggedInEvent event) {
@@ -63,6 +64,9 @@ public class SatchelsEventHooks {
     }
 
     public static void onMenuOpen(Player player, AbstractContainerMenu menu) {
+        // EMI fix; EMI re-opens the menu but doesn't clear the slots when quick-crafting
+        if(menu.slots.stream().anyMatch(s -> s instanceof SatchelInventorySlot)) return;
+
         SatchelData satchelData = SatchelData.get(player);
 
         ResourceLocation menuLocation;
