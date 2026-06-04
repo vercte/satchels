@@ -18,6 +18,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.jarjar.nio.util.Lazy;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -53,6 +55,7 @@ public class SatchelsClient {
         NeoForge.EVENT_BUS.addListener(SatchelsClient::onScreenOpen);
 
         container.registerConfig(ModConfig.Type.CLIENT, SatchelsClientConfig.SPEC);
+        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 
     public static void registerKeyMappings(final RegisterKeyMappingsEvent event) {
