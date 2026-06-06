@@ -19,7 +19,7 @@ public class BackpackMenuMixin {
     @Definition(id = "inventory", local = @Local(type = Inventory.class, name = "inventory"))
     @Expression("?.container == inventory")
     @ModifyExpressionValue(method = "<init>", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private boolean alsoAllowSatchelSlots(boolean original, int windowId, Player player, @Local(name = "slot") Slot slot) {
+    private boolean satchels$alsoAllowSatchelSlots(boolean original, int windowId, Player player, @Local(name = "slot") Slot slot) {
         return original || slot instanceof SatchelEquipmentSlot || slot instanceof SatchelInventorySlot;
     }
 }
