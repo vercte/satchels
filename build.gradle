@@ -65,6 +65,11 @@ dependencies {
 
     compileOnly "dev.emi:emi-neoforge:${emi_version}+${minecraft_version}:api"
     runtimeOnly "dev.emi:emi-neoforge:${emi_version}+${minecraft_version}"
+
+    compileOnly "maven.modrinth:quark:${quark_version}"
+//    runtimeOnly "maven.modrinth:quark:${quark_version}"
+//    runtimeOnly "maven.modrinth:quark-oddities:${minecraft_version}"
+//    runtimeOnly "maven.modrinth:zeta:${zeta_version}"
 }
 
 base {
