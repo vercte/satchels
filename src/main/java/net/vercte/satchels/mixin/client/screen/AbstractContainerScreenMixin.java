@@ -99,8 +99,7 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     public void satchels$swapWithSatchelSlotMaybeMouse(AbstractContainerScreen<?> instance, Slot slot, int index, int i, ClickType type, Operation<Void> original) {
         Player player = instance.getMinecraft().player;
         SatchelData data = SatchelData.get(player);
-        if(!data.canAccess()) return;
-        if(data.isSlotInSatchel(i) && hasShiftDown()) {
+        if(data.canAccess() && data.isSlotInSatchel(i) && hasShiftDown()) {
             int satchelIndex = i - data.getHotbarOffset();
 
             int satchelSlot = -1;
@@ -108,7 +107,11 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
                 Slot possible = instance.getMenu().slots.get(j);
                 if(possible instanceof SatchelInventorySlot && possible.getContainerSlot() == satchelIndex) satchelSlot = j;
             }
-            if(satchelSlot == -1) return;
+
+            if(satchelSlot == -1) {
+                original.call(instance, slot, index, i, type);
+                return;
+            }
 
             original.call(instance, slot, index, satchelSlot, type);
             return;

@@ -73,7 +73,7 @@ dependencies {
 }
 
 base {
-    archivesName = mod_id
+    archivesName = "vercte-" + mod_id
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
