@@ -10,6 +10,7 @@
     "ServerPlaceRecipeMixin",
     "compat.quark.BackpackMenuMixin",
     "menu.AbstractContainerMenuMixin",
+    "menu.HorseInventoryMenuMixin",
     "menu.InventoryMenuMixin",
     "player.InventoryMixin",
     "player.PlayerMixin"
@@ -18,6 +19,7 @@
     "client.screen.AbstractContainerScreenMixin",
     "client.screen.ControlsScreenMixin",
     "client.screen.CreativeModeInventoryScreenMixin",
+    "client.screen.HorseInventoryScreenMixin",
     "client.screen.InventoryScreenMixin",
     "client.screen.RecipeBookComponentMixin",
     "player.PickBlockMixin"

@@ -12,10 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.vercte.satchels.SatchelsCommonConfig;
 import net.vercte.satchels.api.ScreenWithSatchel;
 import net.vercte.satchels.content.satchel.SatchelData;
@@ -58,12 +55,9 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     public boolean satchels$hasClickedOutside(boolean original, double x, double y, int click) {
         if(!original) return false;
 
-        boolean inventory = menu instanceof InventoryMenu;
-        boolean creative = menu instanceof CreativeModeInventoryScreen.ItemPickerMenu;
-        ResourceLocation location = inventory ? ResourceLocation.withDefaultNamespace("inventory") :
-                creative ? ResourceLocation.withDefaultNamespace("creative_menu") :
-                        BuiltInRegistries.MENU.getKey(menu.getType());
+        ResourceLocation location = satchels$getMenuLocation();
 
+        if(location == null) return true;
         if(!SatchelsCommonConfig.isAllowed(location)) return true;
         Tuple<Integer, Integer> offset = SatchelsCommonConfig.getOffset(location);
         return ScreenWithSatchel.hasClickedOutside(x, y, leftPos + offset.getA(), topPos + offset.getB(), this.imageHeight);
@@ -71,12 +65,9 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
 
     @Inject(method = "renderBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderBg(Lnet/minecraft/client/gui/GuiGraphics;FII)V"))
     public void satchels$renderSatchelInventory(GuiGraphics guiGraphics, int p_283661_, int p_281248_, float p_281886_, CallbackInfo ci) {
-        boolean inventory = menu instanceof InventoryMenu;
-        boolean creative = menu instanceof CreativeModeInventoryScreen.ItemPickerMenu;
-        ResourceLocation location = inventory ? ResourceLocation.withDefaultNamespace("inventory") :
-                creative ? ResourceLocation.withDefaultNamespace("creative_menu") :
-                        BuiltInRegistries.MENU.getKey(menu.getType());
+        ResourceLocation location = satchels$getMenuLocation();
 
+        if(location == null) return;
         if(!SatchelsCommonConfig.isAllowed(location)) return;
 
         Tuple<Integer, Integer> offset = SatchelsCommonConfig.getOverlayOffset(location);
@@ -117,5 +108,22 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
             return;
         }
         original.call(instance, slot, index, i, type);
+    }
+
+    @Unique
+    private ResourceLocation satchels$getMenuLocation() {
+        return switch (menu) {
+            case InventoryMenu ignored -> ResourceLocation.withDefaultNamespace("inventory");
+            case CreativeModeInventoryScreen.ItemPickerMenu ignored -> ResourceLocation.withDefaultNamespace("creative_menu");
+            case HorseInventoryMenu ignored -> ResourceLocation.withDefaultNamespace("horse");
+            case null, default -> {
+                try {
+                    assert menu != null;
+                    yield BuiltInRegistries.MENU.getKey(menu.getType());
+                } catch (Exception ignored) {
+                    yield null;
+                }
+            }
+        };
     }
 }
