@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.vercte.satchels.SatchelsCommonConfig;
 import net.vercte.satchels.api.ScreenWithSatchel;
+import net.vercte.satchels.client.SatchelsClientConfig;
 import net.vercte.satchels.content.satchel.SatchelData;
 import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelInventorySlot;
@@ -87,10 +88,13 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     }
 
     @WrapOperation(method = {"checkHotbarKeyPressed", "checkHotbarMouseClicked"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ClickType;)V", ordinal = 1))
-    public void satchels$swapWithSatchelSlotMaybeMouse(AbstractContainerScreen<?> instance, Slot slot, int index, int i, ClickType type, Operation<Void> original) {
+    public void satchels$swapWithSatchelSlot(AbstractContainerScreen<?> instance, Slot slot, int index, int i, ClickType type, Operation<Void> original) {
         Player player = instance.getMinecraft().player;
         SatchelData data = SatchelData.get(player);
-        if(data.canAccess() && data.isSlotInSatchel(i) && hasShiftDown()) {
+        if(
+                SatchelsClientConfig.shouldSwapWithShiftKey() &&
+                data.canAccess() && data.isSlotInSatchel(i) && hasShiftDown()
+        ) {
             int satchelIndex = i - data.getHotbarOffset();
 
             int satchelSlot = -1;

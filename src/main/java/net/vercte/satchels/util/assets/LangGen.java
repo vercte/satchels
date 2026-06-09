@@ -23,7 +23,13 @@ public class LangGen extends LanguageProvider {
         add("satchels.options.offset.tooltip", "The position of the Satchel on your hotbar.");
         add("satchels.options.offset.selection", "Slots %s-%s");
 
+        add("satchels.configuration.gameplay", "Gameplay");
+
         add("satchels.configuration.satchel_offset", "Satchel Position");
+        add("satchels.configuration.shift_swap", "Satchel Slot Swapping");
+
+        add("satchels.configuration.rendering", "Rendering");
+
         add("satchels.configuration.satchel_layer", "Render Satchel on Players");
         add("satchels.configuration.gui_animation", "GUI/HUD Animation");
 
