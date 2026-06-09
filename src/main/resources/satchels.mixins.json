@@ -8,6 +8,7 @@
     "GiveCommandMixin",
     "ItemEntityMixin",
     "ServerPlaceRecipeMixin",
+    "compat.create.SuperGlueSelectionHelperMixin",
     "compat.quark.BackpackMenuMixin",
     "menu.AbstractContainerMenuMixin",
     "menu.HorseInventoryMenuMixin",
