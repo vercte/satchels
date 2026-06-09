@@ -66,6 +66,7 @@ public abstract class InventoryMixin {
     @Inject(method = "placeItemBackInInventory(Lnet/minecraft/world/item/ItemStack;Z)V", at = @At("HEAD"), cancellable = true)
     public void satchels$placeItemBackInInventory(ItemStack stack, boolean update, CallbackInfo ci) {
         SatchelData satchelData = SatchelData.get(player);
+        if(!satchelData.canAccess()) return;
         if(satchelData.isActive() || !update) {
             boolean added = satchelData.getSatchelInventory().placeItemBackInInventory(stack);
             if(added) ci.cancel();
