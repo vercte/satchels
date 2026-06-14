@@ -35,6 +35,7 @@ repositories {
     }
     maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
     maven { url = "https://maven.ithundxr.dev/snapshots" } // Registrate
+    maven { url "https://maven.shedaniel.me/" }
 }
 
 dependencies {
@@ -70,6 +71,10 @@ dependencies {
 //    runtimeOnly "maven.modrinth:quark:${quark_version}"
 //    runtimeOnly "maven.modrinth:quark-oddities:${minecraft_version}"
 //    runtimeOnly "maven.modrinth:zeta:${zeta_version}"
+
+    compileOnly "maven.modrinth:tide:${tide_version}"
+    runtimeOnly "maven.modrinth:tide:${tide_version}"
+    runtimeOnly "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
 }
 
 base {
