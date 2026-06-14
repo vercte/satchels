@@ -67,10 +67,10 @@ dependencies {
     compileOnly "dev.emi:emi-neoforge:${emi_version}+${minecraft_version}:api"
     runtimeOnly "dev.emi:emi-neoforge:${emi_version}+${minecraft_version}"
 
-    compileOnly "maven.modrinth:quark:${quark_version}"
-    runtimeOnly "maven.modrinth:quark:${quark_version}"
+    compileOnly "org.violetmoon.quark:Quark:${quark_version}"
+    runtimeOnly "org.violetmoon.quark:Quark:${quark_version}"
     runtimeOnly "maven.modrinth:quark-oddities:${minecraft_version}"
-    runtimeOnly "maven.modrinth:zeta:${zeta_version}"
+    runtimeOnly "org.violetmoon.zeta:Zeta:${zeta_version}"
 
     compileOnly "maven.modrinth:tide:${tide_version}"
     runtimeOnly "maven.modrinth:tide:${tide_version}"
