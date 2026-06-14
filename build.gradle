@@ -68,9 +68,9 @@ dependencies {
     runtimeOnly "dev.emi:emi-neoforge:${emi_version}+${minecraft_version}"
 
     compileOnly "maven.modrinth:quark:${quark_version}"
-//    runtimeOnly "maven.modrinth:quark:${quark_version}"
-//    runtimeOnly "maven.modrinth:quark-oddities:${minecraft_version}"
-//    runtimeOnly "maven.modrinth:zeta:${zeta_version}"
+    runtimeOnly "maven.modrinth:quark:${quark_version}"
+    runtimeOnly "maven.modrinth:quark-oddities:${minecraft_version}"
+    runtimeOnly "maven.modrinth:zeta:${zeta_version}"
 
     compileOnly "maven.modrinth:tide:${tide_version}"
     runtimeOnly "maven.modrinth:tide:${tide_version}"
