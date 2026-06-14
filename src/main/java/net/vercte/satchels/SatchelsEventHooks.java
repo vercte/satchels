@@ -34,8 +34,6 @@ public class SatchelsEventHooks {
     }
 
     public static void playerClone(final PlayerEvent.Clone event) {
-        if(!event.isWasDeath()) return;
-
         for(Slot slot : event.getEntity().inventoryMenu.slots) {
             if(slot instanceof SatchelEquipmentSlot equipmentSlot) equipmentSlot.onLoad(event.getEntity());
         }
