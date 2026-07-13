@@ -60,10 +60,14 @@ public class AbstractContainerMenuMixin {
 
     // Shift-clicking (QUICK_MOVE) out of a satchel slot: the container's own quickMoveStack branches on
     // hardcoded slot-index ranges that don't account for the satchel slots appended past the vanilla layout,
-    // so it misclassifies the source. Trick the container into treating the click as if it came from the
-    // hotbar slot the satchel overlays: transiently present the satchel item in that real hotbar slot, call
-    // the original with the hotbar menu-slot index, then copy the remainder back and restore the hotbar item.
-    // All within one synchronous doClick, so no flicker or desync is ever observed.
+    // so it misclassifies the source. Trick the container into treating the click as if it came from a real
+    // player-inventory slot: transiently present the satchel item in that slot, call the original with the
+    // borrowed menu-slot index, then copy the remainder back and restore the borrowed slot's item.
+    //
+    // We normally borrow the hotbar slot the satchel overlays, which routes the item into the main inventory
+    // (in the player's own InventoryMenu) or into the open container. But if the main inventory is full, the
+    // hotbar route has nowhere to go, so we instead borrow a main-inventory slot, which routes the item into
+    // the hotbar. All of this happens within one synchronous doClick, so no flicker or desync is ever observed.
     @WrapOperation(
             method = "doClick",
             at = @At(
@@ -83,33 +87,67 @@ public class AbstractContainerMenuMixin {
         ItemStack satchelItem = satchelInv.getItem(satchelIndex);
         if(satchelItem.isEmpty()) return ItemStack.EMPTY;
 
-        int hotbarInvIndex = satchelIndex + data.getHotbarOffset();
-        int hotbarMenuIdx = satchels$findHotbarMenuIndex(player, hotbarInvIndex);
-        if(hotbarMenuIdx == -1) return original.call(menu, player, index);
-
         Inventory inventory = player.getInventory();
-        ItemStack savedHotbar = inventory.getItem(hotbarInvIndex);
 
-        // Present the satchel item as the hotbar item (by reference; moveItemStackTo shrinks it in place).
-        inventory.setItem(hotbarInvIndex, satchelItem);
+        // Pick the real inventory slot to borrow: the overlaid hotbar slot normally, or a main-inventory slot
+        // when the main inventory can't accept the item (so it routes into the hotbar instead).
+        int borrowMenuIdx = -1;
+        if(satchels$mainInventoryFull(inventory, satchelItem)) {
+            borrowMenuIdx = satchels$findMainInventoryMenuIndex(player);
+        }
+        if(borrowMenuIdx == -1) {
+            borrowMenuIdx = satchels$findInventoryMenuIndex(player, satchelIndex + data.getHotbarOffset());
+        }
+        if(borrowMenuIdx == -1) return original.call(menu, player, index);
+
+        int borrowInvIndex = this.slots.get(borrowMenuIdx).getContainerSlot();
+        ItemStack savedItem = inventory.getItem(borrowInvIndex);
+
+        // Present the satchel item in the borrowed slot (by reference; moveItemStackTo shrinks it in place).
+        inventory.setItem(borrowInvIndex, satchelItem);
         satchelInv.setItem(satchelIndex, ItemStack.EMPTY);
 
-        ItemStack result = original.call(menu, player, hotbarMenuIdx);
+        ItemStack result = original.call(menu, player, borrowMenuIdx);
 
-        // Copy the remainder back into the satchel and restore the real hotbar item.
-        satchelInv.setItem(satchelIndex, inventory.getItem(hotbarInvIndex));
-        inventory.setItem(hotbarInvIndex, savedHotbar);
+        // Copy the remainder back into the satchel and restore the borrowed slot's item.
+        satchelInv.setItem(satchelIndex, inventory.getItem(borrowInvIndex));
+        inventory.setItem(borrowInvIndex, savedItem);
 
         return result;
     }
 
     @Unique
-    private int satchels$findHotbarMenuIndex(Player player, int hotbarInvIndex) {
+    private int satchels$findInventoryMenuIndex(Player player, int invIndex) {
         for(int j = 0; j < this.slots.size(); j++) {
             Slot s = this.slots.get(j);
-            if(s.container == player.getInventory() && s.getContainerSlot() == hotbarInvIndex) return j;
+            if(s.container == player.getInventory() && s.getContainerSlot() == invIndex) return j;
         }
         return -1;
+    }
+
+    // Any occupied main-inventory slot (Inventory indices 9-35) present in this menu; -1 if none.
+    @Unique
+    private int satchels$findMainInventoryMenuIndex(Player player) {
+        for(int j = 0; j < this.slots.size(); j++) {
+            Slot s = this.slots.get(j);
+            if(s.container == player.getInventory()) {
+                int cs = s.getContainerSlot();
+                if(cs >= 9 && cs < 36) return j;
+            }
+        }
+        return -1;
+    }
+
+    // True when the main inventory (Inventory indices 9-35) has no room for the item — neither an empty slot
+    // nor a stackable partial slot of the same item.
+    @Unique
+    private boolean satchels$mainInventoryFull(Inventory inventory, ItemStack item) {
+        for(int i = 9; i < 36; i++) {
+            ItemStack s = inventory.getItem(i);
+            if(s.isEmpty()) return false;
+            if(ItemStack.isSameItemSameComponents(s, item) && s.getCount() < s.getMaxStackSize()) return false;
+        }
+        return true;
     }
 
     @Definition(id = "SWAP", field = "Lnet/minecraft/world/inventory/ClickType;SWAP:Lnet/minecraft/world/inventory/ClickType;")
