@@ -16,11 +16,13 @@ import net.minecraft.world.item.ItemStack;
 import net.vercte.satchels.ModTags;
 import net.vercte.satchels.content.satchel.SatchelData;
 import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
+import net.vercte.satchels.content.satchel.SatchelInventory;
 import net.vercte.satchels.content.satchel.SatchelInventorySlot;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Slice;
 
@@ -54,6 +56,60 @@ public class AbstractContainerMenuMixin {
     @ModifyExpressionValue(method = "doClick", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean satchels$allowSwappingFromSatchelHotbar(boolean original, int to, int from, ClickType p_150433_, Player p_150434_) {
         return original || this.slots.get(from) instanceof SatchelInventorySlot;
+    }
+
+    // Shift-clicking (QUICK_MOVE) out of a satchel slot: the container's own quickMoveStack branches on
+    // hardcoded slot-index ranges that don't account for the satchel slots appended past the vanilla layout,
+    // so it misclassifies the source. Trick the container into treating the click as if it came from the
+    // hotbar slot the satchel overlays: transiently present the satchel item in that real hotbar slot, call
+    // the original with the hotbar menu-slot index, then copy the remainder back and restore the hotbar item.
+    // All within one synchronous doClick, so no flicker or desync is ever observed.
+    @WrapOperation(
+            method = "doClick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/inventory/AbstractContainerMenu;quickMoveStack(Lnet/minecraft/world/entity/player/Player;I)Lnet/minecraft/world/item/ItemStack;"
+            )
+    )
+    private ItemStack satchels$quickMoveFromSatchel(AbstractContainerMenu menu, Player player, int index, Operation<ItemStack> original) {
+        Slot slot = this.slots.get(index);
+        if(!(slot instanceof SatchelInventorySlot satchelSlot)) return original.call(menu, player, index);
+
+        SatchelData data = SatchelData.get(player);
+        if(!data.canAccess()) return ItemStack.EMPTY;
+
+        int satchelIndex = satchelSlot.getContainerSlot();
+        SatchelInventory satchelInv = data.getSatchelInventory();
+        ItemStack satchelItem = satchelInv.getItem(satchelIndex);
+        if(satchelItem.isEmpty()) return ItemStack.EMPTY;
+
+        int hotbarInvIndex = satchelIndex + data.getHotbarOffset();
+        int hotbarMenuIdx = satchels$findHotbarMenuIndex(player, hotbarInvIndex);
+        if(hotbarMenuIdx == -1) return original.call(menu, player, index);
+
+        Inventory inventory = player.getInventory();
+        ItemStack savedHotbar = inventory.getItem(hotbarInvIndex);
+
+        // Present the satchel item as the hotbar item (by reference; moveItemStackTo shrinks it in place).
+        inventory.setItem(hotbarInvIndex, satchelItem);
+        satchelInv.setItem(satchelIndex, ItemStack.EMPTY);
+
+        ItemStack result = original.call(menu, player, hotbarMenuIdx);
+
+        // Copy the remainder back into the satchel and restore the real hotbar item.
+        satchelInv.setItem(satchelIndex, inventory.getItem(hotbarInvIndex));
+        inventory.setItem(hotbarInvIndex, savedHotbar);
+
+        return result;
+    }
+
+    @Unique
+    private int satchels$findHotbarMenuIndex(Player player, int hotbarInvIndex) {
+        for(int j = 0; j < this.slots.size(); j++) {
+            Slot s = this.slots.get(j);
+            if(s.container == player.getInventory() && s.getContainerSlot() == hotbarInvIndex) return j;
+        }
+        return -1;
     }
 
     @Definition(id = "SWAP", field = "Lnet/minecraft/world/inventory/ClickType;SWAP:Lnet/minecraft/world/inventory/ClickType;")
