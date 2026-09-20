@@ -122,6 +122,7 @@ public abstract class InventoryMixin {
         SatchelData data = SatchelData.get(player);
         SatchelInventory satchelInventory = data.getSatchelInventory();
         if(!data.isActive()) return;
+        if(!SatchelInventory.itemAllowed(items.get(slot))) return;
 
         int inventorySuitable = getSuitableHotbarSlot();
         int satchelSuitable = satchelInventory.getFreeSlot();
