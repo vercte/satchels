@@ -21,7 +21,7 @@ public class SatchelInventorySlot extends Slot {
 
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
-        return this.satchelData.canAccess();
+        return this.satchelData.canAccess() && SatchelInventory.itemAllowed(stack);
     }
 
     public boolean allowModification(@NotNull Player player) {

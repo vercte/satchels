@@ -6,4 +6,5 @@ import net.minecraft.world.item.Item;
 
 public class ModTags {
     public static final TagKey<Item> SATCHEL = TagKey.create(Registries.ITEM, Satchels.at("satchels"));
+    public static final TagKey<Item> SATCHEL_BLACKLIST = TagKey.create(Registries.ITEM, Satchels.at("satchel_blacklist"));
 }
