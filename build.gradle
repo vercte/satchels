@@ -75,6 +75,11 @@ dependencies {
     compileOnly "maven.modrinth:tide:${tide_version}"
     runtimeOnly "maven.modrinth:tide:${tide_version}"
     runtimeOnly "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+
+    compileOnly "maven.modrinth:supplementaries:${supplementaries_version}"
+    runtimeOnly "maven.modrinth:supplementaries:${supplementaries_version}"
+    runtimeOnly "maven.modrinth:moonlight:${moonlight_lib_version}"
+
 }
 
 base {
