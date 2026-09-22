@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.vercte.satchels.ModTags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -39,6 +40,10 @@ public class SatchelInventory implements Container, INBTSerializable<CompoundTag
         }
 
         return copied;
+    }
+
+    public static boolean itemAllowed(ItemStack stack){
+        return !stack.is(ModTags.SATCHEL_BLACKLIST);
     }
 
     // region Container
@@ -101,6 +106,7 @@ public class SatchelInventory implements Container, INBTSerializable<CompoundTag
     }
 
     public boolean pickup(ItemStack stack) {
+        if(!itemAllowed(stack)) return false;
         Inventory inventory = this.parent.getPlayer().getInventory();
 
         int offset = parent.getHotbarOffset();

@@ -16,13 +16,16 @@ import net.minecraft.world.item.ItemStack;
 import net.vercte.satchels.ModTags;
 import net.vercte.satchels.content.satchel.SatchelData;
 import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
+import net.vercte.satchels.content.satchel.SatchelInventory;
 import net.vercte.satchels.content.satchel.SatchelInventorySlot;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Debug(export = true)
 @Mixin(AbstractContainerMenu.class)
@@ -76,4 +79,13 @@ public class AbstractContainerMenuMixin {
         if(slot instanceof SatchelInventorySlot) satchelData.getSatchelInventory().setItem(slot.getContainerSlot(), stack);
         else original.call(instance, slotIndex, stack);
     }
+
+    @Inject(method = "doClick", at = @At("HEAD"), cancellable = true)
+    public void satchels$doBlacklistedSwap(int slotId, int button, ClickType clickType, Player player, CallbackInfo ci){
+        if(clickType != ClickType.SWAP) return;
+        if(slotId < 0 || slotId >= slots.size() || button < 0 || button >= slots.size()) return;
+        if(!(slots.get(button) instanceof SatchelInventorySlot)) return;
+        if(!SatchelInventory.itemAllowed(slots.get(slotId).getItem())) ci.cancel();
+    }
+
 }

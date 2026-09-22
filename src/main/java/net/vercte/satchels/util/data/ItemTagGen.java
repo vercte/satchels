@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.vercte.satchels.ModItems;
 import net.vercte.satchels.ModTags;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,9 @@ public class ItemTagGen extends ItemTagsProvider {
 
         tag(ModTags.SATCHEL)
                 .add(ModItems.SATCHEL.get());
+
+        tag(ModTags.SATCHEL_BLACKLIST)
+                .addOptional(ResourceLocation.fromNamespaceAndPath("supplementaries", "sack"));
 
         tag(CURIOS_SATCHEL)
                 .addTag(ModTags.SATCHEL);

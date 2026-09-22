@@ -5,6 +5,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
@@ -14,11 +15,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingSwapItemsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.vercte.satchels.api.MenuWithSatchel;
 import net.vercte.satchels.content.satchel.SatchelEquipmentSlot;
 import net.vercte.satchels.content.satchel.SatchelData;
+import net.vercte.satchels.content.satchel.SatchelInventory;
 import net.vercte.satchels.content.satchel.SatchelInventorySlot;
 
 public class SatchelsEventHooks {
@@ -50,6 +53,15 @@ public class SatchelsEventHooks {
 
         SatchelData original = SatchelData.get(event.getOriginal());
         SatchelData.get(event.getEntity()).copyFrom(original);
+    }
+
+    public static void onSwapHands(final LivingSwapItemsEvent.Hands event){
+        Entity entity = event.getEntity();
+        if(!(entity instanceof Player player)) return;
+
+        SatchelData data = SatchelData.get(player);
+        if(!data.isActive() || !data.isSlotInSatchel(player.getInventory().selected)) return;
+        if(!SatchelInventory.itemAllowed(event.getItemSwappedToMainHand())) event.setCanceled(true);
     }
 
     public static void creativeTabBuild(final BuildCreativeModeTabContentsEvent event) {
